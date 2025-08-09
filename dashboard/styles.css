@@ -21,12 +21,23 @@ body {
 /* iOS Status Bar */
 .status-bar {
     background: white;
-    padding: 8px 24px;
+    height: 54px;
+    padding: 0 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
     font-size: 17px;
     font-weight: 600;
+    letter-spacing: -0.41px;
+}
+
+.status-time {
+    color: #000000;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.41px;
 }
 
 .status-bar-levels {
@@ -76,13 +87,13 @@ body {
 
 /* Main Container */
 .main-container {
-    padding: 32px 24px;
+    padding: 24px 24px;
     padding-bottom: 120px;
 }
 
 /* Challenge Header */
 .challenge-header {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 }
 
 .challenge-title {
@@ -90,7 +101,7 @@ body {
     font-weight: 400;
     color: #000000;
     line-height: 1.5;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .challenge-subtitle {
@@ -104,7 +115,7 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 }
 
 .stat-card {
@@ -296,11 +307,12 @@ body {
     border-color: white;
 }
 
-.habit-checkbox.checked::after {
-    content: '✓';
-    color: #0167fe;
-    font-weight: bold;
-    font-size: 12px;
+.habit-checkbox svg {
+    display: none;
+}
+
+.habit-checkbox.checked svg {
+    display: block;
 }
 
 .habit-content {
@@ -370,8 +382,10 @@ body {
 }
 
 .celebration-emoji {
-    font-size: 60px;
     margin-bottom: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .celebration-title {
@@ -470,7 +484,7 @@ body {
 }
 
 .settings-row-title {
-    font-size: 17px;
+    font-size: 15px;
     color: #0f1c14;
     flex: 1;
     min-width: 0;
@@ -579,7 +593,7 @@ body {
 }
 
 .option-text {
-    font-size: 17px;
+    font-size: 15px;
     color: #0f1c14;
 }
 
@@ -599,11 +613,12 @@ body {
     background: #0167fe;
 }
 
-.option-check::after {
-    content: '✓';
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
+.option-check svg {
+    display: none;
+}
+
+.option-item.selected .option-check svg {
+    display: block;
 }
 
 /* Toast Notification */
@@ -639,11 +654,8 @@ body {
     flex-shrink: 0;
 }
 
-.toast-icon::after {
-    content: '✓';
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
+.toast-icon svg {
+    display: block;
 }
 
 .toast-content {
@@ -668,39 +680,31 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.98);
-    border-top: 0.5px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-    padding: 8px 0;
-    padding-bottom: calc(8px + env(safe-area-inset-bottom));
-    z-index: 900;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: white;
+    border-top: 1px solid #f2f2f7;
+    z-index: 1000;
 }
 
 .bottom-nav-container {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 0 16px;
+    height: 84px;
+    padding-bottom: 20px;
 }
 
 .nav-item {
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 8px 0;
-    cursor: pointer;
-    transition: all 0.2s ease;
     text-decoration: none;
-    color: #8e8e93;
-    position: relative;
+    color: #6f7772;
+    transition: color 0.2s ease;
+    flex: 1;
 }
 
 .nav-item:active {
-    transform: scale(0.95);
+    color: #0167fe;
 }
 
 .nav-item.active {
@@ -710,46 +714,29 @@ body {
 .nav-icon {
     width: 24px;
     height: 24px;
-    margin-bottom: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 4px;
 }
 
 .nav-icon svg {
-    width: 100%;
-    height: 100%;
-    stroke-width: 1.5;
+    width: 24px;
+    height: 24px;
 }
 
 .nav-item.active .nav-icon svg {
-    fill: #0167fe;
-    stroke: #0167fe;
+    color: #0167fe;
 }
 
 .nav-label {
     font-size: 10px;
     font-weight: 500;
-    letter-spacing: 0.1px;
+    text-align: center;
 }
 
 .nav-item.active .nav-label {
-    font-weight: 600;
+    color: #0167fe;
 }
 
-/* Confetti */
-.confetti {
-    position: fixed;
-    width: 8px;
-    height: 8px;
-    pointer-events: none;
-    z-index: 999;
-    animation: fall 3s linear forwards;
-}
 
-@keyframes fall {
-    to {
-        transform: translateY(100vh) rotate(720deg);
-        opacity: 0;
-    }
-}

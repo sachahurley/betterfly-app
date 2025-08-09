@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "Betterfly FTUX",
+    "slug": "betterfly-ios-ftux",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#19f578"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.betterfly.ftux"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#19f578"
+      },
+      "package": "com.betterfly.ftux"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}

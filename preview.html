@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Betterfly - Development Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f7;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0f1c14;
+            margin-bottom: 8px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: #6f7772;
+        }
+        
+        .preview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .preview-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .preview-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0f1c14;
+            margin-bottom: 12px;
+        }
+        
+        .preview-description {
+            font-size: 14px;
+            color: #6f7772;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .preview-iframe {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #e5e5e7;
+            border-radius: 12px;
+            background: white;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .nav-button {
+            background: #0167fe;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        
+        .nav-button:hover {
+            background: #0056d6;
+        }
+        
+        .nav-button.secondary {
+            background: #f2f2f7;
+            color: #0f1c14;
+        }
+        
+        .nav-button.secondary:hover {
+            background: #e5e5e7;
+        }
+        
+        .quick-links {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 30px;
+        }
+        
+        .quick-link {
+            background: #0f1c14;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .quick-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(15, 28, 20, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .preview-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .preview-iframe {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Betterfly Development Preview</h1>
+            <p class="subtitle">Navigate between onboarding and dashboard flows</p>
+        </div>
+        
+        <div class="preview-grid">
+            <div class="preview-card">
+                <h2 class="preview-title">Home Page</h2>
+                <p class="preview-description">
+                    Main home screen with welcome message, stats, and quick actions.
+                </p>
+                
+                <div class="nav-buttons">
+                    <button class="nav-button" onclick="loadHome('index.html')">Home</button>
+                </div>
+                
+                <iframe id="homeFrame" class="preview-iframe" src="home/index.html"></iframe>
+            </div>
+            
+            <div class="preview-card">
+                <h2 class="preview-title">Onboarding Flow</h2>
+                <p class="preview-description">
+                    Multi-step questionnaire and welcome screens for new users.
+                </p>
+                
+                <div class="nav-buttons">
+                    <button class="nav-button" onclick="loadOnboarding('welcome.html')">Welcome</button>
+                    <button class="nav-button secondary" onclick="loadOnboarding('questionnaire.html')">Q1</button>
+                    <button class="nav-button secondary" onclick="loadOnboarding('questionnaire-2.html')">Q2</button>
+                    <button class="nav-button secondary" onclick="loadOnboarding('questionnaire-3.html')">Q3</button>
+                    <button class="nav-button secondary" onclick="loadOnboarding('questionnaire-4.html')">Q4</button>
+                    <button class="nav-button secondary" onclick="loadOnboarding('questionnaire-5.html')">Q5</button>
+                    <button class="nav-button secondary" onclick="loadOnboarding('questionnaire-6.html')">Review</button>
+                    <button class="nav-button secondary" onclick="loadOnboarding('completion.html')">Complete</button>
+                </div>
+                
+                <iframe id="onboardingFrame" class="preview-iframe" src="onboarding/welcome.html"></iframe>
+            </div>
+        </div>
+        
+        <div class="preview-grid">
+            <div class="preview-card">
+                <h2 class="preview-title">Dashboard</h2>
+                <p class="preview-description">
+                    Main app with 5-day wellness challenge and settings.
+                </p>
+                
+                <div class="nav-buttons">
+                    <button class="nav-button" onclick="loadDashboard('index.html')">Main App</button>
+                </div>
+                
+                <iframe id="dashboardFrame" class="preview-iframe" src="dashboard/index.html"></iframe>
+            </div>
+        </div>
+        
+        <div class="quick-links">
+            <a href="home/index.html" class="quick-link" target="_blank">Open Home</a>
+            <a href="onboarding/welcome.html" class="quick-link" target="_blank">Open Onboarding</a>
+            <a href="dashboard/index.html" class="quick-link" target="_blank">Open Dashboard</a>
+            <a href="index.html" class="quick-link" target="_blank">Main Entry</a>
+        </div>
+    </div>
+
+    <script>
+        function loadHome(page) {
+            document.getElementById('homeFrame').src = 'home/' + page;
+        }
+        
+        function loadOnboarding(page) {
+            document.getElementById('onboardingFrame').src = 'onboarding/' + page;
+        }
+        
+        function loadDashboard(page) {
+            document.getElementById('dashboardFrame').src = 'dashboard/' + page;
+        }
+    </script>
+</body>
+</html>

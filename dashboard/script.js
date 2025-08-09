@@ -68,7 +68,8 @@ let gameState = {
     totalPoints: 0,
     daysCompleted: {},
     habitsCompleted: {},
-    expandedDays: { 1: true }
+    expandedDays: { 1: true },
+    todayProgress: 0
 };
 
 let currentSettingType = null;
@@ -76,14 +77,20 @@ let tempMultiSelectValues = [];
 
 // Initialize App
 function initializeApp() {
+    console.log('Initializing app...');
     loadGameState();
+    console.log('Game state loaded:', gameState);
     initializeDays();
     loadSettings();
     setupEventListeners();
+    console.log('App initialization complete');
 }
 
 // Load saved game state
 function loadGameState() {
+    // Clear localStorage to start fresh (temporary fix)
+    localStorage.removeItem('betterflyMinimal');
+    
     const savedState = localStorage.getItem('betterflyMinimal');
     if (savedState) {
         try {
@@ -91,6 +98,31 @@ function loadGameState() {
         } catch (e) {
             console.error('Error loading game state');
         }
+    }
+    
+    // If no data exists, add sample data to show habit tracking cards
+    if (!savedState || Object.keys(gameState).length === 0) {
+        gameState = {
+            currentDay: 1,
+            totalPoints: 1250,
+            daysCompleted: { 1: true, 2: true, 3: true, 4: true, 5: true },
+            habitsCompleted: {
+                "day1_habit1": true, "day1_habit2": true, "day1_habit3": true,
+                "day2_habit4": true, "day2_habit5": true, "day2_habit6": true,
+                "day3_habit1": true, "day3_habit7": true, "day3_habit8": true,
+                "day4_habit9": true, "day4_habit2": true, "day4_habit10": true,
+                "day5_habit4": true, "day5_habit11": true, "day5_habit12": true
+            },
+            expandedDays: { 1: true, 2: true, 3: true, 4: true, 5: true },
+            todayProgress: 65
+        };
+        saveState();
+    }
+    
+    // Ensure expandedDays is properly initialized
+    if (!gameState.expandedDays) {
+        gameState.expandedDays = { 1: true };
+        saveState();
     }
 }
 
@@ -102,8 +134,13 @@ function saveState() {
 // Initialize days display
 function initializeDays() {
     const container = document.getElementById('daysContainer');
-    if (!container) return;
+    if (!container) {
+        console.error('daysContainer not found');
+        alert('daysContainer not found!');
+        return;
+    }
     
+    console.log('Initializing days with gameState:', gameState);
     container.innerHTML = '';
 
     for (let day = 1; day <= 5; day++) {
@@ -112,6 +149,7 @@ function initializeDays() {
     }
 
     updateStats();
+    console.log('Days initialization complete. Container children:', container.children.length);
 }
 
 // Create day card element
@@ -120,15 +158,21 @@ function createDayCard(day) {
     const isExpanded = gameState.expandedDays[day];
     const isActive = day === gameState.currentDay;
     
+    console.log(`Creating day card ${day}:`, { isCompleted, isExpanded, isActive });
+    
     const dayCard = document.createElement('div');
     dayCard.className = `day-card ${isCompleted ? 'completed' : ''} ${isActive ? 'active' : ''}`;
 
     const habits = APP_CONFIG.dailyHabits[day];
+    console.log(`Habits for day ${day}:`, habits);
+    
     const dayPoints = habits.reduce((sum, h) => sum + h.points, 0);
     const earnedPoints = habits.reduce((sum, h) => {
         const key = `day${day}_habit${h.id}`;
         return sum + (gameState.habitsCompleted[key] ? h.points : 0);
     }, 0);
+    
+    console.log(`Day ${day} points: ${earnedPoints}/${dayPoints}`);
 
     const habitsHtml = habits.map(habit => {
         const habitKey = `day${day}_habit${habit.id}`;
@@ -136,7 +180,9 @@ function createDayCard(day) {
         
         return `
             <div class="habit-chip ${isChecked ? 'checked' : ''}" onclick="event.stopPropagation(); toggleHabit(${day}, ${habit.id}, this)">
-                <div class="habit-checkbox ${isChecked ? 'checked' : ''}"></div>
+                <div class="habit-checkbox ${isChecked ? 'checked' : ''}">
+                    ${isChecked ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0167fe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/></svg>' : ''}
+                </div>
                 <div class="habit-content">
                     <span class="habit-text">${habit.text}</span>
                     <span class="habit-points">+${habit.points}</span>
@@ -148,7 +194,7 @@ function createDayCard(day) {
     dayCard.innerHTML = `
         <div class="day-header" onclick="toggleDay(${day})">
             <div class="day-info">
-                <div class="day-number">${isCompleted ? '✓' : day}</div>
+                <div class="day-number">${isCompleted ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/></svg>' : day}</div>
                 <div class="day-text">
                     <span class="day-label">Day ${day}</span>
                     <span class="day-date">${APP_CONFIG.dayNames[day - 1]}</span>
@@ -202,25 +248,32 @@ function toggleHabit(day, habitId, element) {
                 gameState.currentDay++;
             }
             
-            setTimeout(() => {
-                showCelebration(
-                    'Day Complete! 🎯',
-                    `Amazing! You've completed all habits for Day ${day}.`,
-                    '🏆'
-                );
+            const completedDays = Object.keys(gameState.daysCompleted).length;
+            const isFinalDay = completedDays === 5;
+            
+            // Only show day completion celebration if it's not the final day
+            if (!isFinalDay) {
+                // Medium confetti for completing a day
+                createMediumConfetti();
                 
-                const completedDays = Object.keys(gameState.daysCompleted).length;
-                if (completedDays === 5) {
-                    setTimeout(() => {
-                        showCelebration(
-                            'Challenge Complete! 🎊',
-                            `Incredible! You've earned ${gameState.totalPoints} points and built amazing habits!`,
-                            '🏅'
-                        );
-                        createMassiveConfetti();
-                    }, 2000);
-                }
-            }, 300);
+                setTimeout(() => {
+                    showCelebration(
+                        'Day Complete! 🎯',
+                        `Amazing! You've completed all habits for Day ${day}.`,
+                        '🏆'
+                    );
+                }, 300);
+            } else {
+                // For the final day, show challenge completion celebration with more delay
+                setTimeout(() => {
+                    showCelebration(
+                        'Challenge Complete! 🎊',
+                        `Incredible! You've earned ${gameState.totalPoints} points and built amazing habits!`,
+                        '🏅'
+                    );
+                    createMassiveConfetti();
+                }, 500);
+            }
         }
     } else {
         gameState.habitsCompleted[habitKey] = false;
@@ -239,18 +292,35 @@ function toggleHabit(day, habitId, element) {
 
 // Update statistics display
 function updateStats() {
+    console.log('Updating stats with gameState:', gameState);
+    
     const totalPointsEl = document.getElementById('totalPoints');
     const currentStreakEl = document.getElementById('currentStreak');
     const habitsCountEl = document.getElementById('habitsCount');
     
-    if (totalPointsEl) totalPointsEl.textContent = gameState.totalPoints;
+    if (totalPointsEl) {
+        totalPointsEl.textContent = gameState.totalPoints;
+        console.log('Updated totalPoints:', gameState.totalPoints);
+    } else {
+        console.error('totalPoints element not found');
+    }
     
     const streak = Object.keys(gameState.daysCompleted).length;
-    if (currentStreakEl) currentStreakEl.textContent = streak;
+    if (currentStreakEl) {
+        currentStreakEl.textContent = streak;
+        console.log('Updated streak:', streak);
+    } else {
+        console.error('currentStreak element not found');
+    }
     
     const habitsCount = Object.keys(gameState.habitsCompleted)
         .filter(k => gameState.habitsCompleted[k]).length;
-    if (habitsCountEl) habitsCountEl.textContent = habitsCount;
+    if (habitsCountEl) {
+        habitsCountEl.textContent = habitsCount;
+        console.log('Updated habitsCount:', habitsCount);
+    } else {
+        console.error('habitsCount element not found');
+    }
 }
 
 // Show celebration modal
@@ -262,7 +332,11 @@ function showCelebration(title, message, emoji) {
     
     if (titleEl) titleEl.textContent = title;
     if (messageEl) messageEl.textContent = message;
-    if (emojiEl) emojiEl.textContent = emoji;
+    if (emojiEl) {
+        // Replace emoji with SVG icon
+        const svgIcon = '<svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+        emojiEl.innerHTML = svgIcon;
+    }
     if (modal) {
         modal.classList.add('show');
         setTimeout(() => closeCelebration(), 3000);
@@ -275,38 +349,37 @@ function closeCelebration() {
     if (modal) modal.classList.remove('show');
 }
 
-// Create mini confetti effect
+// Create mini confetti effect for micro habits
 function createMiniConfetti() {
-    for (let i = 0; i < 8; i++) {
-        setTimeout(() => {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-            confetti.style.left = (Math.random() * 100) + '%';
-            confetti.style.top = '40%';
-            confetti.style.background = ['#0167fe', '#34c759', '#ff9500', '#af52de'][Math.floor(Math.random() * 4)];
-            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-            document.body.appendChild(confetti);
-            setTimeout(() => confetti.remove(), 3000);
-        }, i * 50);
-    }
+    confetti({
+        particleCount: 5,
+        spread: 4,
+        origin: { y: 0.9, x: 0.5 },
+        colors: ['#0167fe'],
+        startVelocity: 5,
+        gravity: 1.5,
+        ticks: 25
+    });
 }
 
-// Create massive confetti effect
+// Create medium confetti effect for completing a day
+function createMediumConfetti() {
+    confetti({
+        particleCount: 50,
+        spread: 50,
+        origin: { y: 0.6 },
+        colors: ['#0167fe', '#34c759', '#ff9500', '#af52de', '#ff3b30', '#5856d6', '#ff2d92', '#007aff', '#5ac8fa', '#ffcc02']
+    });
+}
+
+// Create massive confetti effect for completing the 5-day challenge
 function createMassiveConfetti() {
-    for (let i = 0; i < 40; i++) {
-        setTimeout(() => {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-            confetti.style.left = (Math.random() * 100) + '%';
-            confetti.style.top = '-10px';
-            confetti.style.background = ['#0167fe', '#34c759', '#ff9500', '#af52de', '#ff3b30'][Math.floor(Math.random() * 5)];
-            confetti.style.width = (Math.random() * 10 + 5) + 'px';
-            confetti.style.height = (Math.random() * 10 + 5) + 'px';
-            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-            document.body.appendChild(confetti);
-            setTimeout(() => confetti.remove(), 4000);
-        }, i * 30);
-    }
+    confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#ff0000', '#00ff00', '#0000ff', '#0167fe', '#34c759', '#ff9500', '#af52de', '#ff3b30', '#5856d6', '#ff2d92', '#007aff', '#5ac8fa', '#ffcc02']
+    });
 }
 
 // Settings functions
@@ -337,7 +410,11 @@ function openBottomSheet(type) {
             optionDiv.className = `option-item ${option === currentValue ? 'selected' : ''}`;
             optionDiv.innerHTML = `
                 <span class="option-text">${option}</span>
-                <div class="option-check"></div>
+                <div class="option-check">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m9 12 2 2 4-4"/>
+                    </svg>
+                </div>
             `;
             optionDiv.addEventListener('click', () => selectOption(option));
             optionsContainer.appendChild(optionDiv);
@@ -367,9 +444,13 @@ function selectOption(option) {
             valueEl.textContent = option;
             showToast(`${setting.title} updated to "${option}"`);
             
+            // Save to both localStorage and UserState
             const savedSettings = JSON.parse(localStorage.getItem('betterflySettings') || '{}');
             savedSettings[currentSettingType] = option;
             localStorage.setItem('betterflySettings', JSON.stringify(savedSettings));
+            
+            // Also update UserState for persistence
+            UserState.updatePreference(currentSettingType, option);
         }
     }
     
@@ -389,7 +470,30 @@ function showToast(message) {
 
 function loadSettings() {
     try {
-        const savedSettings = JSON.parse(localStorage.getItem('betterflySettings') || '{}');
+        // First try to load from UserState (from onboarding)
+        const userPreferences = UserState.getPreferences();
+        let savedSettings = {};
+        
+        // Map UserState preferences to dashboard settings
+        if (userPreferences.primaryGoal) {
+            savedSettings.primaryGoal = userPreferences.primaryGoal;
+        }
+        if (userPreferences.biggestBlocker) {
+            savedSettings.biggestBlocker = userPreferences.biggestBlocker;
+        }
+        if (userPreferences.topInterests) {
+            savedSettings.topInterests = userPreferences.topInterests;
+        }
+        if (userPreferences.dailyTime) {
+            savedSettings.dailyTime = userPreferences.dailyTime;
+        }
+        if (userPreferences.supportType) {
+            savedSettings.supportType = userPreferences.supportType;
+        }
+        
+        // Also check for locally saved settings (in case user updated them)
+        const localSettings = JSON.parse(localStorage.getItem('betterflySettings') || '{}');
+        savedSettings = { ...savedSettings, ...localSettings };
         
         Object.keys(savedSettings).forEach(key => {
             if (APP_CONFIG.settingsOptions[key]) {

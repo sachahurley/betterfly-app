@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Betterfly Questionnaire - Step 3</title>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: #ffffff;
+            box-sizing: border-box;
+        }
+        
+        /* iOS Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            background: #ffffff;
+            height: 54px;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.41px;
+        }
+        
+        .status-time {
+            color: #000000;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.41px;
+        }
+        
+        .status-icons {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .status-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* Signal Strength - 4 bars */
+        .signal-bars {
+            display: flex;
+            gap: 2px;
+            align-items: end;
+            height: 12px;
+        }
+        
+        .signal-bar {
+            background: #000000;
+            border-radius: 0.5px;
+        }
+        
+        .signal-bar:nth-child(1) { width: 3px; height: 3px; }
+        .signal-bar:nth-child(2) { width: 3px; height: 5px; }
+        .signal-bar:nth-child(3) { width: 3px; height: 7px; }
+        .signal-bar:nth-child(4) { width: 3px; height: 9px; }
+        
+        /* WiFi Icon */
+        .wifi-icon {
+            width: 17px;
+            height: 12px;
+            position: relative;
+            margin: 0 2px;
+        }
+        
+        .wifi-arc {
+            position: absolute;
+            border: 2px solid #000000;
+            border-radius: 50%;
+            border-bottom: none;
+        }
+        
+        .wifi-arc:nth-child(1) {
+            width: 17px;
+            height: 12px;
+            bottom: 0;
+            left: 0;
+        }
+        
+        .wifi-arc:nth-child(2) {
+            width: 13px;
+            height: 9px;
+            bottom: 0;
+            left: 2px;
+        }
+        
+        .wifi-arc:nth-child(3) {
+            width: 9px;
+            height: 6px;
+            bottom: 0;
+            left: 4px;
+        }
+        
+        .wifi-dot {
+            width: 2px;
+            height: 2px;
+            background: #000000;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            left: 7.5px;
+        }
+        
+        /* Battery */
+        .battery-container {
+            position: relative;
+            width: 27px;
+            height: 13px;
+        }
+        
+        .battery-body {
+            width: 25px;
+            height: 13px;
+            border: 1px solid rgba(0,0,0,0.35);
+            border-radius: 4px;
+            position: relative;
+        }
+        
+        .battery-tip {
+            position: absolute;
+            right: -2px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 4px;
+            background: rgba(0,0,0,0.35);
+            border-radius: 0 1px 1px 0;
+        }
+        
+        .battery-fill {
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            right: 1px;
+            bottom: 1px;
+            background: #000000;
+            border-radius: 2px;
+            width: calc(100% - 2px);
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px;
+            height: 60px;
+            background: #ffffff;
+            position: sticky;
+            top: 54px;
+            z-index: 10;
+            margin-top: 0;
+        }
+        
+        .back-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #0f1c14;
+        }
+        
+        .header-title {
+            font-size: 18px;
+            font-weight: 400;
+            color: #0f1c14;
+            text-align: center;
+            flex: 1;
+            line-height: 1.5;
+        }
+        
+        .header-spacer {
+            width: 40px;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            padding: 0 24px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            display: flex;
+        }
+        
+        .progress-segment {
+            flex: 1;
+            height: 100%;
+            margin-right: 2px;
+        }
+        
+        .progress-segment:last-child {
+            margin-right: 0;
+        }
+        
+        .progress-segment.completed {
+            background-color: #0167fe;
+        }
+        
+        .progress-segment.incomplete {
+            background-color: #dbdddc;
+        }
+        
+        .progress-segment.final {
+            background-color: #22c55e;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 24px 24px 32px 24px;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        
+        /* Progress Indicator */
+        .step-indicator {
+            background: #ffffff;
+            border: 1px solid #0167fe;
+            color: #0167fe;
+            padding: 4px 8px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.36px;
+            display: inline-block;
+            width: fit-content;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        
+        /* Question Section */
+        .question-section {
+            margin-bottom: 24px;
+        }
+        
+        .question-title {
+            font-size: 20px;
+            font-weight: 400;
+            color: #000000;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+        
+        .question-subtitle {
+            font-size: 14px;
+            font-weight: 400;
+            color: #000000;
+            line-height: 1.5;
+        }
+        
+        /* Selection Items - Radio Style */
+        .selection-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin-bottom: 32px;
+        }
+        
+        .selection-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            height: 64px;
+            cursor: pointer;
+            position: relative;
+            border-radius: 20px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .selection-item:hover {
+            background-color: rgba(0,0,0,0.02);
+        }
+        
+        .selection-item.selected {
+            background-color: rgba(1, 152, 102, 0.05);
+        }
+        
+        .item-content {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            gap: 16px;
+        }
+        
+        .item-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            border: 1px solid #dbdddc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            flex-shrink: 0;
+            color: #333333;
+        }
+        
+        .item-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .item-label {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 400;
+            color: #0f1c14;
+            line-height: 1.5;
+        }
+        
+        /* Radio Button Styling */
+        .item-radio {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #9ca3af;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .selection-item.selected .item-radio {
+            border-color: #019866;
+        }
+        
+        .radio-dot {
+            width: 12px;
+            height: 12px;
+            background-color: #019866;
+            border-radius: 50%;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s ease;
+        }
+        
+        .selection-item.selected .radio-dot {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        /* Button Section */
+        .button-section {
+            margin-top: auto;
+            padding-top: 20px;
+        }
+        
+        .continue-button {
+            width: 100%;
+            height: 48px;
+            background: #dbdddc;
+            color: #939995;
+            border: none;
+            border-radius: 32px;
+            font-size: 16px;
+            font-weight: 400;
+            cursor: not-allowed;
+            transition: all 0.3s ease;
+            line-height: 1.5;
+        }
+        
+        .continue-button.enabled {
+            background: #0f1c14;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        
+        .continue-button.enabled:hover {
+            background: #1a2b1f;
+            transform: translateY(-1px);
+        }
+        
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 24px 24px;
+            }
+            
+            .question-title {
+                font-size: 18px;
+            }
+        }
+        
+        @media (min-width: 481px) {
+            .container {
+                max-width: 480px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- iOS Status Bar -->
+        <!-- iOS Status Bar -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons">
+                <!-- Cellular Signal -->
+                <div class="status-icon">
+                    <svg width="19" height="12" viewBox="0 0 19 12" fill="none">
+                        <path d="M1 8.5h2v3h-2z" fill="currentColor"/>
+                        <path d="M4.5 6h2v5.5h-2z" fill="currentColor"/>
+                        <path d="M8 3.5h2v8h-2z" fill="currentColor"/>
+                        <path d="M11.5 1h2v10.5h-2z" fill="currentColor"/>
+                    </svg>
+                </div>
+                <!-- WiFi -->
+                <div class="status-icon">
+                    <svg width="17" height="12" viewBox="0 0 17 12" fill="none">
+                        <path d="M8.5 11.5c0.828 0 1.5-0.672 1.5-1.5s-0.672-1.5-1.5-1.5-1.5 0.672-1.5 1.5 0.672 1.5 1.5 1.5z" fill="currentColor"/>
+                        <path d="M8.5 9.5c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z" fill="currentColor"/>
+                        <path d="M8.5 6.5c2.485 0 4.5-2.015 4.5-4.5s-2.015-4.5-4.5-4.5-4.5 2.015-4.5 4.5 2.015 4.5 4.5 4.5z" fill="currentColor"/>
+                    </svg>
+                </div>
+                <!-- Battery -->
+                <div class="status-icon">
+                    <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+                        <rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="currentColor" fill="none" stroke-width="1" opacity="0.35"/>
+                        <path d="M23 4V8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.4"/>
+                        <rect x="2" y="2" width="18" height="8" rx="1.5" fill="currentColor"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Header -->
+        <div class="header">
+            <button class="back-button" onclick="goBack()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 18L9 12L15 6" stroke="#0f1c14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <div class="header-title">Questionnaire</div>
+            <div class="header-spacer"></div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-segment completed"></div>
+                <div class="progress-segment completed"></div>
+                <div class="progress-segment completed"></div>
+                <div class="progress-segment incomplete"></div>
+                <div class="progress-segment incomplete"></div>
+                <div class="progress-segment incomplete"></div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Step Indicator -->
+            <div class="step-indicator">Step 3 of 6</div>
+            
+            <!-- Question Section -->
+            <div class="question-section">
+                <h1 class="question-title">How much time per day do you feel you can consistently give to your health?</h1>
+                <p class="question-subtitle">Select the one that closest fits you. You can change these at a later time.</p>
+            </div>
+            
+            <!-- Selection Items -->
+            <div class="selection-list">
+                <div class="selection-item" onclick="selectRadio(this)" data-value="2-min">
+                    <div class="item-content">
+                        <div class="item-icon">
+                            <i data-lucide="clock-2"></i>
+                        </div>
+                        <div class="item-label">2 min</div>
+                        <div class="item-radio">
+                            <div class="radio-dot"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="selection-item" onclick="selectRadio(this)" data-value="5-min">
+                    <div class="item-content">
+                        <div class="item-icon">
+                            <i data-lucide="clock-5"></i>
+                        </div>
+                        <div class="item-label">5 min</div>
+                        <div class="item-radio">
+                            <div class="radio-dot"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="selection-item" onclick="selectRadio(this)" data-value="10-min">
+                    <div class="item-content">
+                        <div class="item-icon">
+                            <i data-lucide="clock-10"></i>
+                        </div>
+                        <div class="item-label">10+ min</div>
+                        <div class="item-radio">
+                            <div class="radio-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Continue Button -->
+            <div class="button-section">
+                <button class="continue-button" id="continueBtn" onclick="handleContinue()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedTime = null;
+        const continueBtn = document.getElementById('continueBtn');
+        
+        function selectRadio(item) {
+            // Remove selection from all items
+            const allItems = document.querySelectorAll('.selection-item');
+            allItems.forEach(i => i.classList.remove('selected'));
+            
+            // Select clicked item
+            item.classList.add('selected');
+            selectedTime = item.dataset.value;
+            
+            updateContinueButton();
+        }
+        
+        function updateContinueButton() {
+            if (selectedTime) {
+                continueBtn.classList.add('enabled');
+                continueBtn.disabled = false;
+            } else {
+                continueBtn.classList.remove('enabled');
+                continueBtn.disabled = true;
+            }
+        }
+        
+        function handleContinue() {
+            if (continueBtn.classList.contains('enabled')) {
+                // Save daily time to localStorage
+                const preferences = JSON.parse(localStorage.getItem('userPreferences') || '{}');
+                preferences.dailyTime = selectedTime;
+                localStorage.setItem('userPreferences', JSON.stringify(preferences));
+                
+                console.log('User selected time commitment:', selectedTime);
+                window.location.href = 'questionnaire-4.html';
+            }
+        }
+        
+        function goBack() {
+            window.location.href = 'questionnaire-2.html';
+        }
+        
+        // Initialize button state
+        updateContinueButton();
+        
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
