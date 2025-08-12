@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Question 4 - Betterfly</title>
+    <link rel="stylesheet" href="styles/shared.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script></head>
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons"></div>
+        </div>
+        
+        <div id="backButtonContainer"></div>
+        
+        <div class="content with-nav">
+            <div id="progressContainer"></div>
+            
+            <div id="mascotContainer"></div>
+            
+            <h2>Have you tried wellness apps or programs before?</h2>
+            <p class="subtitle">We validate past struggles and show we understand your journey</p>
+            
+            <div id="selectionContainer"></div>
+        </div>
+        
+        <div id="ctaContainer"></div>
+    </div>
+
+    <script src="state.js"></script>
+    <script src="routes.js"></script>
+    <script src="components/components.js"></script>
+    <script>
+        let ctaGroup;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            OnboardingState.load();
+            
+            // Mount back button
+            BackButton.mount('backButtonContainer', {
+                title: 'Question 4 of 10'
+            });
+            
+            ProgressBar.mount('progressContainer', 4, OnboardingState.TOTAL_QUESTION_STEPS);
+            MascotBubble.mount('mascotContainer', "Your past experiences help me understand what didn't work, so we can try something better! 📈");
+            
+            const selectionList = SelectionList.mount('selectionContainer', {
+                items: [
+                    { value: 'many_failed', emoji: '😔', label: "Yes, many times but they didn't stick" },
+                    { value: 'some_success', emoji: '🤔', label: "A few times with some success" },
+                    { value: 'first_time', emoji: '🆕', label: "This is my first time" },
+                    { value: 'current', emoji: '📱', label: "I'm using other apps currently" }
+                ],
+                multiple: false,
+                onChange: (value) => {
+                    OnboardingState.update('q4_pastExperience', value);
+                    ctaGroup.updateDisabled(!value);
+                }
+            });
+            
+            // Setup CTA with edit mode support  
+            const ctaOptions = EditModeHelper.setupEditModeCTA({
+                primaryLabel: 'Continue'
+            }, () => {
+                if (OnboardingState.canContinue('q4-past-experience')) {
+                    OnboardingRoutes.navigate('q5-wearable');
+                }
+            });
+            
+            ctaGroup = CTAGroup.mount('ctaContainer', {
+                ...ctaOptions,
+                disabled: !OnboardingState.canContinue('q4-past-experience')
+            });
+            
+            const existing = OnboardingState.get('q4_pastExperience');
+            if (existing) {
+                const item = document.querySelector(`[data-value="${existing}"]`);
+                if (item) item.click();
+            }
+        });
+    </script>
+</body>
+</html>

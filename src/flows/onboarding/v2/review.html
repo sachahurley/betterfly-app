@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Review Your Choices - Betterfly</title>
+    <link rel="stylesheet" href="styles/shared.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .review-container {
+            max-width: 100%;
+        }
+        
+        .choices-summary {
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin-bottom: 32px;
+        }
+        
+        .choice-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .choice-group:last-child {
+            border-bottom: none;
+        }
+        
+        .choice-title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.5;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        
+        .choice-value {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            text-align: right;
+            max-width: 60%;
+        }
+        
+        .choice-emoji {
+            display: none;
+        }
+        
+        
+        .settings-note {
+            text-align: center;
+            margin: 32px 0;
+            padding: 0 20px;
+        }
+        
+        .settings-note p {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.5;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons">
+                <div class="signal-bars">
+                    <div class="signal-bar"></div>
+                    <div class="signal-bar"></div>
+                    <div class="signal-bar"></div>
+                    <div class="signal-bar"></div>
+                </div>
+                <div class="wifi-icon"></div>
+                <div class="battery-icon"></div>
+            </div>
+        </div>
+        
+        <div id="backButtonContainer"></div>
+        
+        <div class="content with-nav">
+            <div class="review-container">
+                <h1>Let's Review Your Choices</h1>
+                <p class="subtitle">We'll use these to create your personalized wellness journey</p>
+                
+                <div class="choices-summary" id="choicesSummary">
+                    <!-- Choices will be populated by JavaScript -->
+                </div>
+                
+                <div class="settings-note">
+                    <p>You can update these preferences anytime in your settings.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="ctaContainer"></div>
+    </div>
+
+    <script src="../../../../shared/user-state.js"></script>
+    <script src="state.js"></script>
+    <script src="routes.js"></script>
+    <script src="components/components.js"></script>
+    <script>
+        // Question mappings for display in order
+        const questionMappings = [
+            {
+                key: 'q1_healthFeeling',
+                title: 'Primary Goal',
+                options: {
+                    'struggling': { label: "I'm struggling and need help" },
+                    'okay': { label: "I'm okay but want to improve" },
+                    'well': { label: "I'm doing well but want to optimize" },
+                    'thriving': { label: "I'm thriving and want to maintain it" },
+                    'unsure': { label: "I'm not sure where I stand" }
+                }
+            },
+            {
+                key: 'q2_mainConcern',
+                title: 'Main Health Concern',
+                options: {
+                    'low_energy': { label: "Low energy" },
+                    'stress': { label: "Stress and overwhelm" },
+                    'weight': { label: "Weight management" },
+                    'sleep': { label: "Sleep quality" },
+                    'focus': { label: "Focus and productivity" },
+                    'pain': { label: "Chronic pain" }
+                }
+            },
+            {
+                key: 'q3_biggestChallenge',
+                title: 'Biggest Blocker',
+                options: {
+                    'time': { label: "Time" },
+                    'motivation': { label: "Motivation" },
+                    'knowledge': { label: "Knowledge" },
+                    'consistency': { label: "Consistency" },
+                    'support': { label: "Support system" }
+                }
+            },
+            {
+                key: 'q4_pastExperience',
+                title: 'Past Experience',
+                options: {
+                    'many_failed': { label: "Many attempts, didn't stick" },
+                    'some_success': { label: "Some success" },
+                    'first_time': { label: "First time" },
+                    'current': { label: "Using other apps" }
+                }
+            },
+            {
+                key: 'q5_wearable',
+                title: 'Progress Tracking',
+                options: {
+                    'apple_watch': { label: "Apple Watch" },
+                    'fitbit': { label: "Fitbit" },
+                    'garmin': { label: "Garmin" },
+                    'other': { label: "Other wearable" },
+                    'phone': { label: "Phone only" },
+                    'none': { label: "No tracking" }
+                }
+            },
+            {
+                key: 'q6_motivation',
+                title: 'Top Interests',
+                options: {
+                    'competition': { label: "Competition, Challenges" },
+                    'progress': { label: "Progress tracking" },
+                    'rewards': { label: "Rewards" },
+                    'community': { label: "Community" },
+                    'health': { label: "Health improvements" }
+                }
+            },
+            {
+                key: 'q7_supportPref',
+                title: 'Preferred Support',
+                options: {
+                    'reminders': { label: "Daily reminders" },
+                    'coach': { label: "Personal coaching" },
+                    'community': { label: "Community forums" },
+                    'ai': { label: "AI guidance" },
+                    'solo': { label: "Solo journey" }
+                }
+            },
+            {
+                key: 'q8_lifestyle',
+                title: 'Current Lifestyle',
+                options: {
+                    'sedentary': { label: "Mostly sedentary" },
+                    'light': { label: "Lightly active" },
+                    'moderate': { label: "Moderately active" },
+                    'very': { label: "Very active" },
+                    'athlete': { label: "Athlete level" }
+                }
+            },
+            {
+                key: 'q9_success',
+                title: 'Success Definition',
+                options: {
+                    'energy': { label: "More energy" },
+                    'happiness': { label: "Happiness, calmness" },
+                    'strength': { label: "Strength, fitness" },
+                    'habits': { label: "Lasting habits" },
+                    'balance': { label: "Work-life balance" }
+                }
+            },
+            {
+                key: 'q10_commitment',
+                title: 'Daily Time',
+                options: {
+                    '5min': { label: "5 min/day" },
+                    '15min': { label: "15 min/day" },
+                    '30min': { label: "30 min/day" },
+                    '60min': { label: "1 hour/day" },
+                    'varies': { label: "Varies" }
+                }
+            }
+        ];
+
+        function populateChoices() {
+            const container = document.getElementById('choicesSummary');
+            const userData = OnboardingState.data;
+            let html = '';
+
+            // Iterate through each question in order and display ALL questions
+            questionMappings.forEach(question => {
+                const value = userData[question.key];
+                const choice = value && question.options[value] ? question.options[value] : null;
+                
+                html += `
+                    <div class="choice-group">
+                        <div class="choice-title">${question.title}</div>
+                        <div class="choice-value">
+                            ${choice ? choice.label : 'Not answered'}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function editAnswers() {
+            // Go back to first question to re-do the flow
+            OnboardingRoutes.navigate('q1-health-feeling');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load state
+            OnboardingState.load();
+            
+            // Mount back button
+            BackButton.mount('backButtonContainer', {
+                title: 'Review'
+            });
+            
+            // Populate choices
+            populateChoices();
+            
+            // Mount CTA
+            CTAGroup.mount('ctaContainer', {
+                primaryLabel: 'Looks Great!',
+                secondaryLabel: 'Edit My Answers',
+                onPrimary: () => {
+                    // Award review completion bonus
+                    const bonusCoins = OnboardingState.awardReviewCompletionBonus();
+                    
+                    if (bonusCoins > 0) {
+                        // Show celebration toast for 100 coin bonus
+                        CoinAnimationManager.showCelebrationToast(bonusCoins, () => {
+                            OnboardingRoutes.navigate('challenges-intro');
+                        });
+                    } else {
+                        // Already awarded, proceed immediately
+                        OnboardingRoutes.navigate('challenges-intro');
+                    }
+                },
+                onSecondary: editAnswers
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Verification Code - Betterfly</title>
+    <link rel="stylesheet" href="styles/shared.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .signup-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .signup-progress-bar {
+            background: #f3f4f6;
+            height: 4px;
+            margin-top: 44px;
+            position: relative;
+        }
+        
+        .signup-progress-fill {
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            height: 100%;
+            width: 100%;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        .signup-content {
+            flex: 1;
+            padding: 32px 24px 24px;
+            padding-bottom: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .signup-title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .signup-subtitle {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+            line-height: 1.5;
+            max-width: 300px;
+        }
+        
+        .verification-form {
+            width: 100%;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .verification-input-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            justify-content: center;
+        }
+        
+        .verification-digit {
+            width: 48px;
+            height: 56px;
+            border: 2px solid #d1d5db;
+            border-radius: 12px;
+            background: white;
+            font-family: 'Roboto', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: center;
+            transition: all 0.2s ease;
+            outline: none;
+            -webkit-appearance: none;
+            -moz-appearance: textfield;
+        }
+        
+        .verification-digit::-webkit-outer-spin-button,
+        .verification-digit::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        .verification-digit:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+            background: rgba(16, 185, 129, 0.02);
+        }
+        
+        .verification-digit.filled {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
+        }
+        
+        .verification-digit.error {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.05);
+        }
+        
+        .verification-digit:disabled {
+            background: #f9fafb;
+            border-color: #e5e7eb;
+            color: #9ca3af;
+        }
+        
+        .hidden-input {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .error-message {
+            font-family: 'Roboto', sans-serif;
+            font-size: 12px;
+            color: #ef4444;
+            margin-top: -24px;
+            margin-bottom: 24px;
+            display: none;
+            text-align: center;
+        }
+        
+        .error-message.visible {
+            display: block;
+        }
+        
+        .resend-section {
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        
+        .resend-text {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .resend-button {
+            background: none;
+            border: none;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: #10b981;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .resend-button:hover {
+            opacity: 0.8;
+        }
+        
+        .resend-button:disabled {
+            color: #9ca3af;
+            cursor: not-allowed;
+            text-decoration: none;
+        }
+        
+        .resend-countdown {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+        
+        .signup-cta-section {
+            padding: 0 24px 24px;
+            background: white;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .btn-primary.signup-btn {
+            width: 100%;
+            max-width: 320px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary.signup-btn:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+        
+        .btn-primary.signup-btn:not(:disabled):hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        
+        /* Loading state */
+        .verification-digit.loading {
+            background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Success animation */
+        .verification-success {
+            animation: successPulse 0.6s ease-out;
+        }
+        
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Auto-submit feedback */
+        .auto-submitting {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        /* Demo animation effects */
+        .verification-digit.demo-filling {
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.2) 100%);
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+        
+        .auto-submit-message {
+            font-family: 'Roboto', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            color: #10b981;
+            margin-top: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .auto-submit-message.visible {
+            opacity: 1;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            .verification-input-container {
+                gap: 8px;
+            }
+            
+            .verification-digit {
+                width: 40px;
+                height: 48px;
+                font-size: 20px;
+            }
+            
+            .signup-content {
+                padding: 24px 20px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons"></div>
+        </div>
+        
+        <div id="backButtonContainer"></div>
+        
+        <div class="signup-progress-bar">
+            <div class="signup-progress-fill" id="progressFill"></div>
+        </div>
+        
+        <div class="signup-content">
+            <h1 class="signup-title">Enter 6-digit code</h1>
+            <p class="signup-subtitle" id="subtitleText">We sent a verification code to your phone number</p>
+            
+            <form class="verification-form" id="verificationForm">
+                <!-- Hidden input for paste functionality and mobile keyboards -->
+                <input type="tel" class="hidden-input" id="hiddenInput" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+                
+                <div class="verification-input-container" id="digitContainer">
+                    <input type="text" class="verification-digit" data-index="0" maxlength="1" inputmode="numeric" readonly>
+                    <input type="text" class="verification-digit" data-index="1" maxlength="1" inputmode="numeric" readonly>
+                    <input type="text" class="verification-digit" data-index="2" maxlength="1" inputmode="numeric" readonly>
+                    <input type="text" class="verification-digit" data-index="3" maxlength="1" inputmode="numeric" readonly>
+                    <input type="text" class="verification-digit" data-index="4" maxlength="1" inputmode="numeric" readonly>
+                    <input type="text" class="verification-digit" data-index="5" maxlength="1" inputmode="numeric" readonly>
+                </div>
+                
+                <div class="error-message" id="errorMessage">
+                    Invalid verification code. Please try again.
+                </div>
+                
+                <div class="auto-submit-message" id="autoSubmitMessage">
+                    Verifying code...
+                </div>
+                
+                <div class="resend-section">
+                    <div class="resend-text">Didn't receive the code?</div>
+                    <button type="button" class="resend-button" id="resendButton">Resend Code</button>
+                    <div class="resend-countdown" id="resendCountdown" style="display: none;">
+                        Resend available in <span id="countdownTimer">30</span>s
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <div class="signup-cta-section">
+            <button id="nextBtn" class="btn-primary signup-btn" disabled>
+                Next
+            </button>
+        </div>
+    </div>
+
+    <script src="state.js"></script>
+    <script src="routes.js"></script>
+    <script src="components/components.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load state
+            OnboardingState.load();
+            
+            // Mount back button
+            BackButton.mount('backButtonContainer', {
+                title: 'Verification'
+            });
+            
+            // Initialize Lucide icons
+            lucide.createIcons();
+            
+            // Form elements
+            const hiddenInput = document.getElementById('hiddenInput');
+            const digitInputs = document.querySelectorAll('.verification-digit');
+            const nextBtn = document.getElementById('nextBtn');
+            const verificationForm = document.getElementById('verificationForm');
+            const errorMessage = document.getElementById('errorMessage');
+            const autoSubmitMessage = document.getElementById('autoSubmitMessage');
+            const resendButton = document.getElementById('resendButton');
+            const resendCountdown = document.getElementById('resendCountdown');
+            const countdownTimer = document.getElementById('countdownTimer');
+            const subtitleText = document.getElementById('subtitleText');
+            
+            // Get phone number from state for subtitle
+            const phoneNumber = OnboardingState.get('profile.phoneNumber');
+            const countryCode = OnboardingState.get('profile.countryCode');
+            if (phoneNumber && countryCode) {
+                subtitleText.textContent = `We sent a verification code to ${countryCode} ${phoneNumber}`;
+            }
+            
+            // State management
+            let currentCode = '';
+            let isAutoSubmitting = false;
+            let resendCountdownActive = false;
+            let resendTimeRemaining = 0;
+            
+            // Demo: Animate in a sample 6-digit code
+            const demoCode = '123456';
+            let demoAnimationDelay = 1000; // Start after 1 second
+            
+            function animateDemoCode() {
+                // Clear any existing code first
+                updateCode('');
+                
+                // Animate each digit with a delay
+                for (let i = 0; i < demoCode.length; i++) {
+                    setTimeout(() => {
+                        const currentProgress = demoCode.slice(0, i + 1);
+                        updateCode(currentProgress);
+                        
+                        // Add a subtle bounce animation to the digit being filled
+                        const digitInput = digitInputs[i];
+                        digitInput.classList.add('demo-filling');
+                        digitInput.style.transform = 'scale(1.1)';
+                        digitInput.style.transition = 'all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                        
+                        setTimeout(() => {
+                            digitInput.style.transform = 'scale(1)';
+                            digitInput.classList.remove('demo-filling');
+                        }, 200);
+                        
+                    }, demoAnimationDelay + (i * 300)); // 300ms delay between each digit
+                }
+            }
+            
+            // Start the demo animation
+            animateDemoCode();
+            
+            // Auto-focus on hidden input when page loads (after demo)
+            setTimeout(() => {
+                hiddenInput.focus();
+            }, demoAnimationDelay + (demoCode.length * 300) + 500);
+            
+            // Handle input from hidden field (for mobile keyboards and paste)
+            hiddenInput.addEventListener('input', function(e) {
+                const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+                updateCode(value);
+            });
+            
+            // Handle paste events
+            hiddenInput.addEventListener('paste', function(e) {
+                e.preventDefault();
+                const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+                const cleanData = pasteData.replace(/\D/g, '').slice(0, 6);
+                updateCode(cleanData);
+            });
+            
+            // Handle backspace
+            hiddenInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace') {
+                    if (currentCode.length > 0) {
+                        updateCode(currentCode.slice(0, -1));
+                    }
+                }
+            });
+            
+            // Make digit inputs clickable to focus hidden input
+            digitInputs.forEach((input, index) => {
+                input.addEventListener('click', function() {
+                    hiddenInput.focus();
+                });
+                
+                // Prevent direct input on digit fields
+                input.addEventListener('keydown', function(e) {
+                    e.preventDefault();
+                });
+            });
+            
+            // Update code display and validation
+            function updateCode(newCode) {
+                currentCode = newCode;
+                hiddenInput.value = currentCode;
+                
+                // Clear any existing error state
+                clearError();
+                
+                // Update digit displays
+                digitInputs.forEach((input, index) => {
+                    if (index < currentCode.length) {
+                        input.value = currentCode[index];
+                        input.classList.add('filled');
+                    } else {
+                        input.value = '';
+                        input.classList.remove('filled');
+                    }
+                });
+                
+                // Enable/disable next button
+                nextBtn.disabled = currentCode.length === 0;
+                
+                // For demo purposes, don't auto-submit - let user click Next button
+                // if (currentCode.length === 6 && !isAutoSubmitting) {
+                //     autoSubmitCode();
+                // }
+            }
+            
+            // Auto-submit functionality
+            function autoSubmitCode() {
+                isAutoSubmitting = true;
+                autoSubmitMessage.classList.add('visible');
+                
+                // Add loading state to digits
+                digitInputs.forEach(input => {
+                    input.classList.add('loading');
+                });
+                
+                // Simulate verification process
+                setTimeout(() => {
+                    // For demo purposes, accept any 6-digit code
+                    // In real app, this would validate against server
+                    const isValid = currentCode.length === 6;
+                    
+                    if (isValid) {
+                        handleSuccessfulVerification();
+                    } else {
+                        handleFailedVerification();
+                    }
+                }, 2000);
+            }
+            
+            // Handle successful verification
+            function handleSuccessfulVerification() {
+                // Remove loading state
+                digitInputs.forEach(input => {
+                    input.classList.remove('loading');
+                    input.classList.add('verification-success');
+                });
+                
+                autoSubmitMessage.classList.remove('visible');
+                
+                // Save verification status to state
+                OnboardingState.update('profile.phoneVerified', true);
+                OnboardingState.update('profile.verificationCode', currentCode);
+                
+                // Navigate to celebration page after brief success animation
+                setTimeout(() => {
+                    OnboardingRoutes.navigate('profile-celebration');
+                }, 800);
+                
+                isAutoSubmitting = false;
+            }
+            
+            // Handle failed verification
+            function handleFailedVerification() {
+                // Remove loading state
+                digitInputs.forEach(input => {
+                    input.classList.remove('loading');
+                    input.classList.add('error');
+                });
+                
+                autoSubmitMessage.classList.remove('visible');
+                showError('Invalid verification code. Please try again.');
+                
+                // Clear code after error
+                setTimeout(() => {
+                    updateCode('');
+                    clearError();
+                }, 2000);
+                
+                isAutoSubmitting = false;
+            }
+            
+            // Show error message
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.classList.add('visible');
+            }
+            
+            // Clear error state
+            function clearError() {
+                errorMessage.classList.remove('visible');
+                digitInputs.forEach(input => {
+                    input.classList.remove('error');
+                });
+            }
+            
+            // Handle next button click
+            nextBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if (currentCode.length === 0) return;
+                
+                if (currentCode.length < 6) {
+                    showError('Please enter all 6 digits of the verification code.');
+                    return;
+                }
+                
+                if (!isAutoSubmitting) {
+                    // For demo purposes, navigate directly to celebration
+                    OnboardingState.update('profile.phoneVerified', true);
+                    OnboardingState.update('profile.verificationCode', currentCode);
+                    OnboardingRoutes.navigate('profile-celebration');
+                }
+            });
+            
+            // Handle form submission
+            verificationForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                nextBtn.click();
+            });
+            
+            // Resend functionality
+            resendButton.addEventListener('click', function() {
+                if (resendCountdownActive) return;
+                
+                // Clear current code
+                updateCode('');
+                
+                // Simulate resending
+                console.log('Resending verification code...');
+                
+                // Start countdown
+                startResendCountdown();
+                
+                // Show feedback
+                subtitleText.textContent = 'New verification code sent to your phone';
+                setTimeout(() => {
+                    if (phoneNumber && countryCode) {
+                        subtitleText.textContent = `We sent a verification code to ${countryCode} ${phoneNumber}`;
+                    }
+                }, 3000);
+            });
+            
+            // Resend countdown timer
+            function startResendCountdown() {
+                resendCountdownActive = true;
+                resendTimeRemaining = 30;
+                resendButton.style.display = 'none';
+                resendCountdown.style.display = 'block';
+                
+                const countdown = setInterval(() => {
+                    resendTimeRemaining--;
+                    countdownTimer.textContent = resendTimeRemaining;
+                    
+                    if (resendTimeRemaining <= 0) {
+                        clearInterval(countdown);
+                        resendCountdownActive = false;
+                        resendButton.style.display = 'inline';
+                        resendCountdown.style.display = 'none';
+                    }
+                }, 1000);
+            }
+            
+            // Maintain focus on hidden input
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.signup-container') || e.target.closest('.resend-section') || e.target.closest('#nextBtn')) {
+                    return;
+                }
+                
+                // Refocus hidden input if clicking anywhere else
+                if (document.activeElement !== hiddenInput && !isAutoSubmitting) {
+                    hiddenInput.focus();
+                }
+            });
+            
+            // Handle visibility change to maintain focus
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden && !isAutoSubmitting) {
+                    setTimeout(() => {
+                        hiddenInput.focus();
+                    }, 100);
+                }
+            });
+            
+            // Start resend countdown on page load (simulate initial code was sent)
+            startResendCountdown();
+        });
+    </script>
+</body>
+</html>

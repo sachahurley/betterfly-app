@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Question 1 - Betterfly</title>
+    <link rel="stylesheet" href="styles/shared.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons">
+                <div class="signal-bars">
+                    <div class="signal-bar"></div>
+                    <div class="signal-bar"></div>
+                    <div class="signal-bar"></div>
+                    <div class="signal-bar"></div>
+                </div>
+                <div class="wifi-icon"></div>
+                <div class="battery-icon"></div>
+            </div>
+        </div>
+        
+        <div id="backButtonContainer"></div>
+        
+        <div class="content with-nav">
+            <div id="progressContainer"></div>
+            
+            <div id="mascotContainer"></div>
+            
+            <h2>How are you feeling about your health right now?</h2>
+            
+            <div id="selectionContainer"></div>
+            
+        </div>
+        
+        <div id="ctaContainer"></div>
+    </div>
+
+    <script src="state.js"></script>
+    <script src="routes.js"></script>
+    <script src="components/components.js"></script>
+    <script>
+        let ctaGroup;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load state
+            OnboardingState.load();
+            
+            // Mount back button (disabled for first question)
+            BackButton.mount('backButtonContainer', {
+                title: 'Question 1 of 10',
+                disabled: true
+            });
+            
+            // Mount progress bar
+            ProgressBar.mount('progressContainer', 1, OnboardingState.TOTAL_QUESTION_STEPS);
+            
+            // Mount mascot
+            MascotBubble.mount('mascotContainer', 'What would you like to learn?');
+            
+            // Mount selection list
+            const selectionList = SelectionList.mount('selectionContainer', {
+                items: [
+                    { value: 'struggling', emoji: '😟', label: "I'm struggling and need help" },
+                    { value: 'okay', emoji: '😐', label: "I'm okay but want to improve" },
+                    { value: 'well', emoji: '🙂', label: "I'm doing well but want to optimize" },
+                    { value: 'thriving', emoji: '😊', label: "I'm thriving and want to maintain it" },
+                    { value: 'unsure', emoji: '🤔', label: "I'm not sure where I stand" }
+                ],
+                multiple: false,
+                onChange: (value) => {
+                    OnboardingState.update('q1_healthFeeling', value);
+                    ctaGroup.updateDisabled(!value);
+                }
+            });
+            
+            // Setup CTA with edit mode support
+            const ctaOptions = EditModeHelper.setupEditModeCTA({
+                primaryLabel: 'Continue'
+            }, () => {
+                if (OnboardingState.canContinue('q1-health-feeling')) {
+                    OnboardingRoutes.navigate('loading');
+                }
+            });
+            
+            // Mount CTA
+            ctaGroup = CTAGroup.mount('ctaContainer', {
+                ...ctaOptions,
+                disabled: !OnboardingState.canContinue('q1-health-feeling')
+            });
+            
+            // Restore selection if exists
+            const existing = OnboardingState.get('q1_healthFeeling');
+            if (existing) {
+                const item = document.querySelector(`[data-value="${existing}"]`);
+                if (item) item.click();
+            }
+            
+        });
+    </script>
+</body>
+</html>

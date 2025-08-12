@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Question 10 - Betterfly</title>
+    <link rel="stylesheet" href="styles/shared.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script></head>
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons"></div>
+        </div>
+        
+        <div id="backButtonContainer"></div>
+        
+        <div class="content with-nav">
+            <div id="progressContainer"></div>
+            
+            <div id="mascotContainer"></div>
+            
+            <h2>How much time can you commit daily?</h2>
+            
+            <div id="selectionContainer"></div>
+        </div>
+        
+        <div id="ctaContainer"></div>
+    </div>
+
+    <script src="state.js"></script>
+    <script src="routes.js"></script>
+    <script src="components/components.js"></script>
+    <script>
+        let ctaGroup;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            OnboardingState.load();
+            
+            // Mount back button
+            BackButton.mount('backButtonContainer', {
+                title: 'Question 10 of 10'
+            });
+            
+            ProgressBar.mount('progressContainer', 10, OnboardingState.TOTAL_QUESTION_STEPS);
+            MascotBubble.mount('mascotContainer', "Perfect! Your time commitment helps me create realistic challenges that fit seamlessly into your day ⏰");
+            
+            const selectionList = SelectionList.mount('selectionContainer', {
+                items: [
+                    { value: '5min', emoji: '⚡', label: "5 minutes" },
+                    { value: '15min', emoji: '⏱️', label: "15 minutes" },
+                    { value: '30min', emoji: '⏰', label: "30 minutes" },
+                    { value: '60min', emoji: '🕐', label: "1 hour" },
+                    { value: 'varies', emoji: '📅', label: "It varies" }
+                ],
+                multiple: false,
+                onChange: (value) => {
+                    OnboardingState.update('q10_commitment', value);
+                    ctaGroup.updateDisabled(!value);
+                }
+            });
+            
+            // Setup CTA with edit mode support  
+            const ctaOptions = EditModeHelper.setupEditModeCTA({
+                primaryLabel: 'Continue'
+            }, () => {
+                if (OnboardingState.canContinue('q10-commitment')) {
+                    OnboardingRoutes.navigate('review');
+                }
+            });
+            
+            ctaGroup = CTAGroup.mount('ctaContainer', {
+                ...ctaOptions,
+                disabled: !OnboardingState.canContinue('q10-commitment')
+            });
+            
+            const existing = OnboardingState.get('q10_commitment');
+            if (existing) {
+                const item = document.querySelector(`[data-value="${existing}"]`);
+                if (item) item.click();
+            }
+        });
+    </script>
+</body>
+</html>

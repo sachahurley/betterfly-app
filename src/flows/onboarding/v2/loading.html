@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Personalizing - Betterfly</title>
+    <link rel="stylesheet" href="styles/shared.css">
+    <style>
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            text-align: center;
+        }
+        
+        .loading-graphic {
+            font-size: 80px;
+            margin-bottom: 32px;
+        }
+        
+        
+        .loading-dots {
+            display: inline-block;
+        }
+        
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        
+        @keyframes dots {
+            0% { content: ''; }
+            25% { content: '.'; }
+            50% { content: '..'; }
+            75% { content: '...'; }
+            100% { content: ''; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons"></div>
+        </div>
+        
+        <div class="content">
+            <div class="loading-container">
+                <div class="loading-graphic">
+                    <img src="assets/betterfly-mascot.png" alt="Betterfly Mascot" style="width: 144px; height: 144px; object-fit: contain;">
+                </div>
+                <div class="spinner"></div>
+                <h2 style="margin-top: 32px;">Betterfly is personalizing your next steps<span class="loading-dots"></span></h2>
+                <p class="subtitle">This will just take a moment</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="state.js"></script>
+    <script src="routes.js"></script>
+    <script src="components/components.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-advance after 3 seconds
+            setTimeout(() => {
+                OnboardingRoutes.navigate('q2-main-concern');
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

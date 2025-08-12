@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Question 2 - Betterfly</title>
+    <link rel="stylesheet" href="styles/shared.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script></head>
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons"></div>
+        </div>
+        
+        <div id="backButtonContainer"></div>
+        
+        <div class="content with-nav">
+            <div id="progressContainer"></div>
+            
+            <div id="mascotContainer"></div>
+            
+            <h2>What's your main health concern right now?</h2>
+            
+            <div id="selectionContainer"></div>
+        </div>
+        
+        <div id="ctaContainer"></div>
+    </div>
+
+    <script src="state.js"></script>
+    <script src="routes.js"></script>
+    <script src="components/components.js"></script>
+    <script>
+        let ctaGroup;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load state
+            OnboardingState.load();
+            
+            // Mount back button
+            BackButton.mount('backButtonContainer', {
+                title: 'Question 2 of 10'
+            });
+            
+            // Mount progress bar
+            ProgressBar.mount('progressContainer', 2, OnboardingState.TOTAL_QUESTION_STEPS);
+            
+            // Mount mascot
+            MascotBubble.mount('mascotContainer', "Let's focus on what matters most to you");
+            
+            // Mount selection list
+            const selectionList = SelectionList.mount('selectionContainer', {
+                items: [
+                    { value: 'low_energy', emoji: '😴', label: "I'm always tired and low on energy" },
+                    { value: 'stress', emoji: '😰', label: "I'm stressed and overwhelmed" },
+                    { value: 'weight', emoji: '⚖️', label: "I want to manage my weight better" },
+                    { value: 'sleep', emoji: '🛌', label: "I can't get quality sleep" },
+                    { value: 'focus', emoji: '🧠', label: "I struggle with focus and productivity" },
+                    { value: 'pain', emoji: '💢', label: "I have chronic pain or discomfort" }
+                ],
+                multiple: false,
+                onChange: (value) => {
+                    OnboardingState.update('q2_mainConcern', value);
+                    ctaGroup.updateDisabled(!value);
+                }
+            });
+            
+            // Setup CTA with edit mode support  
+            const ctaOptions = EditModeHelper.setupEditModeCTA({
+                primaryLabel: 'Continue'
+            }, () => {
+                if (OnboardingState.canContinue('q2-main-concern')) {
+                    // Navigate directly to q3-biggest-challenge
+                    OnboardingRoutes.navigate('q3-biggest-challenge');
+                }
+            });
+            
+            ctaGroup = CTAGroup.mount('ctaContainer', {
+                ...ctaOptions,
+                disabled: !OnboardingState.canContinue('q2-main-concern')
+            });
+            
+            // Restore selection if exists
+            const existing = OnboardingState.get('q2_mainConcern');
+            if (existing) {
+                const item = document.querySelector(`[data-value="${existing}"]`);
+                if (item) item.click();
+            }
+        });
+    </script>
+</body>
+</html>

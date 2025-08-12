@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Save Progress - Betterfly</title>
+    <link rel="stylesheet" href="styles/shared.css">
+</head>
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons"></div>
+        </div>
+        
+        <div class="content center-content">
+            <div style="font-size: 64px; margin-bottom: 24px;">🎉</div>
+            
+            <h1>Congratulations!</h1>
+            <p class="subtitle">Your personalized wellness plan is ready!</p>
+            
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 16px; padding: 24px; margin: 32px 0;">
+                <h3 style="color: #166534; margin-bottom: 12px;">What's Next?</h3>
+                <p style="color: #166534; margin: 0;">Start your first challenge and begin building healthy habits that stick!</p>
+            </div>
+        </div>
+        
+        <div id="ctaContainer"></div>
+    </div>
+
+    <script src="../../../../shared/user-state.js"></script>
+    <script src="state.js"></script>
+    <script src="routes.js"></script>
+    <script src="components/components.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Save all the data to the main user state system
+            const allData = OnboardingState.data;
+            
+            // Save to the existing user state system for compatibility
+            try {
+                UserState.saveOnboarding({
+                    primaryGoal: allData.q1_healthFeeling,
+                    biggestBlocker: allData.q2_mainConcern,
+                    topInterests: allData.q6_motivation,
+                    dailyTime: allData.q10_commitment,
+                    supportType: allData.q7_supportPref
+                });
+                
+                // Initialize challenge state for dashboard
+                UserState.initializeChallengeState();
+            } catch (e) {
+                console.error('Error saving user data:', e);
+            }
+            
+            // Clear onboarding state since it's complete
+            OnboardingState.clear();
+            
+            // Mount CTA
+            CTAGroup.mount('ctaContainer', {
+                primaryLabel: 'Start My Challenge',
+                onPrimary: () => {
+                    // Navigate to the v2 dashboard
+                    window.location.href = '../../dashboard/v2/index.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

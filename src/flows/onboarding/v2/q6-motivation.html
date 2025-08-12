@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Question 6 - Betterfly</title>
+    <link rel="stylesheet" href="styles/shared.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script></head>
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons"></div>
+        </div>
+        
+        <div id="backButtonContainer"></div>
+        
+        <div class="content with-nav">
+            <div id="progressContainer"></div>
+            
+            <div id="mascotContainer"></div>
+            
+            <h2>What motivates you most?</h2>
+            
+            <div id="selectionContainer"></div>
+        </div>
+        
+        <div id="ctaContainer"></div>
+    </div>
+
+    <script src="state.js"></script>
+    <script src="routes.js"></script>
+    <script src="components/components.js"></script>
+    <script>
+        let ctaGroup;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            OnboardingState.load();
+            
+            // Mount back button
+            BackButton.mount('backButtonContainer', {
+                title: 'Question 6 of 10'
+            });
+            
+            ProgressBar.mount('progressContainer', 6, OnboardingState.TOTAL_QUESTION_STEPS);
+            MascotBubble.mount('mascotContainer', "Understanding what drives you helps me create challenges that you'll actually want to complete! 🎆");
+            
+            const selectionList = SelectionList.mount('selectionContainer', {
+                items: [
+                    { value: 'competition', emoji: '🏆', label: "Competition and challenges" },
+                    { value: 'progress', emoji: '📈', label: "Seeing my progress" },
+                    { value: 'rewards', emoji: '🎁', label: "Earning rewards" },
+                    { value: 'community', emoji: '👥', label: "Community support" },
+                    { value: 'health', emoji: '❤️', label: "Health improvements" }
+                ],
+                multiple: false,
+                onChange: (value) => {
+                    OnboardingState.update('q6_motivation', value);
+                    ctaGroup.updateDisabled(!value);
+                }
+            });
+            
+            // Setup CTA with edit mode support  
+            const ctaOptions = EditModeHelper.setupEditModeCTA({
+                primaryLabel: 'Continue'
+            }, () => {
+                if (OnboardingState.canContinue('q6-motivation')) {
+                    OnboardingRoutes.navigate('q7-support-preference');
+                }
+            });
+            
+            ctaGroup = CTAGroup.mount('ctaContainer', {
+                ...ctaOptions,
+                disabled: !OnboardingState.canContinue('q6-motivation')
+            });
+            
+            const existing = OnboardingState.get('q6_motivation');
+            if (existing) {
+                const item = document.querySelector(`[data-value="${existing}"]`);
+                if (item) item.click();
+            }
+        });
+    </script>
+</body>
+</html>

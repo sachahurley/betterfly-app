@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Let's Get Started - Betterfly</title>
+    <link rel="stylesheet" href="styles/shared.css">
+</head>
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons"></div>
+        </div>
+        
+        <div class="content" style="display: flex; flex-direction: column;">
+            <div id="mascotContainer"></div>
+            
+            <h1>Just 7 quick questions!</h1>
+            <p class="subtitle">This will take less than 2 minutes</p>
+            
+            <div style="text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                <div style="font-size: 72px; margin-bottom: 24px; width: 100%;">⏱️</div>
+                <div style="width: 100%; display: flex; flex-direction: column; align-items: center; flex: 1; justify-content: center; margin: 0;">
+                    <p>We'll ask about your:</p>
+                    <ul style="list-style: none; padding: 0; margin: 0; text-align: left; display: inline-block; width: 100%; max-width: 300px;">
+                        <li style="margin-bottom: 8px;">• Current health feelings</li>
+                        <li style="margin-bottom: 8px;">• Main concerns</li>
+                        <li style="margin-bottom: 8px;">• Biggest challenges</li>
+                        <li style="margin-bottom: 8px;">• Motivation style</li>
+                        <li>• Lifestyle preferences</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div id="ctaContainer"></div>
+    </div>
+
+    <script src="state.js"></script>
+    <script src="routes.js"></script>
+    <script src="components/components.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mount mascot
+            MascotBubble.mount('mascotContainer', 'Just 7 quick questions! I promise it\'ll be worth it 🎯', 'cheer');
+            
+            // Mount CTA
+            CTAGroup.mount('ctaContainer', {
+                primaryLabel: 'Continue',
+                onPrimary: () => {
+                    OnboardingRoutes.navigate('q1-health-feeling');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

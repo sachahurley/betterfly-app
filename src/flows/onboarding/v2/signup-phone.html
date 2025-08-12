@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Phone Number - Betterfly</title>
+    <link rel="stylesheet" href="styles/shared.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .signup-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .signup-progress-bar {
+            background: #f3f4f6;
+            height: 4px;
+            margin-top: 44px;
+            position: relative;
+        }
+        
+        .signup-progress-fill {
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            height: 100%;
+            width: 66.66%;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        .signup-content {
+            flex: 1;
+            padding: 32px 24px 24px;
+            padding-bottom: 180px;
+        }
+        
+        .signup-title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        
+        .signup-subtitle {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            text-align: center;
+            line-height: 1.5;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .phone-input-container {
+            display: flex;
+            gap: 12px;
+            align-items: stretch;
+        }
+        
+        .country-code-dropdown {
+            position: relative;
+            flex-shrink: 0;
+            width: 80px;
+        }
+        
+        .country-code-button {
+            width: 100%;
+            height: 56px;
+            padding: 0 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+        
+        .country-code-button:hover {
+            border-color: #10b981;
+        }
+        
+        .country-code-button:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+        
+        .country-flag {
+            font-size: 18px;
+            line-height: 1;
+        }
+        
+        .country-code-text {
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .dropdown-chevron {
+            width: 12px;
+            height: 12px;
+            color: #6b7280;
+            transition: transform 0.2s ease;
+        }
+        
+        .country-code-button.open .dropdown-chevron {
+            transform: rotate(180deg);
+        }
+        
+        .country-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            margin-top: 4px;
+        }
+        
+        .country-dropdown-menu.open {
+            display: block;
+        }
+        
+        .country-option {
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .country-option:last-child {
+            border-bottom: none;
+        }
+        
+        .country-option:hover {
+            background-color: #f9fafb;
+        }
+        
+        .country-option.selected {
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+        
+        .country-option-flag {
+            font-size: 16px;
+        }
+        
+        .country-option-details {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .country-option-name {
+            font-family: 'Roboto', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .country-option-code {
+            font-family: 'Roboto', sans-serif;
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+        
+        .phone-input {
+            flex: 1;
+            padding: 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            color: var(--text-primary);
+            background: white;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+        
+        .phone-input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+        
+        .phone-input.error {
+            border-color: #ef4444;
+        }
+        
+        .phone-input::placeholder {
+            color: #9ca3af;
+        }
+        
+        .error-message {
+            font-family: 'Roboto', sans-serif;
+            font-size: 12px;
+            color: #ef4444;
+            margin-top: 4px;
+            display: none;
+        }
+        
+        .phone-input.error + .error-message {
+            display: block;
+        }
+        
+        .sms-detail-text {
+            font-family: 'Roboto', sans-serif;
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            margin-top: 8px;
+            text-align: center;
+        }
+        
+        .signup-cta-section {
+            padding: 0 24px 24px;
+            background: white;
+        }
+        
+        .btn-primary.signup-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary.signup-btn:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+        
+        /* iOS Keyboard Toolbar */
+        .ios-keyboard-toolbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #f2f2f7;
+            border-top: 1px solid #c6c6c8;
+            padding: 8px 16px;
+            display: none;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 2000;
+            height: 44px;
+        }
+        
+        .ios-keyboard-toolbar.visible {
+            display: flex;
+        }
+        
+        .ios-toolbar-title {
+            font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            color: #8e8e93;
+        }
+        
+        .ios-toolbar-actions {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .ios-toolbar-btn {
+            background: none;
+            border: none;
+            font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 17px;
+            font-weight: 400;
+            color: #007aff;
+            cursor: pointer;
+            padding: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .ios-toolbar-btn:hover {
+            opacity: 0.7;
+        }
+        
+        .ios-toolbar-btn:active {
+            opacity: 0.3;
+        }
+        
+        .ios-toolbar-btn.primary {
+            font-weight: 600;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            .phone-input-container {
+                gap: 8px;
+            }
+            
+            .country-code-dropdown {
+                width: 72px;
+            }
+            
+            .country-code-button {
+                padding: 0 6px;
+            }
+            
+            .country-code-text {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons"></div>
+        </div>
+        
+        <div id="backButtonContainer"></div>
+        
+        <div class="signup-progress-bar">
+            <div class="signup-progress-fill" id="progressFill"></div>
+        </div>
+        
+        <div class="signup-content">
+            <h1 class="signup-title">What is your phone number?</h1>
+            <p class="signup-subtitle">You will receive an SMS to verify your phone. Standard SMS rates may apply.</p>
+            
+            <form id="phoneForm">
+                <div class="form-group">
+                    <label class="form-label" for="phoneNumber">Phone Number</label>
+                    <div class="phone-input-container">
+                        <div class="country-code-dropdown">
+                            <button type="button" class="country-code-button" id="countryCodeButton">
+                                <span class="country-flag" id="selectedFlag">🇺🇸</span>
+                                <span class="country-code-text" id="selectedCode">+1</span>
+                                <i data-lucide="chevron-down" class="dropdown-chevron"></i>
+                            </button>
+                            <div class="country-dropdown-menu" id="countryDropdown">
+                                <div class="country-option selected" data-country="US" data-code="+1" data-flag="🇺🇸">
+                                    <span class="country-option-flag">🇺🇸</span>
+                                    <div class="country-option-details">
+                                        <div class="country-option-name">United States</div>
+                                        <div class="country-option-code">+1</div>
+                                    </div>
+                                </div>
+                                <div class="country-option" data-country="CA" data-code="+1" data-flag="🇨🇦">
+                                    <span class="country-option-flag">🇨🇦</span>
+                                    <div class="country-option-details">
+                                        <div class="country-option-name">Canada</div>
+                                        <div class="country-option-code">+1</div>
+                                    </div>
+                                </div>
+                                <div class="country-option" data-country="GB" data-code="+44" data-flag="🇬🇧">
+                                    <span class="country-option-flag">🇬🇧</span>
+                                    <div class="country-option-details">
+                                        <div class="country-option-name">United Kingdom</div>
+                                        <div class="country-option-code">+44</div>
+                                    </div>
+                                </div>
+                                <div class="country-option" data-country="AU" data-code="+61" data-flag="🇦🇺">
+                                    <span class="country-option-flag">🇦🇺</span>
+                                    <div class="country-option-details">
+                                        <div class="country-option-name">Australia</div>
+                                        <div class="country-option-code">+61</div>
+                                    </div>
+                                </div>
+                                <div class="country-option" data-country="DE" data-code="+49" data-flag="🇩🇪">
+                                    <span class="country-option-flag">🇩🇪</span>
+                                    <div class="country-option-details">
+                                        <div class="country-option-name">Germany</div>
+                                        <div class="country-option-code">+49</div>
+                                    </div>
+                                </div>
+                                <div class="country-option" data-country="FR" data-code="+33" data-flag="🇫🇷">
+                                    <span class="country-option-flag">🇫🇷</span>
+                                    <div class="country-option-details">
+                                        <div class="country-option-name">France</div>
+                                        <div class="country-option-code">+33</div>
+                                    </div>
+                                </div>
+                                <div class="country-option" data-country="ES" data-code="+34" data-flag="🇪🇸">
+                                    <span class="country-option-flag">🇪🇸</span>
+                                    <div class="country-option-details">
+                                        <div class="country-option-name">Spain</div>
+                                        <div class="country-option-code">+34</div>
+                                    </div>
+                                </div>
+                                <div class="country-option" data-country="IT" data-code="+39" data-flag="🇮🇹">
+                                    <span class="country-option-flag">🇮🇹</span>
+                                    <div class="country-option-details">
+                                        <div class="country-option-name">Italy</div>
+                                        <div class="country-option-code">+39</div>
+                                    </div>
+                                </div>
+                                <div class="country-option" data-country="NL" data-code="+31" data-flag="🇳🇱">
+                                    <span class="country-option-flag">🇳🇱</span>
+                                    <div class="country-option-details">
+                                        <div class="country-option-name">Netherlands</div>
+                                        <div class="country-option-code">+31</div>
+                                    </div>
+                                </div>
+                                <div class="country-option" data-country="MX" data-code="+52" data-flag="🇲🇽">
+                                    <span class="country-option-flag">🇲🇽</span>
+                                    <div class="country-option-details">
+                                        <div class="country-option-name">Mexico</div>
+                                        <div class="country-option-code">+52</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <input 
+                            type="tel" 
+                            id="phoneNumber" 
+                            name="phoneNumber"
+                            class="phone-input" 
+                            placeholder="(555) 123-4567"
+                            autocomplete="tel"
+                            inputmode="numeric"
+                            required
+                        />
+                    </div>
+                    <span class="error-message">Please enter a valid phone number</span>
+                    <p class="sms-detail-text">You will receive an SMS to verify your phone. Standard SMS rates may apply.</p>
+                </div>
+            </form>
+        </div>
+        
+        <div class="signup-cta-section">
+            <button id="nextBtn" class="btn-primary signup-btn" disabled>
+                Next
+            </button>
+        </div>
+        
+        <!-- iOS Keyboard Toolbar -->
+        <div class="ios-keyboard-toolbar" id="keyboardToolbar">
+            <div class="ios-toolbar-title">Phone Number</div>
+            <div class="ios-toolbar-actions">
+                <button type="button" class="ios-toolbar-btn" id="autoFillBtn">AutoFill</button>
+                <button type="button" class="ios-toolbar-btn primary" id="doneBtn">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="state.js"></script>
+    <script src="routes.js"></script>
+    <script src="components/components.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load state
+            OnboardingState.load();
+            
+            // Mount back button
+            BackButton.mount('backButtonContainer', {
+                title: 'Phone Number'
+            });
+            
+            // Initialize Lucide icons
+            lucide.createIcons();
+            
+            // Form elements
+            const phoneInput = document.getElementById('phoneNumber');
+            const nextBtn = document.getElementById('nextBtn');
+            const phoneForm = document.getElementById('phoneForm');
+            const countryCodeButton = document.getElementById('countryCodeButton');
+            const countryDropdown = document.getElementById('countryDropdown');
+            const selectedFlag = document.getElementById('selectedFlag');
+            const selectedCode = document.getElementById('selectedCode');
+            const keyboardToolbar = document.getElementById('keyboardToolbar');
+            const autoFillBtn = document.getElementById('autoFillBtn');
+            const doneBtn = document.getElementById('doneBtn');
+            
+            // Country data
+            let selectedCountry = {
+                code: '+1',
+                flag: '🇺🇸',
+                country: 'US'
+            };
+            
+            // Phone formatting function for US/CA numbers
+            function formatPhoneNumber(value, countryCode) {
+                // Remove all non-digits
+                const cleaned = value.replace(/\D/g, '');
+                
+                if (countryCode === '+1') {
+                    // US/Canada formatting
+                    if (cleaned.length <= 3) {
+                        return cleaned;
+                    } else if (cleaned.length <= 6) {
+                        return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
+                    } else {
+                        return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6, 10)}`;
+                    }
+                } else {
+                    // International formatting - just add spaces every 3 digits
+                    return cleaned.replace(/(\d{3})(?=\d)/g, '$1 ');
+                }
+            }
+            
+            // Phone validation function
+            function validatePhone(value, countryCode) {
+                const cleaned = value.replace(/\D/g, '');
+                
+                if (countryCode === '+1') {
+                    // US/Canada: exactly 10 digits
+                    return cleaned.length === 10;
+                } else {
+                    // International: at least 7 digits, max 15
+                    return cleaned.length >= 7 && cleaned.length <= 15;
+                }
+            }
+            
+            // Format phone input
+            phoneInput.addEventListener('input', function(e) {
+                const formatted = formatPhoneNumber(e.target.value, selectedCountry.code);
+                e.target.value = formatted;
+                validateForm();
+            });
+            
+            // Validation function
+            function validateForm() {
+                const phoneValid = validatePhone(phoneInput.value, selectedCountry.code);
+                
+                // Update button state
+                nextBtn.disabled = !phoneValid;
+                
+                // Update input styling
+                if (phoneInput.value.length > 0) {
+                    if (phoneValid) {
+                        phoneInput.classList.remove('error');
+                    } else {
+                        phoneInput.classList.add('error');
+                    }
+                } else {
+                    phoneInput.classList.remove('error');
+                }
+                
+                return phoneValid;
+            }
+            
+            // Country dropdown functionality
+            countryCodeButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isOpen = countryDropdown.classList.contains('open');
+                
+                if (isOpen) {
+                    countryDropdown.classList.remove('open');
+                    countryCodeButton.classList.remove('open');
+                } else {
+                    countryDropdown.classList.add('open');
+                    countryCodeButton.classList.add('open');
+                }
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!countryCodeButton.contains(e.target) && !countryDropdown.contains(e.target)) {
+                    countryDropdown.classList.remove('open');
+                    countryCodeButton.classList.remove('open');
+                }
+            });
+            
+            // Handle country selection
+            countryDropdown.addEventListener('click', function(e) {
+                const option = e.target.closest('.country-option');
+                if (option) {
+                    // Update selected country
+                    selectedCountry = {
+                        code: option.dataset.code,
+                        flag: option.dataset.flag,
+                        country: option.dataset.country
+                    };
+                    
+                    // Update UI
+                    selectedFlag.textContent = selectedCountry.flag;
+                    selectedCode.textContent = selectedCountry.code;
+                    
+                    // Update selected state
+                    document.querySelectorAll('.country-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    option.classList.add('selected');
+                    
+                    // Close dropdown
+                    countryDropdown.classList.remove('open');
+                    countryCodeButton.classList.remove('open');
+                    
+                    // Reformat and validate existing phone number
+                    if (phoneInput.value) {
+                        const cleaned = phoneInput.value.replace(/\D/g, '');
+                        phoneInput.value = formatPhoneNumber(cleaned, selectedCountry.code);
+                        validateForm();
+                    }
+                    
+                    // Update placeholder
+                    if (selectedCountry.code === '+1') {
+                        phoneInput.placeholder = '(555) 123-4567';
+                    } else {
+                        phoneInput.placeholder = 'Enter phone number';
+                    }
+                }
+            });
+            
+            // iOS Keyboard Toolbar functionality
+            phoneInput.addEventListener('focus', function() {
+                // Show toolbar on mobile devices
+                if (window.innerWidth <= 768) {
+                    keyboardToolbar.classList.add('visible');
+                }
+            });
+            
+            phoneInput.addEventListener('blur', function() {
+                // Hide toolbar when input loses focus (with delay to allow button clicks)
+                setTimeout(() => {
+                    keyboardToolbar.classList.remove('visible');
+                }, 200);
+            });
+            
+            // AutoFill button
+            autoFillBtn.addEventListener('click', function() {
+                phoneInput.value = formatPhoneNumber('6502399898', selectedCountry.code);
+                validateForm();
+                phoneInput.focus();
+            });
+            
+            // Done button
+            doneBtn.addEventListener('click', function() {
+                phoneInput.blur();
+                keyboardToolbar.classList.remove('visible');
+            });
+            
+            // Restore existing phone number if it exists
+            const existingPhone = OnboardingState.get('profile.phoneNumber');
+            const existingCountryCode = OnboardingState.get('profile.countryCode');
+            
+            if (existingPhone) {
+                phoneInput.value = existingPhone;
+            }
+            if (existingCountryCode) {
+                // Find and select the country
+                const countryOption = document.querySelector(`[data-code="${existingCountryCode}"]`);
+                if (countryOption) {
+                    selectedCountry = {
+                        code: countryOption.dataset.code,
+                        flag: countryOption.dataset.flag,
+                        country: countryOption.dataset.country
+                    };
+                    
+                    selectedFlag.textContent = selectedCountry.flag;
+                    selectedCode.textContent = selectedCountry.code;
+                    
+                    document.querySelectorAll('.country-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    countryOption.classList.add('selected');
+                }
+            }
+            
+            validateForm();
+            
+            // Handle next button
+            nextBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if (validateForm()) {
+                    // Save to state
+                    OnboardingState.update('profile.phoneNumber', phoneInput.value);
+                    OnboardingState.update('profile.countryCode', selectedCountry.code);
+                    OnboardingState.update('profile.countryFlag', selectedCountry.flag);
+                    
+                    // Navigate to verification step
+                    OnboardingRoutes.navigate('signup-verification');
+                }
+            });
+            
+            // Handle form submission
+            phoneForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                nextBtn.click();
+            });
+        });
+    </script>
+</body>
+</html>

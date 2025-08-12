@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Challenges - Betterfly</title>
+    <link rel="stylesheet" href="styles/shared.css">
+</head>
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons"></div>
+        </div>
+        
+        <div class="content center-content">
+            <div id="mascotContainer"></div>
+            
+            <h1>Amazing Work!</h1>
+            <p class="subtitle">You've completed your first wellness challenge and earned coins for your journey!</p>
+            
+            <div class="coin-celebration-center" id="celebrationCenter">
+                <div class="celebration-coin-display" id="coinDisplay">
+                    <img src="assets/betterfly-coin-icon-2.png" alt="Coins" class="celebration-big-coin" />
+                    <div class="celebration-big-count" id="totalCoinCount">200</div>
+                </div>
+                
+                <div class="celebration-message" id="celebrationMessage">
+                    <h3>Total Coins Collected</h3>
+                    <p>You've earned coins by completing the questionnaire and review! Use them to unlock rewards and track your wellness journey.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="ctaContainer"></div>
+    </div>
+
+    <script src="state.js"></script>
+    <script src="routes.js"></script>
+    <script src="components/components.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load state to get current coin count
+            OnboardingState.load();
+            
+            // Update coin count display
+            const totalCoins = OnboardingState.getCoinCount();
+            const coinCountElement = document.getElementById('totalCoinCount');
+            if (coinCountElement) {
+                coinCountElement.textContent = totalCoins;
+            }
+            
+            // Mount mascot with celebration message
+            MascotBubble.mount('mascotContainer', `Congratulations! You've earned ${totalCoins} coins and completed your onboarding journey! 🎉`);
+            
+            // Add entrance animations
+            setTimeout(() => {
+                const coinDisplay = document.getElementById('coinDisplay');
+                const celebrationMessage = document.getElementById('celebrationMessage');
+                
+                if (coinDisplay) {
+                    coinDisplay.style.opacity = '0';
+                    coinDisplay.style.transform = 'scale(0.8) translateY(20px)';
+                    coinDisplay.style.transition = 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    
+                    setTimeout(() => {
+                        coinDisplay.style.opacity = '1';
+                        coinDisplay.style.transform = 'scale(1) translateY(0px)';
+                    }, 300);
+                }
+                
+                if (celebrationMessage) {
+                    celebrationMessage.style.opacity = '0';
+                    celebrationMessage.style.transform = 'translateY(20px)';
+                    celebrationMessage.style.transition = 'all 0.6s ease-out';
+                    
+                    setTimeout(() => {
+                        celebrationMessage.style.opacity = '1';
+                        celebrationMessage.style.transform = 'translateY(0px)';
+                    }, 800);
+                }
+            }, 500);
+            
+            // Mount CTA
+            CTAGroup.mount('ctaContainer', {
+                primaryLabel: 'Claim My Coins',
+                onPrimary: () => {
+                    OnboardingRoutes.navigate('profile-prompt');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

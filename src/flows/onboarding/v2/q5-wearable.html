@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Question 5 - Betterfly</title>
+    <link rel="stylesheet" href="styles/shared.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script></head>
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons"></div>
+        </div>
+        
+        <div id="backButtonContainer"></div>
+        
+        <div class="content with-nav">
+            <div id="progressContainer"></div>
+            
+            <div id="mascotContainer"></div>
+            
+            <h2>Do you use any fitness trackers or wearables?</h2>
+            
+            <div id="selectionContainer"></div>
+        </div>
+        
+        <div id="ctaContainer"></div>
+    </div>
+
+    <script src="state.js"></script>
+    <script src="routes.js"></script>
+    <script src="components/components.js"></script>
+    <script>
+        let ctaGroup;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            OnboardingState.load();
+            
+            // Mount back button
+            BackButton.mount('backButtonContainer', {
+                title: 'Question 5 of 10'
+            });
+            
+            ProgressBar.mount('progressContainer', 5, OnboardingState.TOTAL_QUESTION_STEPS);
+            MascotBubble.mount('mascotContainer', "Great! Knowing what devices you use helps me suggest the best ways to track your progress! 📊");
+            
+            const selectionList = SelectionList.mount('selectionContainer', {
+                items: [
+                    { value: 'apple_watch', emoji: '⌚', label: "Apple Watch" },
+                    { value: 'fitbit', emoji: '📱', label: "Fitbit" },
+                    { value: 'garmin', emoji: '⌚', label: "Garmin" },
+                    { value: 'other', emoji: '📟', label: "Other wearable" },
+                    { value: 'phone', emoji: '📱', label: "Just my phone" },
+                    { value: 'none', emoji: '🚫', label: "No tracking devices" }
+                ],
+                multiple: false,
+                onChange: (value) => {
+                    OnboardingState.update('q5_wearable', value);
+                    ctaGroup.updateDisabled(!value);
+                }
+            });
+            
+            // Setup CTA with edit mode support  
+            const ctaOptions = EditModeHelper.setupEditModeCTA({
+                primaryLabel: 'Continue'
+            }, () => {
+                if (OnboardingState.canContinue('q5-wearable')) {
+                    OnboardingRoutes.navigate('q6-motivation');
+                }
+            });
+            
+            ctaGroup = CTAGroup.mount('ctaContainer', {
+                ...ctaOptions,
+                disabled: !OnboardingState.canContinue('q5-wearable')
+            });
+            
+            const existing = OnboardingState.get('q5_wearable');
+            if (existing) {
+                const item = document.querySelector(`[data-value="${existing}"]`);
+                if (item) item.click();
+            }
+        });
+    </script>
+</body>
+</html>

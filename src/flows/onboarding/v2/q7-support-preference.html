@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Question 7 - Betterfly</title>
+    <link rel="stylesheet" href="styles/shared.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script></head>
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons"></div>
+        </div>
+        
+        <div id="backButtonContainer"></div>
+        
+        <div class="content with-nav">
+            <div id="progressContainer"></div>
+            
+            <div id="mascotContainer"></div>
+            
+            <h2>How do you prefer to receive support?</h2>
+            
+            <div id="selectionContainer"></div>
+        </div>
+        
+        <div id="ctaContainer"></div>
+    </div>
+
+    <script src="state.js"></script>
+    <script src="routes.js"></script>
+    <script src="components/components.js"></script>
+    <script>
+        let ctaGroup;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            OnboardingState.load();
+            
+            // Mount back button
+            BackButton.mount('backButtonContainer', {
+                title: 'Question 7 of 10'
+            });
+            
+            ProgressBar.mount('progressContainer', 7, OnboardingState.TOTAL_QUESTION_STEPS);
+            MascotBubble.mount('mascotContainer', "Everyone needs support differently! I'll tailor my guidance style to match your preferences 🤝");
+            
+            const selectionList = SelectionList.mount('selectionContainer', {
+                items: [
+                    { value: 'reminders', emoji: '🔔', label: "Daily reminders" },
+                    { value: 'coach', emoji: '🗣️', label: "Personal coaching" },
+                    { value: 'community', emoji: '👥', label: "Community forums" },
+                    { value: 'ai', emoji: '🤖', label: "AI guidance" },
+                    { value: 'solo', emoji: '🧘', label: "I prefer going solo" }
+                ],
+                multiple: false,
+                onChange: (value) => {
+                    OnboardingState.update('q7_supportPref', value);
+                    ctaGroup.updateDisabled(!value);
+                }
+            });
+            
+            // Setup CTA with edit mode support  
+            const ctaOptions = EditModeHelper.setupEditModeCTA({
+                primaryLabel: 'Continue'
+            }, () => {
+                if (OnboardingState.canContinue('q7-support-preference')) {
+                    OnboardingRoutes.navigate('q8-lifestyle');
+                }
+            });
+            
+            ctaGroup = CTAGroup.mount('ctaContainer', {
+                ...ctaOptions,
+                disabled: !OnboardingState.canContinue('q7-support-preference')
+            });
+            
+            const existing = OnboardingState.get('q7_supportPref');
+            if (existing) {
+                const item = document.querySelector(`[data-value="${existing}"]`);
+                if (item) item.click();
+            }
+        });
+    </script>
+</body>
+</html>

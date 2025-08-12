@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Question 8 - Betterfly</title>
+    <link rel="stylesheet" href="styles/shared.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script></head>
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons"></div>
+        </div>
+        
+        <div id="backButtonContainer"></div>
+        
+        <div class="content with-nav">
+            <div id="progressContainer"></div>
+            
+            <div id="mascotContainer"></div>
+            
+            <h2>How would you describe your lifestyle?</h2>
+            
+            <div id="selectionContainer"></div>
+        </div>
+        
+        <div id="ctaContainer"></div>
+    </div>
+
+    <script src="state.js"></script>
+    <script src="routes.js"></script>
+    <script src="components/components.js"></script>
+    <script>
+        let ctaGroup;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            OnboardingState.load();
+            
+            // Mount back button
+            BackButton.mount('backButtonContainer', {
+                title: 'Question 8 of 10'
+            });
+            
+            ProgressBar.mount('progressContainer', 8, OnboardingState.TOTAL_QUESTION_STEPS);
+            MascotBubble.mount('mascotContainer', "Your current activity level helps me set realistic goals that build on what you're already doing! 🎯");
+            
+            const selectionList = SelectionList.mount('selectionContainer', {
+                items: [
+                    { value: 'sedentary', emoji: '💻', label: "Mostly sedentary" },
+                    { value: 'light', emoji: '🚶', label: "Lightly active" },
+                    { value: 'moderate', emoji: '🏃', label: "Moderately active" },
+                    { value: 'very', emoji: '🏋️', label: "Very active" },
+                    { value: 'athlete', emoji: '⚡', label: "Athlete level" }
+                ],
+                multiple: false,
+                onChange: (value) => {
+                    OnboardingState.update('q8_lifestyle', value);
+                    ctaGroup.updateDisabled(!value);
+                }
+            });
+            
+            // Setup CTA with edit mode support  
+            const ctaOptions = EditModeHelper.setupEditModeCTA({
+                primaryLabel: 'Continue'
+            }, () => {
+                if (OnboardingState.canContinue('q8-lifestyle')) {
+                    OnboardingRoutes.navigate('q9-success');
+                }
+            });
+            
+            ctaGroup = CTAGroup.mount('ctaContainer', {
+                ...ctaOptions,
+                disabled: !OnboardingState.canContinue('q8-lifestyle')
+            });
+            
+            const existing = OnboardingState.get('q8_lifestyle');
+            if (existing) {
+                const item = document.querySelector(`[data-value="${existing}"]`);
+                if (item) item.click();
+            }
+        });
+    </script>
+</body>
+</html>
