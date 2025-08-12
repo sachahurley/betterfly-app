@@ -1,5 +1,5 @@
 // App Configuration
-const APP_CONFIG = {
+let APP_CONFIG = {
     dailyHabits: {
         1: [
             { id: 1, text: "Drink a glass of water", points: 10 },
@@ -78,45 +78,115 @@ let tempMultiSelectValues = [];
 // Initialize App
 function initializeApp() {
     console.log('Initializing app...');
+    
+    // 🔴 ADDED: Check if user has completed onboarding
+    checkOnboardingStatus();
+    
     loadGameState();
     console.log('Game state loaded:', gameState);
+    
+    // 🔴 ADDED: Personalize challenge based on user preferences
+    personalizeChallenge();
+    
     initializeDays();
     loadSettings();
     setupEventListeners();
     console.log('App initialization complete');
 }
 
+// 🔴 NEW FUNCTION: Check onboarding completion status
+function checkOnboardingStatus() {
+    // Import UserState if not already available
+    if (typeof UserState === 'undefined') {
+        const script = document.createElement('script');
+        script.src = '../../../shared/user-state.js';
+        script.onload = () => {
+            checkOnboardingStatusAfterLoad();
+        };
+        document.head.appendChild(script);
+    } else {
+        checkOnboardingStatusAfterLoad();
+    }
+}
+
+function checkOnboardingStatusAfterLoad() {
+    const onboardingStatus = UserState.getOnboardingStatus();
+    console.log('Onboarding status:', onboardingStatus);
+    
+    if (!onboardingStatus.isComplete) {
+        console.log('User has not completed onboarding, redirecting...');
+        // Redirect to onboarding welcome page
+        window.location.href = '../onboarding/v1/welcome.html';
+        return;
+    }
+    
+    console.log('User has completed onboarding, proceeding with dashboard...');
+}
+
+// 🔴 NEW FUNCTION: Personalize challenge based on user preferences
+function personalizeChallenge() {
+    if (typeof UserState === 'undefined') {
+        console.log('UserState not available, using default challenge');
+        return;
+    }
+    
+    try {
+        // Import challenge templates
+        const script = document.createElement('script');
+        script.src = '../../../config/challenge-templates.js';
+        script.onload = () => {
+            applyPersonalizedChallenge();
+        };
+        document.head.appendChild(script);
+    } catch (e) {
+        console.error('Error loading challenge templates:', e);
+    }
+}
+
+function applyPersonalizedChallenge() {
+    if (typeof getChallengeTemplate === 'undefined') {
+        console.log('Challenge templates not available, using default');
+        return;
+    }
+    
+    const userPreferences = UserState.getPreferences();
+    console.log('User preferences for personalization:', userPreferences);
+    
+    // Get personalized challenge template
+    const template = getChallengeTemplate(userPreferences);
+    const customized = customizeHabits(template, userPreferences);
+    
+    // Update APP_CONFIG with personalized habits
+    APP_CONFIG.dailyHabits = customized.dailyHabits;
+    APP_CONFIG.challengeName = customized.name;
+    APP_CONFIG.challengeDescription = customized.description;
+    
+    console.log('Challenge personalized:', customized.name);
+    
+    // Update the challenge header with personalized content
+    updateChallengeHeader(customized);
+    
+    // Update the display if days are already initialized
+    if (document.getElementById('daysContainer')) {
+        initializeDays();
+    }
+}
+
 // Load saved game state
 function loadGameState() {
-    // Clear localStorage to start fresh (temporary fix)
-    localStorage.removeItem('betterflyMinimal');
-    
     const savedState = localStorage.getItem('betterflyMinimal');
     if (savedState) {
         try {
             gameState = JSON.parse(savedState);
+            console.log('Loaded existing challenge state:', gameState);
         } catch (e) {
-            console.error('Error loading game state');
+            console.error('Error loading game state:', e);
+            // Fall back to default state
+            gameState = getDefaultGameState();
         }
-    }
-    
-    // If no data exists, add sample data to show habit tracking cards
-    if (!savedState || Object.keys(gameState).length === 0) {
-        gameState = {
-            currentDay: 1,
-            totalPoints: 1250,
-            daysCompleted: { 1: true, 2: true, 3: true, 4: true, 5: true },
-            habitsCompleted: {
-                "day1_habit1": true, "day1_habit2": true, "day1_habit3": true,
-                "day2_habit4": true, "day2_habit5": true, "day2_habit6": true,
-                "day3_habit1": true, "day3_habit7": true, "day3_habit8": true,
-                "day4_habit9": true, "day4_habit2": true, "day4_habit10": true,
-                "day5_habit4": true, "day5_habit11": true, "day5_habit12": true
-            },
-            expandedDays: { 1: true, 2: true, 3: true, 4: true, 5: true },
-            todayProgress: 65
-        };
-        saveState();
+    } else {
+        console.log('No existing challenge state found, using default');
+        gameState = getDefaultGameState();
     }
     
     // Ensure expandedDays is properly initialized
@@ -126,9 +196,42 @@ function loadGameState() {
     }
 }
 
+// 🔴 NEW FUNCTION: Get default game state for new users
+function getDefaultGameState() {
+    return {
+        currentDay: 1,
+        totalPoints: 0,
+        daysCompleted: {},
+        habitsCompleted: {},
+        expandedDays: { 1: true },
+        todayProgress: 0,
+        challengeStartDate: new Date().toISOString(),
+        lastModified: new Date().toISOString()
+    };
+}
+
 // Save game state
 function saveState() {
     localStorage.setItem('betterflyMinimal', JSON.stringify(gameState));
+    
+    // 🔴 ADDED: Also update userData for consistency
+    if (typeof UserState !== 'undefined') {
+        UserState.updateChallengeProgress(gameState);
+    }
+}
+
+// 🔴 NEW FUNCTION: Update challenge header with personalized content
+function updateChallengeHeader(challengeData) {
+    const titleElement = document.getElementById('challengeTitle');
+    const subtitleElement = document.getElementById('challengeSubtitle');
+    
+    if (titleElement && challengeData.name) {
+        titleElement.textContent = challengeData.name;
+    }
+    
+    if (subtitleElement && challengeData.description) {
+        subtitleElement.textContent = challengeData.description;
+    }
 }
 
 // Initialize days display

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Betterfly Questionnaire - Step 5</title>
+    <script src="../../../../shared/user-state.js"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
         * {
@@ -577,10 +578,10 @@
             if (continueBtn.classList.contains('enabled')) {
                 const responses = Array.from(selectedItems);
                 
-                // Save preferred support to localStorage
-                const preferences = JSON.parse(localStorage.getItem('userPreferences') || '{}');
-                preferences.preferredSupport = responses.join(', ');
-                localStorage.setItem('userPreferences', JSON.stringify(preferences));
+                // Save preferred support using UserState for consistency
+                UserState.saveUserPreferences({
+                    preferredSupport: responses.join(', ')
+                });
                 
                 console.log('User selected help options:', responses);
                 window.location.href = 'questionnaire-6.html';

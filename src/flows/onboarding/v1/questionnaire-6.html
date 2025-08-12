@@ -394,14 +394,15 @@
         </div>
     </div>
 
-    <script src="../shared/user-state.js"></script>
+    <script src="../../../../shared/user-state.js"></script>
     <script>
         // Initialize Lucide icons
         lucide.createIcons();
         
         // Load user preferences from localStorage
         function loadUserPreferences() {
-            const preferences = JSON.parse(localStorage.getItem('userPreferences') || '{}');
+            // 🔴 FIXED: Use UserState.getPreferences() for consistent data access
+            const preferences = UserState.getPreferences();
             
             // Format time display
             let timeDisplay = preferences.dailyTime || 'Not specified';
@@ -422,8 +423,8 @@
         }
         
         function handleDone() {
-            // Get current preferences from localStorage
-            const preferences = JSON.parse(localStorage.getItem('userPreferences') || '{}');
+            // 🔴 FIXED: Use UserState.getPreferences() for consistent data access
+            const preferences = UserState.getPreferences();
             
             // Save all preferences to persistent state
             UserState.saveOnboarding({

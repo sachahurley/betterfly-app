@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Betterfly Questionnaire - Step 3</title>
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <title>Betterfly Questionnaire</title>
+    <!-- 🔴 ADDED: Import UserState for proper data management -->
+    <script src="../../../../shared/user-state.js"></script>
     <style>
         * {
             margin: 0;
@@ -201,7 +202,6 @@
             color: #0f1c14;
             text-align: center;
             flex: 1;
-            line-height: 1.5;
         }
         
         .header-spacer {
@@ -289,97 +289,76 @@
             line-height: 1.5;
         }
         
-        /* Selection Items - Radio Style */
-        .selection-list {
+        /* Input Section */
+        .input-section {
+            margin-bottom: 12px;
+        }
+        
+        .input-container {
+            position: relative;
+            margin-bottom: 16px;
+        }
+        
+        .input-field {
+            width: 100%;
+            height: 40px;
+            border: none;
+            border-bottom: 1px solid #dbdddc;
+            background: transparent;
+            padding: 8px 0;
+            font-size: 20px;
+            color: #6f7772;
+            outline: none;
+            transition: color 0.2s ease;
+        }
+        
+        .input-field:focus {
+            color: #374151;
+        }
+        
+        .input-field::placeholder {
+            color: #6f7772;
+            font-size: 20px;
+        }
+        
+        .helper-text {
+            font-size: 14px;
+            color: #6f7772;
+            line-height: 1.5;
+            letter-spacing: 0.42px;
+        }
+        
+        /* Chips Section */
+        .chips-container {
             display: flex;
-            flex-direction: column;
-            gap: 0;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-bottom: 32px;
         }
         
-        .selection-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            height: 64px;
-            cursor: pointer;
-            position: relative;
-            border-radius: 20px;
-            transition: background-color 0.2s ease;
-        }
-        
-        .selection-item:hover {
-            background-color: rgba(0,0,0,0.02);
-        }
-        
-        .selection-item.selected {
-            background-color: rgba(1, 152, 102, 0.05);
-        }
-        
-        .item-content {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            gap: 16px;
-        }
-        
-        .item-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            border: 1px solid #dbdddc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f8f9fa;
-            flex-shrink: 0;
-            color: #333333;
-        }
-        
-        .item-icon svg {
-            width: 24px;
-            height: 24px;
-        }
-        
-        .item-label {
-            flex: 1;
-            font-size: 16px;
-            font-weight: 400;
+        .chip {
+            border: 1px solid #0f1c14;
+            background: transparent;
             color: #0f1c14;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 400;
             line-height: 1.5;
-        }
-        
-        /* Radio Button Styling */
-        .item-radio {
-            width: 24px;
-            height: 24px;
-            border: 2px solid #9ca3af;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
+            cursor: pointer;
             transition: all 0.2s ease;
-            position: relative;
+            white-space: nowrap;
+            min-width: 100px;
+            text-align: center;
         }
         
-        .selection-item.selected .item-radio {
-            border-color: #019866;
+        .chip:hover {
+            background: #f5f5f5;
         }
         
-        .radio-dot {
-            width: 12px;
-            height: 12px;
-            background-color: #019866;
-            border-radius: 50%;
-            opacity: 0;
-            transform: scale(0);
-            transition: all 0.2s ease;
-        }
-        
-        .selection-item.selected .radio-dot {
-            opacity: 1;
-            transform: scale(1);
+        .chip.selected {
+            background: #0f1c14;
+            color: #ffffff;
         }
         
         /* Button Section */
@@ -421,6 +400,10 @@
             .question-title {
                 font-size: 18px;
             }
+            
+            .input-field {
+                font-size: 18px;
+            }
         }
         
         @media (min-width: 481px) {
@@ -433,136 +416,100 @@
 <body>
     <div class="container">
         <!-- iOS Status Bar -->
-        <!-- iOS Status Bar -->
         <div class="status-bar">
             <div class="status-time">9:41</div>
             <div class="status-icons">
-                <!-- Cellular Signal -->
                 <div class="status-icon">
-                    <svg width="19" height="12" viewBox="0 0 19 12" fill="none">
-                        <path d="M1 8.5h2v3h-2z" fill="currentColor"/>
-                        <path d="M4.5 6h2v5.5h-2z" fill="currentColor"/>
-                        <path d="M8 3.5h2v8h-2z" fill="currentColor"/>
-                        <path d="M11.5 1h2v10.5h-2z" fill="currentColor"/>
-                    </svg>
+                    <div class="signal-bars">
+                        <div class="signal-bar"></div>
+                        <div class="signal-bar"></div>
+                        <div class="signal-bar"></div>
+                        <div class="signal-bar"></div>
+                    </div>
                 </div>
-                <!-- WiFi -->
                 <div class="status-icon">
-                    <svg width="17" height="12" viewBox="0 0 17 12" fill="none">
-                        <path d="M8.5 11.5c0.828 0 1.5-0.672 1.5-1.5s-0.672-1.5-1.5-1.5-1.5 0.672-1.5 1.5 0.672 1.5 1.5 1.5z" fill="currentColor"/>
-                        <path d="M8.5 9.5c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z" fill="currentColor"/>
-                        <path d="M8.5 6.5c2.485 0 4.5-2.015 4.5-4.5s-2.015-4.5-4.5-4.5-4.5 2.015-4.5 4.5 2.015 4.5 4.5 4.5z" fill="currentColor"/>
-                    </svg>
+                    <div class="wifi-icon">
+                        <div class="wifi-arc" style="width: 17px; height: 12px; border-width: 1px; top: 0; left: 0;"></div>
+                        <div class="wifi-arc" style="width: 13px; height: 8px; border-width: 1px; top: 2px; left: 2px;"></div>
+                        <div class="wifi-arc" style="width: 9px; height: 4px; border-width: 1px; top: 4px; left: 4px;"></div>
+                    </div>
                 </div>
-                <!-- Battery -->
                 <div class="status-icon">
                     <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
-                        <rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="currentColor" fill="none" stroke-width="1" opacity="0.35"/>
-                        <path d="M23 4V8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.4"/>
-                        <rect x="2" y="2" width="18" height="8" rx="1.5" fill="currentColor"/>
+                        <rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="#000000" fill="none" stroke-width="1" opacity="0.35"/>
+                        <path d="M23 4V8" stroke="#000000" stroke-width="1.3" stroke-linecap="round" opacity="0.4"/>
+                        <rect x="2" y="2" width="18" height="8" rx="1.5" fill="#000000"/>
                     </svg>
                 </div>
             </div>
         </div>
-        
-        <!-- Header -->
-        <div class="header">
-            <button class="back-button" onclick="goBack()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M15 18L9 12L15 6" stroke="#0f1c14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
-            <div class="header-title">Questionnaire</div>
-            <div class="header-spacer"></div>
+
+        <!-- Back Button -->
+        <div class="back-button" onclick="goBack()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m15 18-6-6 6-6"/>
+            </svg>
+        </div>
+
+        <!-- Question Section -->
+        <div class="question-section">
+            <h1 class="question-title">What's one thing you want to improve about your health right now?</h1>
+            <p class="question-subtitle">Select all that apply to personalize your experience. You can change these at a later time.</p>
         </div>
         
-        <!-- Progress Bar -->
-        <div class="progress-container">
-            <div class="progress-bar">
-                <div class="progress-segment completed"></div>
-                <div class="progress-segment completed"></div>
-                <div class="progress-segment completed"></div>
-                <div class="progress-segment incomplete"></div>
-                <div class="progress-segment incomplete"></div>
-                <div class="progress-segment incomplete"></div>
+        <!-- Input Section -->
+        <div class="input-section">
+            <div class="input-container">
+                <input type="text" class="input-field" placeholder="placeholder" id="customInput">
             </div>
+            <div class="helper-text">Or select from one of the options below.</div>
         </div>
         
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Step Indicator -->
-            <div class="step-indicator">Step 3 of 6</div>
-            
-            <!-- Question Section -->
-            <div class="question-section">
-                <h1 class="question-title">How much time per day do you feel you can consistently give to your health?</h1>
-                <p class="question-subtitle">Select the one that closest fits you. You can change these at a later time.</p>
-            </div>
-            
-            <!-- Selection Items -->
-            <div class="selection-list">
-                <div class="selection-item" onclick="selectRadio(this)" data-value="2-min">
-                    <div class="item-content">
-                        <div class="item-icon">
-                            <i data-lucide="clock-2"></i>
-                        </div>
-                        <div class="item-label">2 min</div>
-                        <div class="item-radio">
-                            <div class="radio-dot"></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="selection-item" onclick="selectRadio(this)" data-value="5-min">
-                    <div class="item-content">
-                        <div class="item-icon">
-                            <i data-lucide="clock-5"></i>
-                        </div>
-                        <div class="item-label">5 min</div>
-                        <div class="item-radio">
-                            <div class="radio-dot"></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="selection-item" onclick="selectRadio(this)" data-value="10-min">
-                    <div class="item-content">
-                        <div class="item-icon">
-                            <i data-lucide="clock-10"></i>
-                        </div>
-                        <div class="item-label">10+ min</div>
-                        <div class="item-radio">
-                            <div class="radio-dot"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Continue Button -->
-            <div class="button-section">
-                <button class="continue-button" id="continueBtn" onclick="handleContinue()">Continue</button>
-            </div>
+        <!-- Chips -->
+        <div class="chips-container">
+            <button class="chip" onclick="toggleChip(this)">Improve Wellness</button>
+            <button class="chip" onclick="toggleChip(this)">Boost Productivity</button>
+            <button class="chip" onclick="toggleChip(this)">Learn New Skills</button>
+            <button class="chip" onclick="toggleChip(this)">Build Better Habits</button>
+            <button class="chip" onclick="toggleChip(this)">Connect with Others</button>
+            <button class="chip" onclick="toggleChip(this)">Track My Progress</button>
+        </div>
+        
+        <!-- Continue Button -->
+        <div class="button-section">
+            <button class="continue-button" id="continueBtn" onclick="handleContinue()">Continue</button>
         </div>
     </div>
 
     <script>
-        let selectedTime = null;
+        let selectedChip = null;
         const continueBtn = document.getElementById('continueBtn');
+        const customInput = document.getElementById('customInput');
+        const chips = document.querySelectorAll('.chip');
         
-        function selectRadio(item) {
-            // Remove selection from all items
-            const allItems = document.querySelectorAll('.selection-item');
-            allItems.forEach(i => i.classList.remove('selected'));
-            
-            // Select clicked item
-            item.classList.add('selected');
-            selectedTime = item.dataset.value;
+        function toggleChip(chip) {
+            // If clicking the same chip, deselect it
+            if (chip.classList.contains('selected')) {
+                chip.classList.remove('selected');
+                selectedChip = null;
+                customInput.value = '';
+            } else {
+                // Deselect any previously selected chip
+                chips.forEach(c => c.classList.remove('selected'));
+                
+                // Select the new chip
+                chip.classList.add('selected');
+                selectedChip = chip;
+                customInput.value = chip.textContent;
+            }
             
             updateContinueButton();
         }
         
         function updateContinueButton() {
-            if (selectedTime) {
+            const hasSelection = selectedChip !== null || customInput.value.trim() !== '';
+            
+            if (hasSelection) {
                 continueBtn.classList.add('enabled');
                 continueBtn.disabled = false;
             } else {
@@ -571,27 +518,37 @@
             }
         }
         
+        // 🔴 UPDATED: Now uses UserState.saveUserPreferences for proper data management
         function handleContinue() {
             if (continueBtn.classList.contains('enabled')) {
-                // Save daily time to localStorage
-                const preferences = JSON.parse(localStorage.getItem('userPreferences') || '{}');
-                preferences.dailyTime = selectedTime;
-                localStorage.setItem('userPreferences', JSON.stringify(preferences));
+                const response = customInput.value.trim();
                 
-                console.log('User selected time commitment:', selectedTime);
-                window.location.href = 'questionnaire-4.html';
+                // Save primary goal using UserState for consistency
+                UserState.saveUserPreferences({
+                    primaryGoal: response
+                });
+                
+                console.log('User response saved:', response);
+                window.location.href = 'questionnaire-2.html';
             }
         }
         
         function goBack() {
-            window.location.href = 'questionnaire-2.html';
+            window.location.href = 'welcome.html';
         }
+        
+        // Listen for input changes
+        customInput.addEventListener('input', function() {
+            // If user starts typing, deselect any selected chip
+            if (selectedChip) {
+                selectedChip.classList.remove('selected');
+                selectedChip = null;
+            }
+            updateContinueButton();
+        });
         
         // Initialize button state
         updateContinueButton();
-        
-        // Initialize Lucide icons
-        lucide.createIcons();
     </script>
 </body>
 </html>

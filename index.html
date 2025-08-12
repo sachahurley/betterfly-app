@@ -47,16 +47,22 @@
     <div class="loading-text">Loading Betterfly...</div>
     
     <script src="shared/user-state.js"></script>
+    <script src="src/config/version-manager.js"></script>
     <script>
-        // Smart routing based on user state
-        window.addEventListener('DOMContentLoaded', () => {
+        // Smart routing based on user state and version configuration
+        window.addEventListener('DOMContentLoaded', async () => {
+            // Wait for version config to load
+            await versionManager.loadConfig();
+            
             setTimeout(() => {
                 if (UserState.hasCompletedOnboarding()) {
-                    // User has completed onboarding, go to dashboard
-                    window.location.href = 'dashboard/index.html';
+                    // User has completed onboarding, go to versioned dashboard
+                    const dashboardPath = versionManager.getVersionPath('dashboard', 'index.html');
+                    window.location.href = dashboardPath;
                 } else {
-                    // New user, go to onboarding
-                    window.location.href = 'onboarding/welcome.html';
+                    // New user, go to versioned onboarding
+                    const onboardingPath = versionManager.getVersionPath('onboarding', 'welcome.html');
+                    window.location.href = onboardingPath;
                 }
             }, 500); // Small delay for smooth transition
         });

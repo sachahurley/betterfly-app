@@ -1,5 +1,8 @@
 // Home page functionality
 document.addEventListener('DOMContentLoaded', function() {
+    // 🔴 ADDED: Check onboarding status first
+    checkOnboardingStatus();
+    
     // Initialize the page
     loadUserData();
     updateProgress();
@@ -9,9 +12,39 @@ document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
 });
 
+// 🔴 NEW FUNCTION: Check if user has completed onboarding
+function checkOnboardingStatus() {
+    // Import UserState if not already available
+    if (typeof UserState === 'undefined') {
+        const script = document.createElement('script');
+        script.src = '../shared/user-state.js';
+        script.onload = () => {
+            checkOnboardingStatusAfterLoad();
+        };
+        document.head.appendChild(script);
+    } else {
+        checkOnboardingStatusAfterLoad();
+    }
+}
+
+function checkOnboardingStatusAfterLoad() {
+    const onboardingStatus = UserState.getOnboardingStatus();
+    console.log('Onboarding status:', onboardingStatus);
+    
+    if (!onboardingStatus.isComplete) {
+        console.log('User has not completed onboarding, redirecting...');
+        // Redirect to onboarding welcome page
+        window.location.href = '../src/flows/onboarding/v1/welcome.html';
+        return;
+    }
+    
+    console.log('User has completed onboarding, proceeding with home page...');
+}
+
 // Load user data from localStorage
 function loadUserData() {
-    const gameState = JSON.parse(localStorage.getItem('gameState')) || {
+    // 🔴 UPDATED: Now loads from the correct location (betterflyMinimal)
+    const gameState = JSON.parse(localStorage.getItem('betterflyMinimal')) || {
         totalPoints: 0,
         currentStreak: 0,
         habitsCompleted: 0,
@@ -19,12 +52,12 @@ function loadUserData() {
     };
     
     // Update display with loaded data
-    document.getElementById('totalPoints').textContent = gameState.totalPoints;
-    document.getElementById('currentStreak').textContent = gameState.currentStreak;
-    document.getElementById('habitsCompleted').textContent = gameState.habitsCompleted;
+    document.getElementById('totalPoints').textContent = gameState.totalPoints || 0;
+    document.getElementById('currentStreak').textContent = gameState.currentStreak || 0;
+    document.getElementById('habitsCompleted').textContent = gameState.habitsCompleted || 0;
     
     // Update progress bar
-    updateProgressBar(gameState.todayProgress);
+    updateProgressBar(gameState.todayProgress || 0);
 }
 
 // Update progress bar
@@ -44,7 +77,8 @@ function updateStats() {
 
 // Update progress section
 function updateProgress() {
-    const gameState = JSON.parse(localStorage.getItem('gameState')) || {};
+    // 🔴 UPDATED: Now loads from the correct location
+    const gameState = JSON.parse(localStorage.getItem('betterflyMinimal')) || {};
     const todayProgress = gameState.todayProgress || 0;
     
     updateProgressBar(todayProgress);
@@ -66,9 +100,16 @@ function setupEventListeners() {
 }
 
 // Navigation functions
+// 🔴 UPDATED: Now properly handles the onboarding flow
 function startChallenge() {
-    // Navigate to the challenge page
-    window.location.href = '../dashboard/index.html';
+    // Check if user has completed onboarding
+    if (typeof UserState !== 'undefined' && UserState.hasCompletedOnboarding()) {
+        // User has completed onboarding, go to v2 dashboard
+        window.location.href = 'src/flows/dashboard/v2/index.html';
+    } else {
+        // User hasn't completed onboarding, start v2 onboarding flow
+        window.location.href = 'src/flows/onboarding/v2/welcome.html';
+    }
 }
 
 function viewProgress() {
@@ -88,8 +129,6 @@ function viewProfile() {
     console.log('Navigate to profile page');
     // window.location.href = '../profile/index.html';
 }
-
-
 
 // Utility functions
 function formatNumber(num) {
@@ -118,18 +157,18 @@ function updateStatusBarTime() {
 updateStatusBarTime();
 setInterval(updateStatusBarTime, 60000);
 
-// Add some sample data for demonstration
-function addSampleData() {
-    const sampleData = {
-        totalPoints: 1250,
-        currentStreak: 7,
-        habitsCompleted: 23,
-        todayProgress: 65
-    };
-    
-    localStorage.setItem('gameState', JSON.stringify(sampleData));
-    loadUserData();
-}
+// 🔴 REMOVED: No more sample data - we now use real user data
+// function addSampleData() {
+//     const sampleData = {
+//         totalPoints: 1250,
+//         currentStreak: 7,
+//         habitsCompleted: 23,
+//         todayProgress: 65
+//     };
+//     
+//     localStorage.setItem('gameState', JSON.stringify(sampleData));
+//     loadUserData();
+// }
 
 // Uncomment the line below to add sample data for testing
-addSampleData();
+// addSampleData();

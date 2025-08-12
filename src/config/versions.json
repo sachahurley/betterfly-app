@@ -1,0 +1,58 @@
+{
+  "onboarding": {
+    "active": "v2",
+    "versions": {
+      "v1": {
+        "name": "Integrated Onboarding & Challenge System",
+        "created": "2025-01-01",
+        "status": "stable",
+        "description": "Enhanced onboarding flow with challenge system integration, personalized habits, and unified data management"
+      },
+      "v2": {
+        "name": "Advanced Onboarding",
+        "created": "2025-08-11",
+        "status": "development",
+        "description": "Placeholder for next iteration with AI-powered personalization"
+      }
+    }
+  },
+  "dashboard": {
+    "active": "v1",
+    "versions": {
+      "v1": {
+        "name": "Personalized Challenge Dashboard",
+        "created": "2025-01-01",
+        "status": "stable",
+        "description": "5-day personalized wellness challenge dashboard with onboarding integration and challenge templates"
+      },
+      "v2": {
+        "name": "Advanced Dashboard",
+        "created": "2025-08-11",
+        "status": "development",
+        "description": "Placeholder for next iteration with advanced analytics and social features"
+      }
+    }
+  },
+  "challenge-templates": {
+    "active": "v1",
+    "versions": {
+      "v1": {
+        "name": "Initial Challenge Templates",
+        "created": "2025-01-01",
+        "status": "stable",
+        "description": "Wellness, productivity, and fitness challenge templates with personalization based on user preferences"
+      }
+    }
+  },
+  "user-state": {
+    "active": "v1",
+    "versions": {
+      "v1": {
+        "name": "Enhanced User State Management",
+        "created": "2025-01-01",
+        "status": "stable",
+        "description": "Unified user state management with challenge state, onboarding integration, and data consistency"
+      }
+    }
+  }
+}

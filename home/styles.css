@@ -1,8 +1,12 @@
+/* Import Roboto Font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400;1,500&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
 }
 
 html, body {
@@ -10,7 +14,9 @@ html, body {
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
     background: #ffffff;
     color: #0f1c14;
     overflow-y: auto;
@@ -26,23 +32,21 @@ body {
     right: 0;
     z-index: 1000;
     background: white;
-    height: 54px;
-    padding: 0 16px;
+    height: 44px;
+    padding: 0 21px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+    font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
     font-size: 17px;
     font-weight: 600;
-    letter-spacing: -0.41px;
+    line-height: 22px;
+    letter-spacing: -0.408px;
 }
 
 .status-time {
     color: #000000;
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
-    font-size: 17px;
     font-weight: 600;
-    letter-spacing: -0.41px;
 }
 
 .status-bar-levels {

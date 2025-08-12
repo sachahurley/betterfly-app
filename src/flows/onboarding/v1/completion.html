@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Betterfly - You're In!</title>
+    <!-- 🔴 ADDED: Import UserState for proper data management -->
+    <script src="../../../../shared/user-state.js"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
@@ -191,12 +193,26 @@
             });
         }
         
+        // 🔴 UPDATED: Now initializes challenge state and marks Day 1 as completed
         function handleStartDay() {
-            window.location.href = '../dashboard/index.html';
+            // Initialize challenge state for the user
+            const challengeState = UserState.initializeChallengeState();
+            
+            // Mark Day 1 as completed since they've finished onboarding
+            UserState.updateChallengeProgress({
+                daysCompleted: { 1: true },
+                currentDay: 1,
+                todayProgress: 0
+            });
+            
+            console.log('Challenge initialized and Day 1 marked as completed');
+            
+            // Navigate to dashboard
+            window.location.href = '../../dashboard/v1/index.html';
         }
         
         function handleGoHome() {
-            window.location.href = '../home/index.html';
+            window.location.href = '../../../../home/index.html';
         }
         
         // Trigger confetti on page load

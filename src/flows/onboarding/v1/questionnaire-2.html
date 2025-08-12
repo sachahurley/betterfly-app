@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Betterfly Questionnaire - Step 2</title>
+    <script src="../../../../shared/user-state.js"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
         * {
@@ -596,10 +597,10 @@
             if (continueBtn.classList.contains('enabled')) {
                 const responses = Array.from(selectedItems);
                 
-                // Save biggest blocker to localStorage
-                const preferences = JSON.parse(localStorage.getItem('userPreferences') || '{}');
-                preferences.biggestBlocker = responses.join(', ');
-                localStorage.setItem('userPreferences', JSON.stringify(preferences));
+                // Save biggest blocker using UserState for consistency
+                UserState.saveUserPreferences({
+                    biggestBlocker: responses.join(', ')
+                });
                 
                 console.log('User selected obstacles:', responses);
                 window.location.href = 'questionnaire-3.html';

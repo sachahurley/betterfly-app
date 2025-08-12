@@ -1,0 +1,20 @@
+/* src/styles/design-system/colors.css */
+:root {
+  /* Brand Colors */
+  --brand-green-10: #D1EDD7;
+  --brand-green-30: #75f1a8;
+  --brand-green-50: #19f578;
+  --brand-green-70: #00bf5d;
+  --brand-green-90: #00804c;
+  
+  /* Greyscale */
+  --greyscale-white: #FFFFFF;
+  --greyscale-10: #F5F6F6;
+  --greyscale-90: #0F1C14;
+  
+  /* Semantic Colors */
+  --success: var(--brand-green-50);
+  --warning: var(--brand-yellow-50);
+  --error: #FF6B6B;
+  --info: var(--brand-blue-50);
+}
