@@ -67,10 +67,11 @@ class CTAGroup {
     this.disabled = options.disabled || false;
     this.primaryId = options.primaryId || 'primaryBtn';
     this.secondaryId = options.secondaryId || 'secondaryBtn';
+    this.primaryButtonClass = options.primaryButtonClass || 'btn-primary';
   }
 
   render() {
-    const primaryClass = `btn btn-primary ${this.disabled ? 'btn-disabled' : ''}`;
+    const primaryClass = `btn ${this.primaryButtonClass} ${this.disabled ? 'btn-disabled' : ''}`;
     const secondaryButton = this.secondaryLabel ? 
       `<button id="${this.secondaryId}" class="btn btn-secondary">${this.secondaryLabel}</button>` : '';
     
@@ -414,6 +415,23 @@ class CoinAnimationManager {
       btn.classList.add('btn-disabled', 'coin-animating');
     });
     
+    // Create dimmer overlay
+    const dimmer = document.createElement('div');
+    dimmer.className = 'coin-toast-dimmer';
+    dimmer.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: auto;
+      cursor: pointer;
+    `;
+    
     // Create toast element with tap instruction
     const toast = document.createElement('div');
     toast.className = 'coin-toast';
@@ -436,6 +454,7 @@ class CoinAnimationManager {
       cursor: pointer;
     `;
     
+    document.body.appendChild(dimmer);
     document.body.appendChild(toast);
     
     // Track when toast was created to prevent immediate dismissal
@@ -458,17 +477,23 @@ class CoinAnimationManager {
       
       console.log('DEBUGGING: Event details:', e);
       console.log('Coin toast dismissed by user tap - proceeding to next screen');
+      
       // Remove event listeners
       toast.removeEventListener('click', dismissToast);
+      dimmer.removeEventListener('click', dismissToast);
       
-      // Slide toast down
+      // Fade out dimmer and slide toast down simultaneously
+      dimmer.style.opacity = '0';
       toast.style.bottom = '-100px';
       
-      // Cleanup after slide down animation
+      // Cleanup after animations complete
       setTimeout(() => {
-        // Remove toast
+        // Remove toast and dimmer
         if (toast.parentNode) {
           toast.remove();
+        }
+        if (dimmer.parentNode) {
+          dimmer.remove();
         }
         
         // Re-enable buttons
@@ -485,18 +510,23 @@ class CoinAnimationManager {
       }, 400); // Wait for slide down animation to complete
     };
     
-    // Animate toast sliding up to 81px from bottom
+    // Animate dimmer fade in and toast sliding up
     setTimeout(() => {
+      // Fade in dimmer
+      dimmer.style.opacity = '1';
+      
+      // Slide up toast
       toast.style.transition = 'bottom 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
       toast.style.bottom = '81px';
       
       // Enable interaction after slide up animation completes
       setTimeout(() => {
-        console.log('DEBUGGING: Adding click listener to toast for tap-to-close');
+        console.log('DEBUGGING: Adding click listeners to both toast and dimmer for tap-to-close');
         // Enable dismissal now that animation is complete
         canDismiss = true;
-        // Add tap listener for dismissal - ONLY on the toast itself
+        // Add tap listeners for dismissal - both toast and dimmer
         toast.addEventListener('click', dismissToast);
+        dimmer.addEventListener('click', dismissToast);
       }, 400); // Wait for slide up animation to complete
       
     }, 100);
@@ -524,16 +554,31 @@ class CoinAnimationManager {
       btn.classList.add('btn-disabled', 'coin-animating');
     });
     
+    // Create dimmer overlay
+    const dimmer = document.createElement('div');
+    dimmer.className = 'coin-celebration-dimmer';
+    dimmer.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: auto;
+      cursor: pointer;
+    `;
+    
     // Create celebration toast element with tap instruction
     const toast = document.createElement('div');
     toast.className = 'coin-celebration-toast';
     toast.innerHTML = `
       <div class="celebration-toast-content">
-        <div class="celebration-confetti">🎉</div>
         <img src="assets/betterfly-coin-icon-2.png" alt="Coins" class="celebration-coin-icon" />
         <span class="celebration-coin-text">+${coinsAwarded} coins!</span>
         <div class="celebration-subtitle">Amazing work!</div>
-        <div class="celebration-confetti">🎉</div>
         <span class="celebration-tap-instruction">Tap to continue</span>
       </div>
     `;
@@ -549,23 +594,30 @@ class CoinAnimationManager {
       cursor: pointer;
     `;
     
+    document.body.appendChild(dimmer);
     document.body.appendChild(toast);
     
     // Function to handle toast dismissal
     const dismissToast = (e) => {
       console.log('DEBUGGING: dismissToast called on celebration toast, event type:', e?.type, 'target:', e?.target?.className);
       console.log('Coin toast dismissed by user tap - proceeding to next screen');
+      
       // Remove event listeners
       toast.removeEventListener('click', dismissToast);
+      dimmer.removeEventListener('click', dismissToast);
       
-      // Slide toast down
+      // Fade out dimmer and slide toast down simultaneously
+      dimmer.style.opacity = '0';
       toast.style.bottom = '-150px';
       
       // Cleanup after slide down animation
       setTimeout(() => {
-        // Remove toast
+        // Remove toast and dimmer
         if (toast.parentNode) {
           toast.remove();
+        }
+        if (dimmer.parentNode) {
+          dimmer.remove();
         }
         
         // Re-enable buttons
@@ -582,16 +634,21 @@ class CoinAnimationManager {
       }, 600); // Wait for slide down animation to complete
     };
     
-    // Animate toast sliding up to 81px from bottom with bounce
+    // Animate dimmer fade in and toast sliding up with bounce
     setTimeout(() => {
+      // Fade in dimmer
+      dimmer.style.opacity = '1';
+      
+      // Slide up toast with bounce
       toast.style.transition = 'bottom 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)'; // Bouncy easing
       toast.style.bottom = '81px';
       
       // Enable interaction after slide up animation completes
       setTimeout(() => {
-        console.log('DEBUGGING: Adding click listener to celebration toast for tap-to-close');
-        // Add tap listener for dismissal - ONLY on the toast itself
+        console.log('DEBUGGING: Adding click listeners to both celebration toast and dimmer for tap-to-close');
+        // Add tap listeners for dismissal - both toast and dimmer
         toast.addEventListener('click', dismissToast);
+        dimmer.addEventListener('click', dismissToast);
       }, 600); // Wait for slide up animation to complete
       
     }, 100);
@@ -1954,73 +2011,4 @@ class FollowUpQuestionnaireSystem {
     return this.instance;
   }
 
-  // Test function to force show follow-up (for debugging)
-  static testFollowUp(questionId = 'q1-health-feeling') {
-    console.log('testFollowUp called with questionId:', questionId);
-    const system = this.getInstance();
-    console.log('System instance:', system);
-    
-    const question = system.getRandomFollowUpQuestion(questionId);
-    console.log('Random question retrieved:', question);
-    
-    if (question) {
-      console.log('Showing bottom sheet with question:', question);
-      system.showFollowUpBottomSheet(
-        question,
-        (selectedOption) => {
-          console.log('Follow-up completed:', selectedOption);
-          CoinAnimationManager.showCoinToast(25, () => {
-            console.log('Animation completed');
-          });
-        },
-        () => {
-          console.log('Follow-up skipped');
-          CoinAnimationManager.showCoinToast(10, () => {
-            console.log('Standard animation completed');
-          });
-        }
-      );
-    } else {
-      console.log('No available questions for', questionId);
-      console.log('Available question bank:', system.questionBank[questionId]);
-    }
-  }
-
-  // Simple test with hardcoded question using new timing sequence
-  static testBottomSheetDirect() {
-    console.log('Testing bottom sheet with new timing sequence...');
-    const system = this.getInstance();
-    
-    const testQuestion = {
-      id: 'test_question',
-      title: 'Test Question',
-      description: 'This is a test question to verify the new timing sequence works',
-      options: [
-        { id: 1, text: 'Option 1', icon: '🌅' },
-        { id: 2, text: 'Option 2', icon: '☀️' },
-        { id: 3, text: 'Option 3', icon: '🌆' }
-      ]
-    };
-    
-    system.showFollowUpBottomSheet(
-      testQuestion,
-      (selectedOption) => {
-        console.log('Test - showing completion state...');
-        // Use the new timing sequence
-        system.showCompletionStateAndClose(selectedOption, () => {
-          console.log('Test - completion state finished, showing coin toast...');
-          CoinAnimationManager.showCoinToast(25, () => {
-            console.log('Test - coin animation completed');
-            alert('Test sequence completed successfully!');
-          });
-        });
-      },
-      () => {
-        console.log('Test skipped');
-        CoinAnimationManager.showCoinToast(10, () => {
-          alert('Test skipped - standard coins shown');
-        });
-      }
-    );
-  }
 }

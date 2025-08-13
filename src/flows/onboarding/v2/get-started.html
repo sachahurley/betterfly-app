@@ -15,8 +15,6 @@
         </div>
         
         <div class="content">
-            <div id="mascotContainer"></div>
-            
             <h1>Welcome to Your Wellness Journey</h1>
             <p class="subtitle">We'll personalize your experience to help you build lasting healthy habits</p>
             
@@ -39,12 +37,9 @@
     <script src="components/components.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Mount mascot
-            MascotBubble.mount('mascotContainer', 'Hello! I\'m here to guide you on your wellness journey! 🌟');
-            
             // Mount CTA
             CTAGroup.mount('ctaContainer', {
-                primaryLabel: 'Get Started',
+                primaryLabel: 'Let\'s go!',
                 onPrimary: () => {
                     OnboardingRoutes.navigate('expectations');
                 },

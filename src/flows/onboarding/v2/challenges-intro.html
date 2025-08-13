@@ -14,7 +14,7 @@
             <div class="status-icons"></div>
         </div>
         
-        <div class="content center-content">
+        <div class="content">
             <div id="mascotContainer"></div>
             
             <h1>Amazing Work!</h1>
@@ -56,29 +56,17 @@
             
             // Add entrance animations
             setTimeout(() => {
-                const coinDisplay = document.getElementById('coinDisplay');
-                const celebrationMessage = document.getElementById('celebrationMessage');
+                const celebrationCenter = document.getElementById('celebrationCenter');
                 
-                if (coinDisplay) {
-                    coinDisplay.style.opacity = '0';
-                    coinDisplay.style.transform = 'scale(0.8) translateY(20px)';
-                    coinDisplay.style.transition = 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                if (celebrationCenter) {
+                    celebrationCenter.style.opacity = '0';
+                    celebrationCenter.style.transform = 'translateY(20px)';
+                    celebrationCenter.style.transition = 'all 0.8s ease-out';
                     
                     setTimeout(() => {
-                        coinDisplay.style.opacity = '1';
-                        coinDisplay.style.transform = 'scale(1) translateY(0px)';
+                        celebrationCenter.style.opacity = '1';
+                        celebrationCenter.style.transform = 'translateY(0px)';
                     }, 300);
-                }
-                
-                if (celebrationMessage) {
-                    celebrationMessage.style.opacity = '0';
-                    celebrationMessage.style.transform = 'translateY(20px)';
-                    celebrationMessage.style.transition = 'all 0.6s ease-out';
-                    
-                    setTimeout(() => {
-                        celebrationMessage.style.opacity = '1';
-                        celebrationMessage.style.transform = 'translateY(0px)';
-                    }, 800);
                 }
             }, 500);
             

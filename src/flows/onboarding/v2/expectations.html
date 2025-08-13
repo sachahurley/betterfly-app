@@ -20,11 +20,10 @@
             <h1>Just 7 quick questions!</h1>
             <p class="subtitle">This will take less than 2 minutes</p>
             
-            <div style="text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: center;">
-                <div style="font-size: 72px; margin-bottom: 24px; width: 100%;">⏱️</div>
-                <div style="width: 100%; display: flex; flex-direction: column; align-items: center; flex: 1; justify-content: center; margin: 0;">
-                    <p>We'll ask about your:</p>
-                    <ul style="list-style: none; padding: 0; margin: 0; text-align: left; display: inline-block; width: 100%; max-width: 300px;">
+            <div>
+                <div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start; margin: 0;">
+                    <p style="margin-top: 0; text-align: left;">We'll ask about your:</p>
+                    <ul style="list-style: none; padding: 0; margin: 0; text-align: left;">
                         <li style="margin-bottom: 8px;">• Current health feelings</li>
                         <li style="margin-bottom: 8px;">• Main concerns</li>
                         <li style="margin-bottom: 8px;">• Biggest challenges</li>
@@ -43,8 +42,8 @@
     <script src="components/components.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Mount mascot
-            MascotBubble.mount('mascotContainer', 'Just 7 quick questions! I promise it\'ll be worth it 🎯', 'cheer');
+            // Mount mascot (moved from get-started page)
+            MascotBubble.mount('mascotContainer', 'Hello! I\'m here to guide you on your wellness journey! 🌟');
             
             // Mount CTA
             CTAGroup.mount('ctaContainer', {

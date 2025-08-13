@@ -7,6 +7,8 @@
     <title>Phone Number - Betterfly</title>
     <link rel="stylesheet" href="styles/shared.css">
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <!-- Add libphonenumber-js for phone validation and formatting -->
+    <script src="https://unpkg.com/libphonenumber-js@1.10.44/bundle/libphonenumber-max.js"></script>
     <style>
         .signup-container {
             min-height: 100vh;
@@ -14,34 +16,20 @@
             flex-direction: column;
         }
         
-        .signup-progress-bar {
-            background: #f3f4f6;
-            height: 4px;
-            margin-top: 44px;
-            position: relative;
-        }
-        
-        .signup-progress-fill {
-            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
-            height: 100%;
-            width: 66.66%;
-            border-radius: 2px;
-            transition: width 0.3s ease;
-        }
         
         .signup-content {
             flex: 1;
-            padding: 32px 24px 24px;
-            padding-bottom: 180px;
+            padding: 32px 24px 60px;
         }
         
         .signup-title {
-            font-family: 'Roboto', sans-serif;
-            font-size: 24px;
-            font-weight: 600;
+            font-family: 'Obviously', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            font-stretch: condensed;
             color: var(--text-primary);
-            margin-bottom: 8px;
-            text-align: center;
+            margin-bottom: 32px;
+            text-align: left;
         }
         
         .signup-subtitle {
@@ -50,7 +38,7 @@
             font-weight: 400;
             color: var(--text-secondary);
             margin-bottom: 32px;
-            text-align: center;
+            text-align: left;
             line-height: 1.5;
         }
         
@@ -109,12 +97,13 @@
         }
         
         .country-flag {
-            font-size: 18px;
+            font-size: 20px;
             line-height: 1;
         }
         
         .country-code-text {
-            font-size: 12px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
             font-weight: 500;
         }
         
@@ -133,16 +122,35 @@
             position: absolute;
             top: 100%;
             left: 0;
-            right: 0;
+            width: max-content;
+            min-width: 200px;
+            max-width: 320px;
             background: white;
             border: 1px solid #d1d5db;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             z-index: 1000;
-            max-height: 200px;
+            max-height: 250px;
             overflow-y: auto;
             display: none;
             margin-top: 4px;
+        }
+        
+        .country-search-input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-bottom: 1px solid #e5e7eb;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            color: var(--text-primary);
+            background: white;
+            outline: none;
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .country-search-input::placeholder {
+            color: #9ca3af;
         }
         
         .country-dropdown-menu.open {
@@ -172,7 +180,7 @@
         }
         
         .country-option-flag {
-            font-size: 16px;
+            font-size: 20px;
         }
         
         .country-option-details {
@@ -182,7 +190,7 @@
         
         .country-option-name {
             font-family: 'Roboto', sans-serif;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 500;
             color: var(--text-primary);
             white-space: nowrap;
@@ -192,7 +200,7 @@
         
         .country-option-code {
             font-family: 'Roboto', sans-serif;
-            font-size: 11px;
+            font-size: 16px;
             font-weight: 400;
             color: var(--text-secondary);
         }
@@ -242,8 +250,8 @@
             font-weight: 400;
             color: var(--text-secondary);
             line-height: 1.4;
-            margin-top: 8px;
-            text-align: center;
+            margin-top: 16px;
+            text-align: left;
         }
         
         .signup-cta-section {
@@ -253,13 +261,14 @@
         
         .btn-primary.signup-btn {
             width: 100%;
-            padding: 16px;
+            padding: 16px 32px;
             font-size: 16px;
-            font-weight: 600;
-            border-radius: 12px;
+            font-weight: 400;
+            border-radius: 24px;
             border: none;
-            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            background: #0F1C14;
             color: white;
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
             cursor: pointer;
             transition: all 0.2s ease;
         }
@@ -356,94 +365,36 @@
         
         <div id="backButtonContainer"></div>
         
-        <div class="signup-progress-bar">
-            <div class="signup-progress-fill" id="progressFill"></div>
-        </div>
-        
         <div class="signup-content">
+            <div id="progressContainer"></div>
             <h1 class="signup-title">What is your phone number?</h1>
-            <p class="signup-subtitle">You will receive an SMS to verify your phone. Standard SMS rates may apply.</p>
             
             <form id="phoneForm">
                 <div class="form-group">
                     <label class="form-label" for="phoneNumber">Phone Number</label>
                     <div class="phone-input-container">
                         <div class="country-code-dropdown">
-                            <button type="button" class="country-code-button" id="countryCodeButton">
+                            <button type="button" 
+                                    class="country-code-button" 
+                                    id="countryCodeButton"
+                                    aria-label="Select country code"
+                                    aria-expanded="false"
+                                    aria-haspopup="listbox">
                                 <span class="country-flag" id="selectedFlag">🇺🇸</span>
                                 <span class="country-code-text" id="selectedCode">+1</span>
                                 <i data-lucide="chevron-down" class="dropdown-chevron"></i>
                             </button>
-                            <div class="country-dropdown-menu" id="countryDropdown">
-                                <div class="country-option selected" data-country="US" data-code="+1" data-flag="🇺🇸">
-                                    <span class="country-option-flag">🇺🇸</span>
-                                    <div class="country-option-details">
-                                        <div class="country-option-name">United States</div>
-                                        <div class="country-option-code">+1</div>
-                                    </div>
-                                </div>
-                                <div class="country-option" data-country="CA" data-code="+1" data-flag="🇨🇦">
-                                    <span class="country-option-flag">🇨🇦</span>
-                                    <div class="country-option-details">
-                                        <div class="country-option-name">Canada</div>
-                                        <div class="country-option-code">+1</div>
-                                    </div>
-                                </div>
-                                <div class="country-option" data-country="GB" data-code="+44" data-flag="🇬🇧">
-                                    <span class="country-option-flag">🇬🇧</span>
-                                    <div class="country-option-details">
-                                        <div class="country-option-name">United Kingdom</div>
-                                        <div class="country-option-code">+44</div>
-                                    </div>
-                                </div>
-                                <div class="country-option" data-country="AU" data-code="+61" data-flag="🇦🇺">
-                                    <span class="country-option-flag">🇦🇺</span>
-                                    <div class="country-option-details">
-                                        <div class="country-option-name">Australia</div>
-                                        <div class="country-option-code">+61</div>
-                                    </div>
-                                </div>
-                                <div class="country-option" data-country="DE" data-code="+49" data-flag="🇩🇪">
-                                    <span class="country-option-flag">🇩🇪</span>
-                                    <div class="country-option-details">
-                                        <div class="country-option-name">Germany</div>
-                                        <div class="country-option-code">+49</div>
-                                    </div>
-                                </div>
-                                <div class="country-option" data-country="FR" data-code="+33" data-flag="🇫🇷">
-                                    <span class="country-option-flag">🇫🇷</span>
-                                    <div class="country-option-details">
-                                        <div class="country-option-name">France</div>
-                                        <div class="country-option-code">+33</div>
-                                    </div>
-                                </div>
-                                <div class="country-option" data-country="ES" data-code="+34" data-flag="🇪🇸">
-                                    <span class="country-option-flag">🇪🇸</span>
-                                    <div class="country-option-details">
-                                        <div class="country-option-name">Spain</div>
-                                        <div class="country-option-code">+34</div>
-                                    </div>
-                                </div>
-                                <div class="country-option" data-country="IT" data-code="+39" data-flag="🇮🇹">
-                                    <span class="country-option-flag">🇮🇹</span>
-                                    <div class="country-option-details">
-                                        <div class="country-option-name">Italy</div>
-                                        <div class="country-option-code">+39</div>
-                                    </div>
-                                </div>
-                                <div class="country-option" data-country="NL" data-code="+31" data-flag="🇳🇱">
-                                    <span class="country-option-flag">🇳🇱</span>
-                                    <div class="country-option-details">
-                                        <div class="country-option-name">Netherlands</div>
-                                        <div class="country-option-code">+31</div>
-                                    </div>
-                                </div>
-                                <div class="country-option" data-country="MX" data-code="+52" data-flag="🇲🇽">
-                                    <span class="country-option-flag">🇲🇽</span>
-                                    <div class="country-option-details">
-                                        <div class="country-option-name">Mexico</div>
-                                        <div class="country-option-code">+52</div>
-                                    </div>
+                            <div class="country-dropdown-menu" 
+                                 id="countryDropdown"
+                                 role="listbox"
+                                 aria-label="Country selection">
+                                <input type="text" 
+                                       class="country-search-input" 
+                                       id="countrySearchInput" 
+                                       placeholder="Search countries..."
+                                       aria-label="Search countries" />
+                                <div class="country-options-list" id="countryOptionsList">
+                                    <!-- Country options will be populated dynamically -->
                                 </div>
                             </div>
                         </div>
@@ -456,11 +407,13 @@
                             placeholder="(555) 123-4567"
                             autocomplete="tel"
                             inputmode="numeric"
+                            aria-label="Phone number"
+                            aria-describedby="sms-detail-text"
                             required
                         />
                     </div>
                     <span class="error-message">Please enter a valid phone number</span>
-                    <p class="sms-detail-text">You will receive an SMS to verify your phone. Standard SMS rates may apply.</p>
+                    <p class="sms-detail-text" id="sms-detail-text">You will receive an SMS to verify your phone. Standard SMS rates may apply.</p>
                 </div>
             </form>
         </div>
@@ -494,6 +447,9 @@
                 title: 'Phone Number'
             });
             
+            // Mount progress bar (step 2 of 3: name, phone, password)
+            ProgressBar.mount('progressContainer', 2, 3);
+            
             // Initialize Lucide icons
             lucide.createIcons();
             
@@ -509,66 +465,294 @@
             const autoFillBtn = document.getElementById('autoFillBtn');
             const doneBtn = document.getElementById('doneBtn');
             
-            // Country data
-            let selectedCountry = {
-                code: '+1',
-                flag: '🇺🇸',
-                country: 'US'
-            };
-            
-            // Phone formatting function for US/CA numbers
-            function formatPhoneNumber(value, countryCode) {
-                // Remove all non-digits
-                const cleaned = value.replace(/\D/g, '');
+            // Enhanced country data with comprehensive list
+            const countryData = [
+                { code: 'US', dialCode: '+1', name: 'United States', flag: '🇺🇸' },
+                { code: 'CA', dialCode: '+1', name: 'Canada', flag: '🇨🇦' },
+                { code: 'GB', dialCode: '+44', name: 'United Kingdom', flag: '🇬🇧' },
+                { code: 'AU', dialCode: '+61', name: 'Australia', flag: '🇦🇺' },
+                { code: 'DE', dialCode: '+49', name: 'Germany', flag: '🇩🇪' },
+                { code: 'FR', dialCode: '+33', name: 'France', flag: '🇫🇷' },
+                { code: 'ES', dialCode: '+34', name: 'Spain', flag: '🇪🇸' },
+                { code: 'IT', dialCode: '+39', name: 'Italy', flag: '🇮🇹' },
+                { code: 'NL', dialCode: '+31', name: 'Netherlands', flag: '🇳🇱' },
+                { code: 'MX', dialCode: '+52', name: 'Mexico', flag: '🇲🇽' },
+                { code: 'BR', dialCode: '+55', name: 'Brazil', flag: '🇧🇷' },
+                { code: 'AR', dialCode: '+54', name: 'Argentina', flag: '🇦🇷' },
+                { code: 'IN', dialCode: '+91', name: 'India', flag: '🇮🇳' },
+                { code: 'CN', dialCode: '+86', name: 'China', flag: '🇨🇳' },
+                { code: 'JP', dialCode: '+81', name: 'Japan', flag: '🇯🇵' },
+                { code: 'KR', dialCode: '+82', name: 'South Korea', flag: '🇰🇷' },
+                { code: 'SG', dialCode: '+65', name: 'Singapore', flag: '🇸🇬' },
+                { code: 'CH', dialCode: '+41', name: 'Switzerland', flag: '🇨🇭' },
+                { code: 'SE', dialCode: '+46', name: 'Sweden', flag: '🇸🇪' },
+                { code: 'NO', dialCode: '+47', name: 'Norway', flag: '🇳🇴' },
+                { code: 'DK', dialCode: '+45', name: 'Denmark', flag: '🇩🇰' },
+                { code: 'FI', dialCode: '+358', name: 'Finland', flag: '🇫🇮' },
+                { code: 'BE', dialCode: '+32', name: 'Belgium', flag: '🇧🇪' },
+                { code: 'AT', dialCode: '+43', name: 'Austria', flag: '🇦🇹' },
+                { code: 'IE', dialCode: '+353', name: 'Ireland', flag: '🇮🇪' },
+                { code: 'PT', dialCode: '+351', name: 'Portugal', flag: '🇵🇹' },
+                { code: 'GR', dialCode: '+30', name: 'Greece', flag: '🇬🇷' },
+                { code: 'PL', dialCode: '+48', name: 'Poland', flag: '🇵🇱' },
+                { code: 'CZ', dialCode: '+420', name: 'Czech Republic', flag: '🇨🇿' },
+                { code: 'HU', dialCode: '+36', name: 'Hungary', flag: '🇭🇺' },
+                { code: 'RO', dialCode: '+40', name: 'Romania', flag: '🇷🇴' },
+                { code: 'BG', dialCode: '+359', name: 'Bulgaria', flag: '🇧🇬' },
+                { code: 'HR', dialCode: '+385', name: 'Croatia', flag: '🇭🇷' },
+                { code: 'RS', dialCode: '+381', name: 'Serbia', flag: '🇷🇸' },
+                { code: 'SI', dialCode: '+386', name: 'Slovenia', flag: '🇸🇮' },
+                { code: 'SK', dialCode: '+421', name: 'Slovakia', flag: '🇸🇰' },
+                { code: 'EE', dialCode: '+372', name: 'Estonia', flag: '🇪🇪' },
+                { code: 'LV', dialCode: '+371', name: 'Latvia', flag: '🇱🇻' },
+                { code: 'LT', dialCode: '+370', name: 'Lithuania', flag: '🇱🇹' },
+                { code: 'IL', dialCode: '+972', name: 'Israel', flag: '🇮🇱' },
+                { code: 'AE', dialCode: '+971', name: 'United Arab Emirates', flag: '🇦🇪' },
+                { code: 'SA', dialCode: '+966', name: 'Saudi Arabia', flag: '🇸🇦' },
+                { code: 'TR', dialCode: '+90', name: 'Turkey', flag: '🇹🇷' },
+                { code: 'EG', dialCode: '+20', name: 'Egypt', flag: '🇪🇬' },
+                { code: 'ZA', dialCode: '+27', name: 'South Africa', flag: '🇿🇦' },
+                { code: 'NG', dialCode: '+234', name: 'Nigeria', flag: '🇳🇬' },
+                { code: 'KE', dialCode: '+254', name: 'Kenya', flag: '🇰🇪' },
+                { code: 'GH', dialCode: '+233', name: 'Ghana', flag: '🇬🇭' },
+                { code: 'MA', dialCode: '+212', name: 'Morocco', flag: '🇲🇦' },
+                { code: 'TN', dialCode: '+216', name: 'Tunisia', flag: '🇹🇳' },
+                { code: 'DZ', dialCode: '+213', name: 'Algeria', flag: '🇩🇿' },
+                { code: 'RU', dialCode: '+7', name: 'Russia', flag: '🇷🇺' },
+                { code: 'UA', dialCode: '+380', name: 'Ukraine', flag: '🇺🇦' },
+                { code: 'BY', dialCode: '+375', name: 'Belarus', flag: '🇧🇾' },
+                { code: 'KZ', dialCode: '+7', name: 'Kazakhstan', flag: '🇰🇿' },
+                { code: 'UZ', dialCode: '+998', name: 'Uzbekistan', flag: '🇺🇿' },
+                { code: 'TH', dialCode: '+66', name: 'Thailand', flag: '🇹🇭' },
+                { code: 'VN', dialCode: '+84', name: 'Vietnam', flag: '🇻🇳' },
+                { code: 'MY', dialCode: '+60', name: 'Malaysia', flag: '🇲🇾' },
+                { code: 'ID', dialCode: '+62', name: 'Indonesia', flag: '🇮🇩' },
+                { code: 'PH', dialCode: '+63', name: 'Philippines', flag: '🇵🇭' },
+                { code: 'PK', dialCode: '+92', name: 'Pakistan', flag: '🇵🇰' },
+                { code: 'BD', dialCode: '+880', name: 'Bangladesh', flag: '🇧🇩' },
+                { code: 'LK', dialCode: '+94', name: 'Sri Lanka', flag: '🇱🇰' },
+                { code: 'NP', dialCode: '+977', name: 'Nepal', flag: '🇳🇵' },
+                { code: 'AF', dialCode: '+93', name: 'Afghanistan', flag: '🇦🇫' },
+                { code: 'IR', dialCode: '+98', name: 'Iran', flag: '🇮🇷' },
+                { code: 'IQ', dialCode: '+964', name: 'Iraq', flag: '🇮🇶' },
+                { code: 'SY', dialCode: '+963', name: 'Syria', flag: '🇸🇾' },
+                { code: 'LB', dialCode: '+961', name: 'Lebanon', flag: '🇱🇧' },
+                { code: 'JO', dialCode: '+962', name: 'Jordan', flag: '🇯🇴' },
+                { code: 'KW', dialCode: '+965', name: 'Kuwait', flag: '🇰🇼' },
+                { code: 'QA', dialCode: '+974', name: 'Qatar', flag: '🇶🇦' },
+                { code: 'BH', dialCode: '+973', name: 'Bahrain', flag: '🇧🇭' },
+                { code: 'OM', dialCode: '+968', name: 'Oman', flag: '🇴🇲' },
+                { code: 'YE', dialCode: '+967', name: 'Yemen', flag: '🇾🇪' }
+            ];
+
+            let selectedCountry = { code: 'US', dialCode: '+1', name: 'United States', flag: '🇺🇸' };
+            let allCountries = [...countryData];
+
+            // Auto-detect user's country by IP (simplified implementation)
+            async function detectUserCountry() {
+                try {
+                    const response = await fetch('https://ipapi.co/country/');
+                    const countryCode = await response.text();
+                    const detectedCountry = countryData.find(c => c.code === countryCode.toUpperCase());
+                    if (detectedCountry) {
+                        return detectedCountry;
+                    }
+                } catch (error) {
+                    console.log('Country detection failed, using default US');
+                }
+                return countryData[0]; // Default to US
+            }
+
+            // Initialize country options in dropdown
+            function populateCountryDropdown(countries = allCountries) {
+                const container = document.getElementById('countryOptionsList');
+                container.innerHTML = '';
                 
-                if (countryCode === '+1') {
-                    // US/Canada formatting
-                    if (cleaned.length <= 3) {
-                        return cleaned;
-                    } else if (cleaned.length <= 6) {
-                        return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
+                countries.forEach(country => {
+                    const option = document.createElement('div');
+                    option.className = 'country-option';
+                    option.role = 'option';
+                    option.setAttribute('aria-label', `${country.name} ${country.dialCode}`);
+                    if (country.code === selectedCountry.code) {
+                        option.classList.add('selected');
+                        option.setAttribute('aria-selected', 'true');
                     } else {
+                        option.setAttribute('aria-selected', 'false');
+                    }
+                    option.dataset.country = country.code;
+                    option.dataset.code = country.dialCode;
+                    option.dataset.flag = country.flag;
+                    option.dataset.name = country.name;
+                    
+                    option.innerHTML = `
+                        <span class="country-option-flag">${country.flag}</span>
+                        <div class="country-option-details">
+                            <div class="country-option-name">${country.name}</div>
+                            <div class="country-option-code">${country.dialCode}</div>
+                        </div>
+                    `;
+                    
+                    container.appendChild(option);
+                });
+            }
+
+            // Enhanced phone formatting using libphonenumber
+            function formatPhoneNumber(value, countryCode) {
+                try {
+                    if (!value.trim()) return '';
+                    
+                    // Parse the phone number
+                    const phoneNumber = window.libphonenumber.parsePhoneNumber(value, countryCode);
+                    if (phoneNumber && phoneNumber.isValid()) {
+                        return phoneNumber.formatNational();
+                    } else {
+                        // Fallback to simple formatting for partial input
+                        const cleaned = value.replace(/\D/g, '');
+                        if (countryCode === 'US' || countryCode === 'CA') {
+                            if (cleaned.length <= 3) return cleaned;
+                            if (cleaned.length <= 6) return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
+                            return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6, 10)}`;
+                        }
+                        return cleaned.replace(/(\d{3})(?=\d)/g, '$1 ');
+                    }
+                } catch (error) {
+                    // Fallback formatting
+                    const cleaned = value.replace(/\D/g, '');
+                    if (countryCode === 'US' || countryCode === 'CA') {
+                        if (cleaned.length <= 3) return cleaned;
+                        if (cleaned.length <= 6) return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
                         return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6, 10)}`;
                     }
-                } else {
-                    // International formatting - just add spaces every 3 digits
                     return cleaned.replace(/(\d{3})(?=\d)/g, '$1 ');
                 }
             }
-            
-            // Phone validation function
+
+            // Enhanced phone validation using libphonenumber
             function validatePhone(value, countryCode) {
-                const cleaned = value.replace(/\D/g, '');
-                
-                if (countryCode === '+1') {
-                    // US/Canada: exactly 10 digits
-                    return cleaned.length === 10;
-                } else {
-                    // International: at least 7 digits, max 15
+                try {
+                    if (!value.trim()) return false;
+                    
+                    const phoneNumber = window.libphonenumber.parsePhoneNumber(value, countryCode);
+                    return phoneNumber && phoneNumber.isValid();
+                } catch (error) {
+                    // Fallback validation
+                    const cleaned = value.replace(/\D/g, '');
+                    if (countryCode === 'US' || countryCode === 'CA') {
+                        return cleaned.length === 10;
+                    }
                     return cleaned.length >= 7 && cleaned.length <= 15;
                 }
             }
+
+            // Auto-detect country from phone number input
+            function detectCountryFromPhone(phoneValue) {
+                try {
+                    if (!phoneValue.trim()) return null;
+                    
+                    // Try to parse without country code first
+                    const phoneNumber = window.libphonenumber.parsePhoneNumber(phoneValue);
+                    if (phoneNumber && phoneNumber.country) {
+                        const detectedCountry = countryData.find(c => c.code === phoneNumber.country);
+                        return detectedCountry;
+                    }
+                } catch (error) {
+                    // If parsing fails, try to detect from dial code
+                    const cleaned = phoneValue.replace(/\D/g, '');
+                    if (cleaned.startsWith('1') && cleaned.length >= 10) {
+                        return countryData.find(c => c.code === 'US');
+                    }
+                }
+                return null;
+            }
+
+            // Get placeholder for selected country
+            function getPlaceholderForCountry(countryCode) {
+                const placeholders = {
+                    'US': '(555) 123-4567',
+                    'CA': '(555) 123-4567', 
+                    'GB': '07700 900123',
+                    'AU': '0412 345 678',
+                    'DE': '0151 23456789',
+                    'FR': '06 12 34 56 78',
+                    'ES': '612 34 56 78',
+                    'IT': '312 345 6789',
+                    'NL': '06 12345678',
+                    'MX': '55 1234 5678'
+                };
+                return placeholders[countryCode] || 'Enter phone number';
+            }
             
-            // Format phone input
+            // Initialize country dropdown and auto-detect
+            async function initializeCountrySelection() {
+                try {
+                    const detectedCountry = await detectUserCountry();
+                    selectedCountry = detectedCountry;
+                    
+                    // Update UI
+                    selectedFlag.textContent = selectedCountry.flag;
+                    selectedCode.textContent = selectedCountry.dialCode;
+                    phoneInput.placeholder = getPlaceholderForCountry(selectedCountry.code);
+                    
+                    // Populate dropdown
+                    populateCountryDropdown();
+                } catch (error) {
+                    console.log('Failed to initialize country selection');
+                    populateCountryDropdown();
+                }
+            }
+
+            // Search functionality for country dropdown
+            const countrySearchInput = document.getElementById('countrySearchInput');
+            countrySearchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredCountries = allCountries.filter(country => 
+                    country.name.toLowerCase().includes(searchTerm) ||
+                    country.dialCode.includes(searchTerm) ||
+                    country.code.toLowerCase().includes(searchTerm)
+                );
+                populateCountryDropdown(filteredCountries);
+            });
+
+            // Enhanced phone input handler with auto-detection
             phoneInput.addEventListener('input', function(e) {
-                const formatted = formatPhoneNumber(e.target.value, selectedCountry.code);
+                let inputValue = e.target.value;
+                
+                // Auto-detect country from phone number if user enters with country code
+                if (inputValue.startsWith('+')) {
+                    const detectedCountry = detectCountryFromPhone(inputValue);
+                    if (detectedCountry && detectedCountry.code !== selectedCountry.code) {
+                        selectedCountry = detectedCountry;
+                        selectedFlag.textContent = selectedCountry.flag;
+                        selectedCode.textContent = selectedCountry.dialCode;
+                        phoneInput.placeholder = getPlaceholderForCountry(selectedCountry.code);
+                        populateCountryDropdown();
+                    }
+                }
+                
+                // Format the input
+                const formatted = formatPhoneNumber(inputValue, selectedCountry.code);
                 e.target.value = formatted;
                 validateForm();
             });
             
-            // Validation function
+            // Enhanced validation function
             function validateForm() {
                 const phoneValid = validatePhone(phoneInput.value, selectedCountry.code);
                 
                 // Update button state
                 nextBtn.disabled = !phoneValid;
                 
-                // Update input styling
+                // Update input styling with better error messaging
                 if (phoneInput.value.length > 0) {
                     if (phoneValid) {
                         phoneInput.classList.remove('error');
                     } else {
                         phoneInput.classList.add('error');
+                        // Update error message based on country
+                        const errorMsg = document.querySelector('.error-message');
+                        if (errorMsg) {
+                            errorMsg.textContent = `Please enter a valid ${selectedCountry.name} phone number`;
+                        }
                     }
                 } else {
                     phoneInput.classList.remove('error');
@@ -576,8 +760,33 @@
                 
                 return phoneValid;
             }
+
+            // Update country selection function
+            function updateSelectedCountry(country) {
+                selectedCountry = country;
+                
+                // Update UI elements
+                selectedFlag.textContent = country.flag;
+                selectedCode.textContent = country.dialCode;
+                phoneInput.placeholder = getPlaceholderForCountry(country.code);
+                
+                // Update selected state in dropdown
+                document.querySelectorAll('.country-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                    if (opt.dataset.country === country.code) {
+                        opt.classList.add('selected');
+                    }
+                });
+                
+                // Reformat existing phone number for new country
+                if (phoneInput.value) {
+                    const cleaned = phoneInput.value.replace(/\D/g, '');
+                    phoneInput.value = formatPhoneNumber(cleaned, country.code);
+                    validateForm();
+                }
+            }
             
-            // Country dropdown functionality
+            // Enhanced country dropdown functionality
             countryCodeButton.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const isOpen = countryDropdown.classList.contains('open');
@@ -585,10 +794,19 @@
                 if (isOpen) {
                     countryDropdown.classList.remove('open');
                     countryCodeButton.classList.remove('open');
+                    countryCodeButton.setAttribute('aria-expanded', 'false');
                 } else {
                     countryDropdown.classList.add('open');
                     countryCodeButton.classList.add('open');
+                    countryCodeButton.setAttribute('aria-expanded', 'true');
+                    // Focus search input when opened
+                    setTimeout(() => countrySearchInput.focus(), 100);
                 }
+            });
+            
+            // Prevent search input clicks from closing dropdown
+            countrySearchInput.addEventListener('click', function(e) {
+                e.stopPropagation();
             });
             
             // Close dropdown when clicking outside
@@ -596,47 +814,43 @@
                 if (!countryCodeButton.contains(e.target) && !countryDropdown.contains(e.target)) {
                     countryDropdown.classList.remove('open');
                     countryCodeButton.classList.remove('open');
+                    countryCodeButton.setAttribute('aria-expanded', 'false');
+                    countrySearchInput.value = ''; // Clear search
+                    populateCountryDropdown(); // Reset list
                 }
             });
             
             // Handle country selection
-            countryDropdown.addEventListener('click', function(e) {
+            document.addEventListener('click', function(e) {
                 const option = e.target.closest('.country-option');
-                if (option) {
-                    // Update selected country
-                    selectedCountry = {
-                        code: option.dataset.code,
-                        flag: option.dataset.flag,
-                        country: option.dataset.country
+                if (option && countryDropdown.contains(option)) {
+                    const country = {
+                        code: option.dataset.country,
+                        dialCode: option.dataset.code,
+                        name: option.dataset.name,
+                        flag: option.dataset.flag
                     };
                     
-                    // Update UI
-                    selectedFlag.textContent = selectedCountry.flag;
-                    selectedCode.textContent = selectedCountry.code;
-                    
-                    // Update selected state
-                    document.querySelectorAll('.country-option').forEach(opt => {
-                        opt.classList.remove('selected');
-                    });
-                    option.classList.add('selected');
+                    updateSelectedCountry(country);
                     
                     // Close dropdown
                     countryDropdown.classList.remove('open');
                     countryCodeButton.classList.remove('open');
-                    
-                    // Reformat and validate existing phone number
-                    if (phoneInput.value) {
-                        const cleaned = phoneInput.value.replace(/\D/g, '');
-                        phoneInput.value = formatPhoneNumber(cleaned, selectedCountry.code);
-                        validateForm();
-                    }
-                    
-                    // Update placeholder
-                    if (selectedCountry.code === '+1') {
-                        phoneInput.placeholder = '(555) 123-4567';
-                    } else {
-                        phoneInput.placeholder = 'Enter phone number';
-                    }
+                    countryCodeButton.setAttribute('aria-expanded', 'false');
+                    countrySearchInput.value = ''; // Clear search
+                    populateCountryDropdown(); // Reset list
+                }
+            });
+
+            // Keyboard navigation for country search
+            countrySearchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    countryDropdown.classList.remove('open');
+                    countryCodeButton.classList.remove('open');
+                    countryCodeButton.setAttribute('aria-expanded', 'false');
+                    countrySearchInput.value = '';
+                    populateCountryDropdown();
+                    phoneInput.focus();
                 }
             });
             
@@ -668,47 +882,59 @@
                 keyboardToolbar.classList.remove('visible');
             });
             
-            // Restore existing phone number if it exists
-            const existingPhone = OnboardingState.get('profile.phoneNumber');
-            const existingCountryCode = OnboardingState.get('profile.countryCode');
-            
-            if (existingPhone) {
-                phoneInput.value = existingPhone;
-            }
-            if (existingCountryCode) {
-                // Find and select the country
-                const countryOption = document.querySelector(`[data-code="${existingCountryCode}"]`);
-                if (countryOption) {
-                    selectedCountry = {
-                        code: countryOption.dataset.code,
-                        flag: countryOption.dataset.flag,
-                        country: countryOption.dataset.country
-                    };
-                    
-                    selectedFlag.textContent = selectedCountry.flag;
-                    selectedCode.textContent = selectedCountry.code;
-                    
-                    document.querySelectorAll('.country-option').forEach(opt => {
-                        opt.classList.remove('selected');
-                    });
-                    countryOption.classList.add('selected');
+            // Initialize the enhanced phone input
+            async function initializePhoneInput() {
+                // Initialize country selection with auto-detection
+                await initializeCountrySelection();
+                
+                // Restore existing data if available
+                const existingPhone = OnboardingState.get('profile.phoneNumber');
+                const existingCountryCode = OnboardingState.get('profile.countryCode');
+                
+                if (existingCountryCode) {
+                    const existingCountry = countryData.find(c => c.dialCode === existingCountryCode);
+                    if (existingCountry) {
+                        updateSelectedCountry(existingCountry);
+                    }
+                }
+                
+                if (existingPhone) {
+                    phoneInput.value = existingPhone;
+                    validateForm();
                 }
             }
             
-            validateForm();
+            // Initialize everything
+            initializePhoneInput();
             
-            // Handle next button
+            // Handle next button with E.164 formatting
             nextBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 
                 if (validateForm()) {
-                    // Save to state
-                    OnboardingState.update('profile.phoneNumber', phoneInput.value);
-                    OnboardingState.update('profile.countryCode', selectedCountry.code);
-                    OnboardingState.update('profile.countryFlag', selectedCountry.flag);
-                    
-                    // Navigate to verification step
-                    OnboardingRoutes.navigate('signup-verification');
+                    try {
+                        // Parse and format phone number in E.164 format for backend
+                        const phoneNumber = window.libphonenumber.parsePhoneNumber(phoneInput.value, selectedCountry.code);
+                        const e164Number = phoneNumber ? phoneNumber.format('E.164') : phoneInput.value;
+                        
+                        // Save to state
+                        OnboardingState.update('profile.phoneNumber', phoneInput.value); // Display format
+                        OnboardingState.update('profile.phoneNumberE164', e164Number); // Backend format
+                        OnboardingState.update('profile.countryCode', selectedCountry.dialCode);
+                        OnboardingState.update('profile.countryISO', selectedCountry.code);
+                        OnboardingState.update('profile.countryFlag', selectedCountry.flag);
+                        OnboardingState.update('profile.countryName', selectedCountry.name);
+                        
+                        // Navigate to verification step
+                        OnboardingRoutes.navigate('signup-verification');
+                    } catch (error) {
+                        console.error('Error processing phone number:', error);
+                        // Fallback - save as entered
+                        OnboardingState.update('profile.phoneNumber', phoneInput.value);
+                        OnboardingState.update('profile.countryCode', selectedCountry.dialCode);
+                        OnboardingState.update('profile.countryISO', selectedCountry.code);
+                        OnboardingRoutes.navigate('signup-verification');
+                    }
                 }
             });
             
