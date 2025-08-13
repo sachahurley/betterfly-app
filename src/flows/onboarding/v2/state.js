@@ -150,6 +150,15 @@ const OnboardingState = {
 
   // Complete onboarding and clear all stored data
   complete() {
+    // Save total coins before clearing
+    this.data.totalCoins = this.data.coins.count;
+    this.save();
+    
+    // Submit data to Google Sheets if DataCollector is available
+    if (typeof DataCollector !== 'undefined') {
+      DataCollector.submitToGoogleSheets();
+    }
+    
     this.clearPersistent();
   },
 
@@ -166,6 +175,15 @@ const OnboardingState = {
     } else {
       this.data[field] = value;
     }
+    
+    // Save userName and phoneNumber at root level for data collection
+    if (field === 'profile.firstName' || field === 'profile.lastName') {
+      this.data.userName = `${this.data.profile.firstName} ${this.data.profile.lastName}`.trim();
+    }
+    if (field === 'profile.phone') {
+      this.data.phoneNumber = value;
+    }
+    
     this.save();
   },
 

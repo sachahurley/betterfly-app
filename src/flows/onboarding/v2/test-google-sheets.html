@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Google Sheets Connection</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        button {
+            background: #10B981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 10px 10px 0;
+        }
+        button:hover {
+            background: #059669;
+        }
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 3px solid #6c757d;
+            background: white;
+        }
+        .log-entry.success {
+            border-left-color: #28a745;
+        }
+        .log-entry.error {
+            border-left-color: #dc3545;
+        }
+        .config-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .test-data {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .test-data div {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .test-data label {
+            font-weight: bold;
+            color: #495057;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Google Sheets Connection Test</h1>
+        <p>Use this page to test your Google Apps Script deployment and verify data is being sent correctly.</p>
+        
+        <div class="config-section">
+            <h3>Configuration</h3>
+            <label for="scriptUrl">Google Apps Script URL:</label>
+            <input type="text" id="scriptUrl" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
+            <div style="margin-top: 10px; font-size: 12px; color: #6c757d;">
+                This URL should be from your deployed Google Apps Script web app.
+            </div>
+        </div>
+        
+        <div class="test-data">
+            <div>
+                <label>Session ID:</label>
+                <span id="sessionId">Will be generated</span>
+            </div>
+            <div>
+                <label>Timestamp:</label>
+                <span id="timestamp">Will be set on send</span>
+            </div>
+            <div>
+                <label>Test Type:</label>
+                <span id="testType">Basic Connection</span>
+            </div>
+            <div>
+                <label>Status:</label>
+                <span id="connectionStatus">Not tested</span>
+            </div>
+        </div>
+        
+        <button onclick="testConnection()">Test Basic Connection</button>
+        <button onclick="sendTestData()">Send Test Data</button>
+        <button onclick="sendFullData()">Send Full Mock Data</button>
+        <button onclick="clearLog()">Clear Log</button>
+        
+        <div id="status"></div>
+        
+        <h3>Activity Log</h3>
+        <div id="log" class="log"></div>
+    </div>
+    
+    <script>
+        // Load saved URL if exists
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedUrl = localStorage.getItem('betterfly_test_script_url');
+            if (savedUrl) {
+                document.getElementById('scriptUrl').value = savedUrl;
+                addLog('Loaded saved script URL', 'info');
+            }
+            
+            // Generate session ID
+            const sessionId = 'test_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            document.getElementById('sessionId').textContent = sessionId;
+        });
+        
+        function getScriptUrl() {
+            const url = document.getElementById('scriptUrl').value.trim();
+            if (url) {
+                localStorage.setItem('betterfly_test_script_url', url);
+            }
+            return url;
+        }
+        
+        function addLog(message, type = 'info') {
+            const log = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            log.insertBefore(entry, log.firstChild);
+        }
+        
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+            addLog('Log cleared', 'info');
+        }
+        
+        function showStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.className = `status ${type}`;
+            status.textContent = message;
+        }
+        
+        async function testConnection() {
+            const url = getScriptUrl();
+            if (!url) {
+                showStatus('Please enter your Google Apps Script URL', 'error');
+                return;
+            }
+            
+            showStatus('Testing connection...', 'info');
+            addLog('Starting connection test...', 'info');
+            
+            const testData = {
+                test: true,
+                sessionId: document.getElementById('sessionId').textContent,
+                timestamp: new Date().toISOString(),
+                message: 'Connection test from Betterfly'
+            };
+            
+            try {
+                addLog('Sending test request...', 'info');
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                // With no-cors, we can't read the response, but no error means it likely worked
+                showStatus('Request sent successfully! Check your Google Sheet for the data.', 'success');
+                addLog('✅ Request sent (no-cors mode - check sheet for confirmation)', 'success');
+                document.getElementById('connectionStatus').textContent = 'Connected';
+                
+            } catch (error) {
+                showStatus('Error: ' + error.message, 'error');
+                addLog('❌ Error: ' + error.message, 'error');
+                document.getElementById('connectionStatus').textContent = 'Error';
+            }
+        }
+        
+        async function sendTestData() {
+            const url = getScriptUrl();
+            if (!url) {
+                showStatus('Please enter your Google Apps Script URL', 'error');
+                return;
+            }
+            
+            showStatus('Sending test data...', 'info');
+            addLog('Preparing test questionnaire data...', 'info');
+            
+            const testData = {
+                sessionId: document.getElementById('sessionId').textContent,
+                submissionType: 'test',
+                timestamp: new Date().toISOString(),
+                startTime: new Date(Date.now() - 300000).toISOString(), // 5 minutes ago
+                q1_healthFeeling: 'okay',
+                q2_mainConcern: 'stress',
+                q3_biggestChallenge: 'time',
+                userName: 'Test User',
+                phoneNumber: '555-0123',
+                browser: navigator.userAgent,
+                platform: navigator.platform
+            };
+            
+            try {
+                addLog('Sending questionnaire test data...', 'info');
+                
+                await fetch(url, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                showStatus('Test data sent! Check your Google Sheet.', 'success');
+                addLog('✅ Test data sent successfully', 'success');
+                
+            } catch (error) {
+                showStatus('Error: ' + error.message, 'error');
+                addLog('❌ Error: ' + error.message, 'error');
+            }
+        }
+        
+        async function sendFullData() {
+            const url = getScriptUrl();
+            if (!url) {
+                showStatus('Please enter your Google Apps Script URL', 'error');
+                return;
+            }
+            
+            showStatus('Sending full mock data...', 'info');
+            addLog('Preparing complete mock submission...', 'info');
+            
+            const startTime = new Date(Date.now() - 900000); // 15 minutes ago
+            const endTime = new Date();
+            
+            const fullData = {
+                sessionId: document.getElementById('sessionId').textContent,
+                submissionType: 'final',
+                timestamp: endTime.toISOString(),
+                startTime: startTime.toISOString(),
+                endTime: endTime.toISOString(),
+                duration: Math.floor((endTime - startTime) / 1000),
+                q1_healthFeeling: 'well',
+                q2_mainConcern: 'sleep',
+                q3_biggestChallenge: 'consistency',
+                q4_pastExperience: 'some_success',
+                q5_wearable: 'apple_watch',
+                q6_motivation: 'progress',
+                q7_supportPref: 'ai',
+                q8_lifestyle: 'moderate',
+                q9_success: 'habits',
+                q10_commitment: '30min',
+                userName: 'John Doe',
+                phoneNumber: '555-1234',
+                feedbackRating: '5',
+                feedbackText: 'This is a test submission with full data. The onboarding flow works great!',
+                wouldRecommend: '5',
+                clarityRating: '4',
+                browser: navigator.userAgent,
+                platform: navigator.platform,
+                screenWidth: window.screen.width,
+                screenHeight: window.screen.height,
+                referrer: 'test-page',
+                coinsEarned: '210'
+            };
+            
+            try {
+                addLog('Sending complete mock data...', 'info');
+                
+                await fetch(url, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(fullData)
+                });
+                
+                showStatus('Full mock data sent! Check your Google Sheet for complete row.', 'success');
+                addLog('✅ Complete mock submission sent', 'success');
+                
+            } catch (error) {
+                showStatus('Error: ' + error.message, 'error');
+                addLog('❌ Error: ' + error.message, 'error');
+            }
+        }
+        
+        // Update timestamp every second
+        setInterval(() => {
+            document.getElementById('timestamp').textContent = new Date().toLocaleTimeString();
+        }, 1000);
+    </script>
+</body>
+</html>

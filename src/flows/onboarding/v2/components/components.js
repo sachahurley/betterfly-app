@@ -318,11 +318,16 @@ class CoinCounter {
   constructor(coinCount = 0) {
     this.coinCount = coinCount;
     this.animating = false;
+    this.currentBottomSheet = null;
   }
 
   render() {
     return `
-      <div class="coin-counter">
+      <div class="coin-counter coin-counter-tappable" 
+           role="button" 
+           tabindex="0" 
+           aria-label="View coin information. Current balance: ${this.coinCount} coins"
+           data-coins="${this.coinCount}">
         <img src="assets/betterfly-coin-icon-2.png" alt="Coins" class="coin-icon" />
         <span class="coin-count">${this.coinCount}</span>
       </div>
@@ -333,7 +338,56 @@ class CoinCounter {
     const container = document.getElementById(containerId);
     if (container) {
       container.innerHTML = this.render();
+      this.setupTapHandler(containerId);
     }
+  }
+
+  setupTapHandler(containerId) {
+    const coinCounter = document.querySelector(`#${containerId} .coin-counter-tappable`);
+    if (!coinCounter) return;
+
+    // Touch feedback and tap handler
+    const handleTap = () => {
+      this.showCoinExplanationBottomSheet();
+    };
+
+    // Mouse events
+    coinCounter.addEventListener('click', handleTap);
+    
+    // Touch events for mobile
+    coinCounter.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      coinCounter.classList.add('coin-counter-pressed');
+    });
+    
+    coinCounter.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      coinCounter.classList.remove('coin-counter-pressed');
+      handleTap();
+    });
+    
+    coinCounter.addEventListener('touchcancel', () => {
+      coinCounter.classList.remove('coin-counter-pressed');
+    });
+    
+    // Keyboard accessibility
+    coinCounter.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleTap();
+      }
+    });
+
+    // Hover effects for desktop
+    coinCounter.addEventListener('mouseenter', () => {
+      if (!coinCounter.classList.contains('coin-counter-pressed')) {
+        coinCounter.classList.add('coin-counter-hover');
+      }
+    });
+    
+    coinCounter.addEventListener('mouseleave', () => {
+      coinCounter.classList.remove('coin-counter-hover');
+    });
   }
 
   updateCount(newCount, animate = false) {
@@ -344,6 +398,7 @@ class CoinCounter {
     
     const countElement = document.querySelector('.coin-count');
     const coinIcon = document.querySelector('.coin-icon');
+    const coinCounter = document.querySelector('.coin-counter-tappable');
     
     if (countElement) {
       if (animate && newCount > oldCount) {
@@ -382,7 +437,149 @@ class CoinCounter {
       } else {
         countElement.textContent = newCount;
       }
+      
+      // Update accessibility attributes
+      if (coinCounter) {
+        coinCounter.setAttribute('aria-label', `View coin information. Current balance: ${newCount} coins`);
+        coinCounter.setAttribute('data-coins', newCount);
+      }
     }
+  }
+
+  showCoinExplanationBottomSheet() {
+    // Prevent multiple bottom sheets
+    if (this.currentBottomSheet) {
+      return;
+    }
+
+    // Get current coin count
+    const currentCoins = this.coinCount;
+    
+    // Create backdrop
+    const backdrop = document.createElement('div');
+    backdrop.className = 'followup-backdrop';
+    
+    // Create bottom sheet
+    const bottomSheet = document.createElement('div');
+    bottomSheet.className = 'followup-bottom-sheet coin-explanation-sheet';
+    
+    bottomSheet.innerHTML = `
+      <div class="followup-handle"></div>
+      <div class="followup-header">
+        <h3 class="followup-title">Betterfly Coins</h3>
+        <button class="followup-close" id="coinExplanationClose">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="followup-content">
+        <div class="coin-explanation-content">
+          <div class="coin-balance-display">
+            <img src="assets/betterfly-coin-icon-2.png" alt="Coins" class="coin-explanation-icon" />
+            <span class="coin-explanation-count">${currentCoins}</span>
+            <span class="coin-balance-label">Total Coins</span>
+          </div>
+          <p class="coin-explanation-text">
+            Earn coins by completing wellness challenges and redeem them for employer-sponsored benefits and subsidies that support your health and well-being.
+          </p>
+        </div>
+      </div>
+    `;
+    
+    // Store references
+    this.currentBottomSheet = { backdrop, bottomSheet };
+    
+    // Add to DOM
+    document.body.appendChild(backdrop);
+    document.body.appendChild(bottomSheet);
+    
+    // Initialize Lucide icons
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+    
+    // Animate in
+    requestAnimationFrame(() => {
+      backdrop.classList.add('visible');
+      bottomSheet.classList.add('visible');
+    });
+    
+    // Set up event listeners
+    this.setupCoinBottomSheetListeners();
+  }
+
+  setupCoinBottomSheetListeners() {
+    const { backdrop, bottomSheet } = this.currentBottomSheet;
+    
+    // Close button
+    const closeBtn = bottomSheet.querySelector('#coinExplanationClose');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        this.dismissCoinBottomSheet();
+      });
+    }
+    
+    // Backdrop click
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) {
+        this.dismissCoinBottomSheet();
+      }
+    });
+    
+    // Swipe to dismiss (simplified touch handling)
+    let startY = 0;
+    let currentY = 0;
+    
+    bottomSheet.addEventListener('touchstart', (e) => {
+      startY = e.touches[0].clientY;
+    });
+    
+    bottomSheet.addEventListener('touchmove', (e) => {
+      currentY = e.touches[0].clientY;
+      const diffY = currentY - startY;
+      
+      if (diffY > 0) {
+        bottomSheet.style.transform = `translateY(${diffY}px)`;
+        bottomSheet.style.opacity = Math.max(0.5, 1 - (diffY / 300));
+      }
+    });
+    
+    bottomSheet.addEventListener('touchend', () => {
+      const diffY = currentY - startY;
+      
+      if (diffY > 100) {
+        this.dismissCoinBottomSheet();
+      } else {
+        bottomSheet.style.transform = 'translateY(0)';
+        bottomSheet.style.opacity = '1';
+      }
+    });
+    
+    // Keyboard escape
+    const handleKeydown = (e) => {
+      if (e.key === 'Escape') {
+        this.dismissCoinBottomSheet();
+        document.removeEventListener('keydown', handleKeydown);
+      }
+    };
+    document.addEventListener('keydown', handleKeydown);
+  }
+
+  dismissCoinBottomSheet() {
+    if (!this.currentBottomSheet) {
+      return;
+    }
+    
+    const { backdrop, bottomSheet } = this.currentBottomSheet;
+    
+    // Animate out
+    backdrop.classList.remove('visible');
+    bottomSheet.classList.remove('visible');
+    
+    setTimeout(() => {
+      if (backdrop.parentNode) backdrop.remove();
+      if (bottomSheet.parentNode) bottomSheet.remove();
+      this.currentBottomSheet = null;
+    }, 300);
   }
 
   static mount(containerId, coinCount = 0) {
@@ -396,8 +593,8 @@ class CoinCounter {
 class CoinAnimationManager {
   static isAnimating = false;
   
-  static showCoinToast(coinsAwarded = 10, callback = () => {}) {
-    console.log('showCoinToast called with interactive version - requires user tap to continue');
+  static showCoinToast(coinsAwarded = 10, callback = () => {}, autoCloseDelay = 600) {
+    console.log('showCoinToast called with auto-close after', autoCloseDelay, 'ms');
     console.log('DEBUGGING: showCoinToast stack trace:', new Error().stack);
     console.log('DEBUGGING: isAnimating status:', this.isAnimating);
     if (this.isAnimating) {
@@ -415,31 +612,15 @@ class CoinAnimationManager {
       btn.classList.add('btn-disabled', 'coin-animating');
     });
     
-    // Create dimmer overlay
-    const dimmer = document.createElement('div');
-    dimmer.className = 'coin-toast-dimmer';
-    dimmer.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 9999;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: auto;
-      cursor: pointer;
-    `;
+    // No dimmer for regular coin toasts
     
-    // Create toast element with tap instruction
+    // Create toast element without tap instruction
     const toast = document.createElement('div');
     toast.className = 'coin-toast';
     toast.innerHTML = `
       <div class="coin-toast-content">
         <img src="assets/betterfly-coin-icon-2.png" alt="Coins" class="toast-coin-icon" />
         <span class="toast-coin-text">+${coinsAwarded} coins earned!</span>
-        <span class="toast-tap-instruction">Tap to continue</span>
       </div>
     `;
     
@@ -450,50 +631,32 @@ class CoinAnimationManager {
       right: 24px;
       bottom: -100px;
       z-index: 10000;
-      pointer-events: auto;
-      cursor: pointer;
+      pointer-events: none;
     `;
     
-    document.body.appendChild(dimmer);
     document.body.appendChild(toast);
     
-    // Track when toast was created to prevent immediate dismissal
-    const toastCreatedTime = Date.now();
-    let canDismiss = false;
+    // Auto-close timer
+    let autoCloseTimer = null;
     
     // Function to handle toast dismissal
-    const dismissToast = (e) => {
-      const timeSinceCreation = Date.now() - toastCreatedTime;
-      console.log('DEBUGGING: dismissToast called, event type:', e?.type, 'target:', e?.target?.className);
-      console.log('DEBUGGING: Event timestamp:', Date.now());
-      console.log('DEBUGGING: Time since toast creation:', timeSinceCreation, 'ms');
-      console.log('DEBUGGING: Can dismiss:', canDismiss);
+    const dismissToast = () => {
+      console.log('DEBUGGING: dismissToast called - auto-closing toast');
       
-      // Prevent dismissal if called too quickly (likely an auto-dismiss issue)
-      if (!canDismiss || timeSinceCreation < 1000) {
-        console.log('DEBUGGING: Dismissal blocked - too early or not user initiated');
-        return;
+      // Clear timer if it exists
+      if (autoCloseTimer) {
+        clearTimeout(autoCloseTimer);
+        autoCloseTimer = null;
       }
       
-      console.log('DEBUGGING: Event details:', e);
-      console.log('Coin toast dismissed by user tap - proceeding to next screen');
-      
-      // Remove event listeners
-      toast.removeEventListener('click', dismissToast);
-      dimmer.removeEventListener('click', dismissToast);
-      
-      // Fade out dimmer and slide toast down simultaneously
-      dimmer.style.opacity = '0';
+      // Slide toast down
       toast.style.bottom = '-100px';
       
       // Cleanup after animations complete
       setTimeout(() => {
-        // Remove toast and dimmer
+        // Remove toast
         if (toast.parentNode) {
           toast.remove();
-        }
-        if (dimmer.parentNode) {
-          dimmer.remove();
         }
         
         // Re-enable buttons
@@ -504,29 +667,25 @@ class CoinAnimationManager {
         
         this.isAnimating = false;
         
-        // Proceed to next screen immediately
-        console.log('DEBUGGING: Calling navigation callback immediately after toast dismissal');
+        // Proceed to next screen
+        console.log('DEBUGGING: Calling navigation callback after auto-close');
         callback();
       }, 400); // Wait for slide down animation to complete
     };
     
-    // Animate dimmer fade in and toast sliding up
+    // Animate toast sliding up
     setTimeout(() => {
-      // Fade in dimmer
-      dimmer.style.opacity = '1';
-      
       // Slide up toast
       toast.style.transition = 'bottom 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
       toast.style.bottom = '81px';
       
-      // Enable interaction after slide up animation completes
+      // Start auto-close timer after slide up animation completes
       setTimeout(() => {
-        console.log('DEBUGGING: Adding click listeners to both toast and dimmer for tap-to-close');
-        // Enable dismissal now that animation is complete
-        canDismiss = true;
-        // Add tap listeners for dismissal - both toast and dimmer
-        toast.addEventListener('click', dismissToast);
-        dimmer.addEventListener('click', dismissToast);
+        console.log('DEBUGGING: Starting auto-close timer for', autoCloseDelay, 'ms');
+        autoCloseTimer = setTimeout(() => {
+          console.log('DEBUGGING: Auto-close timer triggered');
+          dismissToast();
+        }, autoCloseDelay);
       }, 400); // Wait for slide up animation to complete
       
     }, 100);
@@ -539,7 +698,7 @@ class CoinAnimationManager {
     }, 500); // 400ms slide + 100ms buffer for full visibility
   }
   
-  static showCelebrationToast(coinsAwarded = 100, callback = () => {}) {
+  static showCelebrationToast(coinsAwarded = 100, callback = () => {}, autoCloseDelay = 600) {
     if (this.isAnimating) {
       callback();
       return;
@@ -567,8 +726,7 @@ class CoinAnimationManager {
       z-index: 9999;
       opacity: 0;
       transition: opacity 0.3s ease;
-      pointer-events: auto;
-      cursor: pointer;
+      pointer-events: none;
     `;
     
     // Create celebration toast element with tap instruction
@@ -579,7 +737,7 @@ class CoinAnimationManager {
         <img src="assets/betterfly-coin-icon-2.png" alt="Coins" class="celebration-coin-icon" />
         <span class="celebration-coin-text">+${coinsAwarded} coins!</span>
         <div class="celebration-subtitle">Amazing work!</div>
-        <span class="celebration-tap-instruction">Tap to continue</span>
+        <div class="celebration-tap-instruction">Tap to continue</div>
       </div>
     `;
     
@@ -590,7 +748,7 @@ class CoinAnimationManager {
       right: 24px;
       bottom: -150px;
       z-index: 10000;
-      pointer-events: auto;
+      pointer-events: all;
       cursor: pointer;
     `;
     
@@ -598,13 +756,8 @@ class CoinAnimationManager {
     document.body.appendChild(toast);
     
     // Function to handle toast dismissal
-    const dismissToast = (e) => {
-      console.log('DEBUGGING: dismissToast called on celebration toast, event type:', e?.type, 'target:', e?.target?.className);
-      console.log('Coin toast dismissed by user tap - proceeding to next screen');
-      
-      // Remove event listeners
-      toast.removeEventListener('click', dismissToast);
-      dimmer.removeEventListener('click', dismissToast);
+    const dismissToast = () => {
+      console.log('DEBUGGING: dismissToast called on celebration toast - tap to dismiss');
       
       // Fade out dimmer and slide toast down simultaneously
       dimmer.style.opacity = '0';
@@ -628,8 +781,8 @@ class CoinAnimationManager {
         
         this.isAnimating = false;
         
-        // Proceed to next screen immediately
-        console.log('DEBUGGING: Calling navigation callback immediately after toast dismissal');
+        // Proceed to next screen
+        console.log('DEBUGGING: Calling navigation callback after celebration toast auto-close');
         callback();
       }, 600); // Wait for slide down animation to complete
     };
@@ -643,10 +796,9 @@ class CoinAnimationManager {
       toast.style.transition = 'bottom 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)'; // Bouncy easing
       toast.style.bottom = '81px';
       
-      // Enable interaction after slide up animation completes
+      // Add click event listeners for tap-to-dismiss
       setTimeout(() => {
-        console.log('DEBUGGING: Adding click listeners to both celebration toast and dimmer for tap-to-close');
-        // Add tap listeners for dismissal - both toast and dimmer
+        console.log('DEBUGGING: Adding click event listeners to celebration toast');
         toast.addEventListener('click', dismissToast);
         dimmer.addEventListener('click', dismissToast);
       }, 600); // Wait for slide up animation to complete

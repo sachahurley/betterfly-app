@@ -94,6 +94,7 @@
     </div>
 
     <script src="../../../../shared/user-state.js"></script>
+    <script src="data-collector.js"></script>
     <script src="state.js"></script>
     <script src="routes.js"></script>
     <script src="components/components.js"></script>
@@ -252,6 +253,12 @@
             
             // Populate choices
             populateChoices();
+            
+            // Submit intermediate progress after questions are complete
+            console.log('📋 User reached review page - submitting questionnaire progress');
+            if (typeof DataCollector !== 'undefined') {
+                DataCollector.submitIntermediateProgress();
+            }
             
             // Mount CTA
             CTAGroup.mount('ctaContainer', {

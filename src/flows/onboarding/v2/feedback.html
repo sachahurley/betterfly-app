@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Your Feedback - Betterfly</title>
+    <link rel="stylesheet" href="styles/shared.css">
+    <style>
+        .feedback-container {
+            max-width: 100%;
+            padding: 0 20px;
+        }
+        
+        .rating-section {
+            margin-bottom: 32px;
+        }
+        
+        .rating-question {
+            margin-bottom: 24px;
+        }
+        
+        .rating-label {
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: block;
+        }
+        
+        .rating-options {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        
+        .rating-button {
+            flex: 1;
+            padding: 16px 8px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            background: white;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+        
+        .rating-button:hover {
+            border-color: #10B981;
+            background: #f0fdf4;
+        }
+        
+        .rating-button.selected {
+            border-color: #10B981;
+            background: #10B981;
+            color: white;
+        }
+        
+        .pricing-button {
+            padding: 12px 16px !important;
+        }
+        
+        .pricing-button.selected {
+            border-color: #10B981 !important;
+            background: #10B981 !important;
+            color: white !important;
+        }
+        
+        .rating-number {
+            font-size: 18px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .rating-text {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+        
+        .feedback-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            resize: vertical;
+            transition: border-color 0.2s ease;
+        }
+        
+        .feedback-textarea:focus {
+            outline: none;
+            border-color: #10B981;
+        }
+        
+        .feedback-textarea::placeholder {
+            color: #9ca3af;
+        }
+        
+        .character-count {
+            text-align: right;
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+        
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .loading-overlay.active {
+            display: flex;
+        }
+        
+        .loading-content {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            text-align: center;
+        }
+        
+        .success-message {
+            display: none;
+            background: #10B981;
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        
+        .success-message.show {
+            display: block;
+            animation: fadeInScale 0.5s ease-out;
+        }
+        
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="backButtonContainer"></div>
+        
+        <div class="content with-nav">
+            <div class="feedback-container">
+                <h1>Help Us Improve</h1>
+                <p class="subtitle">Your feedback helps us create a better experience for everyone</p>
+                
+                <div id="successMessage" class="success-message">
+                    Thank you! Your feedback has been submitted. You can safely close this session.
+                </div>
+                
+                <div class="rating-section">
+                    <!-- Overall Experience Rating -->
+                    <div class="rating-question">
+                        <label class="rating-label">How was your overall experience?</label>
+                        <div class="rating-options" data-rating="overall">
+                            <button class="rating-button" data-value="1">
+                                <span class="rating-number">1</span>
+                                <span class="rating-text">Poor</span>
+                            </button>
+                            <button class="rating-button" data-value="2">
+                                <span class="rating-number">2</span>
+                                <span class="rating-text">Fair</span>
+                            </button>
+                            <button class="rating-button" data-value="3">
+                                <span class="rating-number">3</span>
+                                <span class="rating-text">Good</span>
+                            </button>
+                            <button class="rating-button" data-value="4">
+                                <span class="rating-number">4</span>
+                                <span class="rating-text">Great</span>
+                            </button>
+                            <button class="rating-button" data-value="5">
+                                <span class="rating-number">5</span>
+                                <span class="rating-text">Excellent</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Restart Likelihood Rating -->
+                    <div class="rating-question">
+                        <label class="rating-label">How likely would you be to restart or come back to this app?</label>
+                        <div class="rating-options" data-rating="restartLikelihood">
+                            <button class="rating-button" data-value="1">
+                                <span class="rating-number">1</span>
+                                <span class="rating-text">Very Unlikely</span>
+                            </button>
+                            <button class="rating-button" data-value="2">
+                                <span class="rating-number">2</span>
+                                <span class="rating-text">Unlikely</span>
+                            </button>
+                            <button class="rating-button" data-value="3">
+                                <span class="rating-number">3</span>
+                                <span class="rating-text">Maybe</span>
+                            </button>
+                            <button class="rating-button" data-value="4">
+                                <span class="rating-number">4</span>
+                                <span class="rating-text">Likely</span>
+                            </button>
+                            <button class="rating-button" data-value="5">
+                                <span class="rating-number">5</span>
+                                <span class="rating-text">Very Likely</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Challenge Interest Rating -->
+                    <div class="rating-question">
+                        <label class="rating-label">How likely would you be interested in continuing the 5-day challenge?</label>
+                        <div class="rating-options" data-rating="challengeInterest">
+                            <button class="rating-button" data-value="1">
+                                <span class="rating-number">1</span>
+                                <span class="rating-text">Not at all</span>
+                            </button>
+                            <button class="rating-button" data-value="2">
+                                <span class="rating-number">2</span>
+                                <span class="rating-text">Unlikely</span>
+                            </button>
+                            <button class="rating-button" data-value="3">
+                                <span class="rating-number">3</span>
+                                <span class="rating-text">Maybe</span>
+                            </button>
+                            <button class="rating-button" data-value="4">
+                                <span class="rating-number">4</span>
+                                <span class="rating-text">Likely</span>
+                            </button>
+                            <button class="rating-button" data-value="5">
+                                <span class="rating-number">5</span>
+                                <span class="rating-text">Definitely</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Uniqueness Rating -->
+                <div class="rating-section">
+                    <div class="rating-question">
+                        <label class="rating-label">How interesting or different do you feel Betterfly is from other well-being, health, or fitness apps?</label>
+                        <div class="rating-options" data-rating="uniqueness">
+                            <button class="rating-button" data-value="1">
+                                <span class="rating-number">1</span>
+                                <span class="rating-text">Not Different</span>
+                            </button>
+                            <button class="rating-button" data-value="2">
+                                <span class="rating-number">2</span>
+                                <span class="rating-text">Slightly Different</span>
+                            </button>
+                            <button class="rating-button" data-value="3">
+                                <span class="rating-number">3</span>
+                                <span class="rating-text">Somewhat Different</span>
+                            </button>
+                            <button class="rating-button" data-value="4">
+                                <span class="rating-number">4</span>
+                                <span class="rating-text">Very Different</span>
+                            </button>
+                            <button class="rating-button" data-value="5">
+                                <span class="rating-number">5</span>
+                                <span class="rating-text">Extremely Different</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trust Rating -->
+                <div class="rating-section">
+                    <div class="rating-question">
+                        <label class="rating-label">How likely are you to trust these recommendations?</label>
+                        <div class="rating-options" data-rating="trust">
+                            <button class="rating-button" data-value="1">
+                                <span class="rating-number">1</span>
+                                <span class="rating-text">Not at all</span>
+                            </button>
+                            <button class="rating-button" data-value="2">
+                                <span class="rating-number">2</span>
+                                <span class="rating-text">Unlikely</span>
+                            </button>
+                            <button class="rating-button" data-value="3">
+                                <span class="rating-number">3</span>
+                                <span class="rating-text">Maybe</span>
+                            </button>
+                            <button class="rating-button" data-value="4">
+                                <span class="rating-number">4</span>
+                                <span class="rating-text">Likely</span>
+                            </button>
+                            <button class="rating-button" data-value="5">
+                                <span class="rating-number">5</span>
+                                <span class="rating-text">Completely</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Expected Recommendations -->
+                <div class="rating-section">
+                    <div class="rating-question">
+                        <label class="rating-label">What type of recommendations were you expecting to see?</label>
+                        <textarea 
+                            id="expectedRecommendations" 
+                            class="feedback-textarea" 
+                            placeholder="Please describe the type of recommendations you were hoping to receive..."
+                            maxlength="500"
+                            style="min-height: 80px; margin-bottom: 8px;"
+                        ></textarea>
+                        <div class="character-count">
+                            <span id="expectedCharCount">0</span> / 500
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Work Performance Rating -->
+                <div class="rating-section">
+                    <div class="rating-question">
+                        <label class="rating-label">If your employer provided this app to you, how likely is it to improve your work performance?</label>
+                        <div class="rating-options" data-rating="workPerformance">
+                            <button class="rating-button" data-value="1">
+                                <span class="rating-number">1</span>
+                                <span class="rating-text">Very Unlikely</span>
+                            </button>
+                            <button class="rating-button" data-value="2">
+                                <span class="rating-number">2</span>
+                                <span class="rating-text">Unlikely</span>
+                            </button>
+                            <button class="rating-button" data-value="3">
+                                <span class="rating-number">3</span>
+                                <span class="rating-text">Maybe</span>
+                            </button>
+                            <button class="rating-button" data-value="4">
+                                <span class="rating-number">4</span>
+                                <span class="rating-text">Likely</span>
+                            </button>
+                            <button class="rating-button" data-value="5">
+                                <span class="rating-number">5</span>
+                                <span class="rating-text">Very Likely</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pricing Question -->
+                <div class="rating-section">
+                    <div class="rating-question">
+                        <label class="rating-label">What would you consider a fair monthly price for an app that meets your expectations?</label>
+                        <div class="pricing-options" style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px;">
+                            <button class="rating-button pricing-button" data-price="free" style="flex: 1; min-width: 120px;">
+                                <span class="rating-text">Free</span>
+                            </button>
+                            <button class="rating-button pricing-button" data-price="1-5" style="flex: 1; min-width: 120px;">
+                                <span class="rating-text">$1-5</span>
+                            </button>
+                            <button class="rating-button pricing-button" data-price="6-10" style="flex: 1; min-width: 120px;">
+                                <span class="rating-text">$6-10</span>
+                            </button>
+                            <button class="rating-button pricing-button" data-price="11-20" style="flex: 1; min-width: 120px;">
+                                <span class="rating-text">$11-20</span>
+                            </button>
+                            <button class="rating-button pricing-button" data-price="21-30" style="flex: 1; min-width: 120px;">
+                                <span class="rating-text">$21-30</span>
+                            </button>
+                            <button class="rating-button pricing-button" data-price="30+" style="flex: 1; min-width: 120px;">
+                                <span class="rating-text">$30+</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feedback-text-section">
+                    <label class="rating-label">Any additional feedback? (optional)</label>
+                    <textarea 
+                        id="feedbackText" 
+                        class="feedback-textarea" 
+                        placeholder="Tell us what you liked, what could be improved, or any other thoughts..."
+                        maxlength="1000"
+                    ></textarea>
+                    <div class="character-count">
+                        <span id="charCount">0</span> / 1000
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="ctaContainer"></div>
+    </div>
+    
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p style="margin-top: 16px;">Submitting your feedback...</p>
+        </div>
+    </div>
+
+    <script src="data-collector.js"></script>
+    <script src="state.js"></script>
+    <script src="routes.js"></script>
+    <script src="components/components.js"></script>
+    <script>
+        // Track ratings
+        const ratings = {
+            overall: null,
+            restartLikelihood: null,
+            challengeInterest: null,
+            uniqueness: null,
+            trust: null,
+            workPerformance: null
+        };
+        
+        // Track pricing selection
+        let selectedPrice = null;
+        
+        // Handle rating button clicks
+        document.querySelectorAll('.rating-options').forEach(group => {
+            const ratingType = group.dataset.rating;
+            
+            group.querySelectorAll('.rating-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove selected from all buttons in this group
+                    group.querySelectorAll('.rating-button').forEach(b => {
+                        b.classList.remove('selected');
+                    });
+                    
+                    // Add selected to clicked button
+                    button.classList.add('selected');
+                    
+                    // Store rating value
+                    ratings[ratingType] = parseInt(button.dataset.value);
+                });
+            });
+        });
+        
+        // Handle pricing button clicks
+        document.querySelectorAll('.pricing-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove selected from all pricing buttons
+                document.querySelectorAll('.pricing-button').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Add selected to clicked button
+                button.classList.add('selected');
+                
+                // Store pricing value
+                selectedPrice = button.dataset.price;
+            });
+        });
+        
+        // Handle textarea character counts
+        const feedbackText = document.getElementById('feedbackText');
+        const charCount = document.getElementById('charCount');
+        const expectedRecommendations = document.getElementById('expectedRecommendations');
+        const expectedCharCount = document.getElementById('expectedCharCount');
+        
+        feedbackText.addEventListener('input', () => {
+            charCount.textContent = feedbackText.value.length;
+        });
+        
+        expectedRecommendations.addEventListener('input', () => {
+            expectedCharCount.textContent = expectedRecommendations.value.length;
+        });
+        
+        // Show/hide loading state
+        window.showLoadingState = function(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            if (show) {
+                overlay.classList.add('active');
+            } else {
+                overlay.classList.remove('active');
+            }
+        };
+        
+        // Submit feedback
+        async function submitFeedback() {
+            // Validate that at least one rating is provided
+            if (!ratings.overall && !ratings.restartLikelihood && !ratings.challengeInterest && !ratings.uniqueness && !ratings.trust && !ratings.workPerformance && !feedbackText.value.trim() && !expectedRecommendations.value.trim() && !selectedPrice) {
+                alert('Please provide at least one rating, feedback, or answer before submitting.');
+                return;
+            }
+            
+            // Prepare feedback data
+            const feedbackData = {
+                feedbackRating: ratings.overall || '',
+                restartLikelihood: ratings.restartLikelihood || '',
+                challengeInterest: ratings.challengeInterest || '',
+                uniquenessRating: ratings.uniqueness || '',
+                trustRating: ratings.trust || '',
+                workPerformanceRating: ratings.workPerformance || '',
+                expectedRecommendations: expectedRecommendations.value.trim(),
+                pricingExpectation: selectedPrice || '',
+                feedbackText: feedbackText.value.trim()
+            };
+            
+            // DEBUG: Log the feedback data being submitted
+            console.log('🧪 FEEDBACK DEBUG - Data being submitted:', JSON.stringify(feedbackData, null, 2));
+            console.log('🧪 FEEDBACK DEBUG - Individual values:');
+            console.log('  - feedbackRating:', feedbackData.feedbackRating);
+            console.log('  - restartLikelihood:', feedbackData.restartLikelihood);
+            console.log('  - challengeInterest:', feedbackData.challengeInterest);
+            console.log('  - uniquenessRating:', feedbackData.uniquenessRating);
+            console.log('  - trustRating:', feedbackData.trustRating);
+            console.log('  - workPerformanceRating:', feedbackData.workPerformanceRating);
+            console.log('  - expectedRecommendations:', feedbackData.expectedRecommendations);
+            console.log('  - pricingExpectation:', feedbackData.pricingExpectation);
+            console.log('  - feedbackText:', feedbackData.feedbackText);
+            
+            // Submit to Google Sheets
+            const result = await DataCollector.submitToGoogleSheets(feedbackData);
+            
+            if (result.success) {
+                // Show success message and hide form
+                document.getElementById('successMessage').classList.add('show');
+                document.querySelector('.feedback-container').style.opacity = '0.6';
+                document.getElementById('ctaContainer').style.display = 'none';
+                document.getElementById('backButtonContainer').style.display = 'none';
+                
+                // Hide all form sections
+                document.querySelectorAll('.rating-section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                document.querySelector('.feedback-text-section').style.display = 'none';
+                
+                // Update page title and header
+                document.querySelector('h1').textContent = 'Thank You!';
+                document.querySelector('.subtitle').textContent = 'Your responses have been recorded.';
+                
+                // Complete the onboarding process
+                OnboardingState.complete();
+                
+            } else {
+                // Show error message
+                alert('We couldn\'t submit your feedback right now. Please check your internet connection and try again.');
+            }
+        }
+        
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load state
+            OnboardingState.load();
+            
+            // Mount back button
+            BackButton.mount('backButtonContainer', {
+                title: 'Feedback'
+            });
+            
+            // Mount CTA buttons
+            CTAGroup.mount('ctaContainer', {
+                primaryLabel: 'Submit Feedback',
+                onPrimary: submitFeedback
+            });
+        });
+    </script>
+</body>
+</html>

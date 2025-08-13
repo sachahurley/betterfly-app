@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Header Update - Betterfly</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        button { padding: 12px 24px; background: #10B981; color: white; border: none; border-radius: 6px; cursor: pointer; margin: 10px 0; }
+        .output { background: #f9f9f9; padding: 20px; margin: 20px 0; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Test Header Update</h1>
+    <p>This will send a test submission to trigger the header update in your Google Sheet.</p>
+    
+    <button onclick="triggerHeaderUpdate()">Send Test Data (This Will Update Headers)</button>
+    
+    <div class="output">
+        <div id="results"></div>
+    </div>
+
+    <script src="data-collector.js"></script>
+    <script>
+        // Mock OnboardingState for testing
+        if (typeof OnboardingState === 'undefined') {
+            window.OnboardingState = {
+                data: { sessionId: 'header-test-' + Date.now() },
+                get: (key) => window.OnboardingState.data[key] || '',
+                save: () => console.log('State saved')
+            };
+        }
+        
+        async function triggerHeaderUpdate() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<p>⏳ Sending test data to update headers...</p>';
+            
+            console.log('=== TRIGGERING HEADER UPDATE ===');
+            
+            const testData = {
+                feedbackRating: 5,
+                restartLikelihood: 4,
+                challengeInterest: 5,
+                uniquenessRating: 4,
+                trustRating: 5,
+                expectedRecommendations: "Header update test",
+                pricingExpectation: "6-10",
+                feedbackText: "This submission should update the headers in Google Sheet"
+            };
+            
+            try {
+                const result = await DataCollector.submitToGoogleSheets(testData);
+                console.log('Header update test result:', result);
+                
+                resultsDiv.innerHTML = `
+                    <h3>✅ Test Completed</h3>
+                    <p><strong>Result:</strong> ${result.success ? 'Success' : 'Failed'}</p>
+                    <p><strong>Time:</strong> ${new Date().toLocaleTimeString()}</p>
+                    <p><strong>Instructions:</strong> Check your Google Sheet now. The column headers should be updated to:</p>
+                    <ul>
+                        <li>Column R: Feedback Rating</li>
+                        <li>Column S: Restart Likelihood</li>
+                        <li>Column T: Challenge Interest</li>
+                        <li>Column U: Uniqueness Rating</li>
+                        <li>Column V: Trust Rating</li>
+                        <li>Column W: Expected Recommendations</li>
+                        <li>Column X: Pricing Expectation</li>
+                        <li>Column Y: Feedback Text</li>
+                    </ul>
+                    <p><em>If headers are not updated, check the Google Apps Script execution logs for errors.</em></p>
+                `;
+                
+            } catch (error) {
+                console.error('Header update test error:', error);
+                resultsDiv.innerHTML = `
+                    <h3>❌ Test Failed</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p>Check the browser console for more details.</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

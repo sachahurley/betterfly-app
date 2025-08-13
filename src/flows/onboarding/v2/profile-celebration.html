@@ -134,6 +134,7 @@
         <div id="ctaContainer"></div>
     </div>
 
+    <script src="data-collector.js"></script>
     <script src="state.js"></script>
     <script src="routes.js"></script>
     <script src="components/components.js"></script>
@@ -142,12 +143,18 @@
             // Load state
             OnboardingState.load();
             
+            // Submit intermediate progress after profile completion
+            console.log('👤 User completed profile - submitting profile progress');
+            if (typeof DataCollector !== 'undefined') {
+                DataCollector.submitIntermediateProgress();
+            }
+            
             // Mount CTA
             CTAGroup.mount('ctaContainer', {
-                primaryLabel: 'Start Challenge',
+                primaryLabel: 'Continue',
                 onPrimary: () => {
-                    // Navigate to 5-day challenge flow (continuing with existing signup flow)
-                    OnboardingRoutes.navigate('signup-email');
+                    // Navigate to feedback page
+                    OnboardingRoutes.navigate('feedback');
                 }
             });
             

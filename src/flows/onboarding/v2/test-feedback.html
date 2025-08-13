@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Feedback Submission - Betterfly</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 600px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        button { padding: 12px 24px; background: #10B981; color: white; border: none; border-radius: 6px; cursor: pointer; }
+        button:hover { background: #059669; }
+        .results { margin-top: 20px; padding: 12px; background: #f9f9f9; border-radius: 6px; }
+        pre { background: #f0f0f0; padding: 12px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Feedback Submission Test</h1>
+        <p>This page helps test if feedback data is being sent correctly to Google Sheets.</p>
+        
+        <div class="test-section">
+            <h2>Test 1: Simple Feedback Data</h2>
+            <button onclick="testSimpleFeedback()">Send Test Feedback</button>
+            <div id="simpleResults" class="results" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Test 2: Complete Feedback Data</h2>
+            <button onclick="testCompleteFeedback()">Send Complete Test Data</button>
+            <div id="completeResults" class="results" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Console Logs</h2>
+            <p>Open browser Developer Tools → Console to see detailed submission logs</p>
+        </div>
+    </div>
+
+    <script src="data-collector.js"></script>
+    
+    <script>
+        // Initialize state for testing
+        if (typeof OnboardingState === 'undefined') {
+            window.OnboardingState = {
+                data: { sessionId: 'test-session-' + Date.now() },
+                get: (key) => window.OnboardingState.data[key],
+                save: () => console.log('State saved')
+            };
+        }
+        
+        async function testSimpleFeedback() {
+            console.log('=== TESTING SIMPLE FEEDBACK ===');
+            
+            const testData = {
+                feedbackRating: 5,
+                restartLikelihood: 4,
+                challengeInterest: 5,
+                feedbackText: "This is a test feedback submission"
+            };
+            
+            showResults('simpleResults', 'Sending simple feedback data...', testData);
+            
+            try {
+                const result = await DataCollector.submitToGoogleSheets(testData);
+                console.log('Simple test result:', result);
+                updateResults('simpleResults', result, testData);
+            } catch (error) {
+                console.error('Simple test error:', error);
+                updateResults('simpleResults', { success: false, error: error.message }, testData);
+            }
+        }
+        
+        async function testCompleteFeedback() {
+            console.log('=== TESTING COMPLETE FEEDBACK ===');
+            
+            const testData = {
+                feedbackRating: 5,
+                restartLikelihood: 4,
+                challengeInterest: 5,
+                uniquenessRating: 4,
+                trustRating: 5,
+                expectedRecommendations: "Expected personalized wellness recommendations based on my answers",
+                pricingExpectation: "6-10",
+                feedbackText: "Complete test feedback with all fields filled out. This tests the full submission."
+            };
+            
+            showResults('completeResults', 'Sending complete feedback data...', testData);
+            
+            try {
+                const result = await DataCollector.submitToGoogleSheets(testData);
+                console.log('Complete test result:', result);
+                updateResults('completeResults', result, testData);
+            } catch (error) {
+                console.error('Complete test error:', error);
+                updateResults('completeResults', { success: false, error: error.message }, testData);
+            }
+        }
+        
+        function showResults(elementId, status, data) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.innerHTML = `
+                <h3>Status: ${status}</h3>
+                <h4>Data being sent:</h4>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            `;
+        }
+        
+        function updateResults(elementId, result, data) {
+            const element = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            
+            element.innerHTML = `
+                <h3>Result: ${result.success ? '✅ Success' : '❌ Failed'}</h3>
+                <p><strong>Time:</strong> ${timestamp}</p>
+                ${result.error ? `<p><strong>Error:</strong> ${result.error}</p>` : ''}
+                <h4>Data sent:</h4>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+                <p><em>Check browser console for detailed logs and Google Sheet for actual data.</em></p>
+            `;
+        }
+    </script>
+</body>
+</html>

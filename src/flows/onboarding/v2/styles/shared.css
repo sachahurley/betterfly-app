@@ -253,6 +253,32 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid rgba(255, 193, 7, 0.3);
 }
 
+.coin-counter-tappable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.coin-counter-tappable:hover {
+  background: rgba(255, 193, 7, 0.2);
+  border-color: rgba(255, 193, 7, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2);
+}
+
+.coin-counter-tappable.coin-counter-pressed {
+  background: rgba(255, 193, 7, 0.3);
+  border-color: rgba(255, 193, 7, 0.6);
+  transform: translateY(0px) scale(0.98);
+  box-shadow: 0 1px 4px rgba(255, 193, 7, 0.3);
+}
+
+.coin-counter-tappable:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
 .coin-icon {
   width: 24px;
   height: 24px;
@@ -328,14 +354,6 @@ h1, h2, h3, h4, h5, h6 {
   white-space: nowrap;
 }
 
-.toast-tap-instruction {
-  font-family: 'Roboto', sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  color: rgba(0, 0, 0, 0.7);
-  margin-left: auto;
-  opacity: 0.8;
-}
 
 /* Celebration Toast Component */
 .coin-celebration-toast {
@@ -1292,6 +1310,94 @@ p.subtitle {
 
   .followup-completion-text {
     font-size: 15px;
+  }
+}
+
+/* Coin Explanation Bottom Sheet Styles */
+.coin-explanation-sheet {
+  background: #ffffff;
+}
+
+.coin-explanation-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 8px 0;
+}
+
+.coin-balance-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 193, 7, 0.2);
+  min-width: 140px;
+}
+
+.coin-explanation-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(255, 193, 7, 0.3));
+}
+
+.coin-explanation-count {
+  font-family: 'Roboto', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.coin-balance-label {
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.coin-explanation-text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #374151;
+  text-align: center;
+  margin: 0;
+  max-width: 320px;
+}
+
+/* Mobile optimizations for coin explanation */
+@media (max-width: 480px) {
+  .coin-explanation-content {
+    gap: 20px;
+    padding: 4px 0;
+  }
+  
+  .coin-balance-display {
+    padding: 16px;
+    min-width: 120px;
+  }
+  
+  .coin-explanation-icon {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .coin-explanation-count {
+    font-size: 20px;
+  }
+  
+  .coin-explanation-text {
+    font-size: 15px;
+    line-height: 1.5;
+    max-width: 280px;
   }
 }
 

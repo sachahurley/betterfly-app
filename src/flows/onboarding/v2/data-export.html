@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Betterfly - Data Export</title>
+    <link rel="stylesheet" href="styles/shared.css">
+    <style>
+        body {
+            background: #f9fafb;
+            padding: 20px;
+        }
+        
+        .export-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: #1f2937;
+        }
+        
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 32px;
+        }
+        
+        .instructions {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+        
+        .instructions h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: #047857;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            color: #065f46;
+            line-height: 1.8;
+        }
+        
+        .instructions code {
+            background: #d1fae5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .google-sheet-embed {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-top: 24px;
+        }
+        
+        .placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            color: #6b7280;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .link-section {
+            margin-top: 32px;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+        
+        .link-section h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #374151;
+        }
+        
+        .link-input {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .link-input input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .link-input button {
+            padding: 10px 20px;
+            background: #10B981;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .link-input button:hover {
+            background: #059669;
+        }
+        
+        .test-link {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 12px 24px;
+            background: #3B82F6;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+        
+        .test-link:hover {
+            background: #2563EB;
+        }
+    </style>
+</head>
+<body>
+    <div class="export-container">
+        <h1>Betterfly Onboarding - Data Export</h1>
+        <p class="subtitle">View and export user responses from the onboarding flow</p>
+        
+        <div class="instructions">
+            <h2>Setup Instructions:</h2>
+            <ol>
+                <li>Create a new Google Sheet</li>
+                <li>Copy the Google Apps Script code from <code>google-apps-script.js</code></li>
+                <li>In your Google Sheet, go to Extensions → Apps Script</li>
+                <li>Replace the default code with the copied script</li>
+                <li>Click Deploy → New Deployment</li>
+                <li>Choose "Web app" as the type</li>
+                <li>Set "Execute as" to "Me" and "Who has access" to "Anyone"</li>
+                <li>Copy the Web App URL and paste it in <code>data-collector.js</code> where it says <code>YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE</code></li>
+                <li>To view data here, make your Google Sheet publicly viewable:
+                    <ul>
+                        <li>Click Share → Change to anyone with the link</li>
+                        <li>Set permission to "Viewer"</li>
+                        <li>Copy the sheet ID from the URL (between /d/ and /edit)</li>
+                        <li>Paste it below to embed the sheet</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+        
+        <div class="link-section">
+            <h3>Google Sheet Embed</h3>
+            <div class="link-input">
+                <input type="text" id="sheetId" placeholder="Enter your Google Sheet ID (e.g., 1AbCdEfGhIjKlMnOpQrStUvWxYz)">
+                <button onclick="embedSheet()">Embed Sheet</button>
+            </div>
+            <p style="font-size: 12px; color: #6b7280;">
+                The Sheet ID is the part of your Google Sheets URL between /d/ and /edit
+            </p>
+        </div>
+        
+        <div id="sheetContainer">
+            <div class="placeholder">
+                <div>
+                    <h3>No Google Sheet Embedded Yet</h3>
+                    <p>Follow the instructions above to set up your Google Sheet and embed it here.</p>
+                    <p style="margin-top: 12px;">Once embedded, you'll see live data from user submissions.</p>
+                </div>
+            </div>
+        </div>
+        
+        <a href="get-started.html" class="test-link">Test Onboarding Flow →</a>
+    </div>
+    
+    <script>
+        function embedSheet() {
+            const sheetId = document.getElementById('sheetId').value.trim();
+            
+            if (!sheetId) {
+                alert('Please enter a Google Sheet ID');
+                return;
+            }
+            
+            // Create iframe embed URL
+            const embedUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/pubhtml?widget=true&headers=false`;
+            
+            // Create iframe
+            const iframe = document.createElement('iframe');
+            iframe.src = embedUrl;
+            iframe.className = 'google-sheet-embed';
+            iframe.frameBorder = '0';
+            
+            // Replace placeholder with iframe
+            const container = document.getElementById('sheetContainer');
+            container.innerHTML = '';
+            container.appendChild(iframe);
+            
+            // Save to localStorage for persistence
+            localStorage.setItem('betterfly_sheet_id', sheetId);
+        }
+        
+        // Load saved sheet on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedSheetId = localStorage.getItem('betterfly_sheet_id');
+            if (savedSheetId) {
+                document.getElementById('sheetId').value = savedSheetId;
+                embedSheet();
+            }
+        });
+    </script>
+</body>
+</html>

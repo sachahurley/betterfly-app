@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Google Apps Script Connection - Betterfly</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        button { padding: 12px 24px; background: #10B981; color: white; border: none; border-radius: 6px; cursor: pointer; margin: 10px 0; display: block; }
+        .output { background: #f9f9f9; padding: 20px; margin: 20px 0; border-radius: 8px; }
+        .error { background: #fee; border: 1px solid #fcc; }
+        .success { background: #efe; border: 1px solid #cfc; }
+        pre { background: #f0f0f0; padding: 12px; border-radius: 4px; overflow-x: auto; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug Google Apps Script Connection</h1>
+    
+    <button onclick="testDirectConnection()">Test 1: Direct Connection Test</button>
+    <button onclick="testWithCORS()">Test 2: Test With CORS (should fail but show if URL is reachable)</button>
+    <button onclick="testDataCollectorMethod()">Test 3: Test DataCollector Method</button>
+    <button onclick="testManualFetch()">Test 4: Manual Fetch Test</button>
+    
+    <div class="output">
+        <div id="results"></div>
+    </div>
+
+    <script src="data-collector.js"></script>
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzkkYzDuTRnNIa-GUhbUwvu8HTZSVbkiHyJB6_dmCZP24lR9PPzcl8tUuvdxaDqABhXJQ/exec";
+        
+        function logResult(title, data, isError = false) {
+            const resultsDiv = document.getElementById('results');
+            const className = isError ? 'error' : 'success';
+            resultsDiv.innerHTML += `
+                <div class="output ${className}">
+                    <h3>${title}</h3>
+                    <pre>${typeof data === 'object' ? JSON.stringify(data, null, 2) : data}</pre>
+                    <small>Time: ${new Date().toLocaleTimeString()}</small>
+                </div>
+            `;
+        }
+        
+        // Test 1: Direct connection to see if URL is valid
+        async function testDirectConnection() {
+            console.log('=== TEST 1: DIRECT CONNECTION ===');
+            logResult('Test 1: Starting Direct Connection Test', 'Testing if Google Apps Script URL is reachable...');
+            
+            try {
+                // Test GET request (should return error message but prove connection)
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'GET',
+                    mode: 'no-cors'
+                });
+                
+                logResult('Test 1: Direct Connection Result', {
+                    status: 'Fetch completed without throwing error',
+                    type: response.type,
+                    note: 'no-cors mode means we cannot read response, but no error = URL is reachable'
+                });
+                
+            } catch (error) {
+                logResult('Test 1: Direct Connection Failed', {
+                    error: error.message,
+                    note: 'This suggests the URL may be incorrect or unreachable'
+                }, true);
+            }
+        }
+        
+        // Test 2: Test with CORS (will fail but shows if URL exists)
+        async function testWithCORS() {
+            console.log('=== TEST 2: CORS TEST ===');
+            logResult('Test 2: Starting CORS Test', 'This will fail due to CORS, but helps verify if URL exists...');
+            
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ test: 'cors-test' })
+                });
+                
+                const result = await response.text();
+                logResult('Test 2: CORS Test - Unexpected Success', result);
+                
+            } catch (error) {
+                if (error.message.includes('CORS')) {
+                    logResult('Test 2: CORS Test Result', {
+                        status: 'Expected CORS error occurred',
+                        error: error.message,
+                        note: 'This means the URL exists and is reachable'
+                    });
+                } else {
+                    logResult('Test 2: CORS Test - Unexpected Error', {
+                        error: error.message,
+                        note: 'This might indicate a URL or network issue'
+                    }, true);
+                }
+            }
+        }
+        
+        // Test 3: Test using the DataCollector method
+        async function testDataCollectorMethod() {
+            console.log('=== TEST 3: DATACOLLECTOR METHOD ===');
+            logResult('Test 3: Starting DataCollector Test', 'Using the actual DataCollector.submitToGoogleSheets method...');
+            
+            // Mock OnboardingState
+            if (typeof OnboardingState === 'undefined') {
+                window.OnboardingState = {
+                    data: { sessionId: 'debug-test-' + Date.now() },
+                    get: (key) => window.OnboardingState.data[key] || '',
+                };
+            }
+            
+            const testData = {
+                feedbackRating: 5,
+                restartLikelihood: 4,
+                challengeInterest: 5,
+                uniquenessRating: 4,
+                trustRating: 5,
+                expectedRecommendations: "Connection debug test",
+                pricingExpectation: "6-10",
+                feedbackText: "Testing Google Apps Script connection"
+            };
+            
+            try {
+                const result = await DataCollector.submitToGoogleSheets(testData);
+                logResult('Test 3: DataCollector Result', result);
+                
+            } catch (error) {
+                logResult('Test 3: DataCollector Failed', {
+                    error: error.message,
+                    stack: error.stack
+                }, true);
+            }
+        }
+        
+        // Test 4: Manual fetch with detailed logging
+        async function testManualFetch() {
+            console.log('=== TEST 4: MANUAL FETCH ===');
+            logResult('Test 4: Starting Manual Fetch Test', 'Testing manual fetch with detailed error handling...');
+            
+            const testPayload = {
+                sessionId: 'manual-test-' + Date.now(),
+                submissionType: 'final',
+                feedbackRating: 5,
+                restartLikelihood: 4,
+                challengeInterest: 5,
+                uniquenessRating: 4,
+                trustRating: 5,
+                expectedRecommendations: "Manual fetch test",
+                pricingExpectation: "6-10",
+                feedbackText: "Testing manual fetch"
+            };
+            
+            logResult('Test 4: Payload Being Sent', testPayload);
+            
+            try {
+                console.log('Sending manual fetch to:', SCRIPT_URL);
+                console.log('Payload:', testPayload);
+                
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testPayload)
+                });
+                
+                logResult('Test 4: Manual Fetch Result', {
+                    status: 'Fetch completed',
+                    responseType: response.type,
+                    note: 'Check Google Apps Script execution logs now'
+                });
+                
+            } catch (error) {
+                logResult('Test 4: Manual Fetch Failed', {
+                    error: error.message,
+                    stack: error.stack,
+                    note: 'This indicates a fundamental connection issue'
+                }, true);
+            }
+        }
+        
+        // Log the URL being tested
+        document.addEventListener('DOMContentLoaded', () => {
+            logResult('Configuration', {
+                scriptUrl: SCRIPT_URL,
+                dataCollectorUrl: DataCollector.GOOGLE_SCRIPT_URL,
+                urlsMatch: SCRIPT_URL === DataCollector.GOOGLE_SCRIPT_URL
+            });
+        });
+    </script>
+</body>
+</html>

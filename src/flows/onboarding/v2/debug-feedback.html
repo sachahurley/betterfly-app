@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Feedback - Betterfly</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        button { padding: 12px 24px; background: #10B981; color: white; border: none; border-radius: 6px; cursor: pointer; margin: 10px 0; }
+        .output { background: #f9f9f9; padding: 20px; margin: 20px 0; border-radius: 8px; }
+        pre { background: #f0f0f0; padding: 12px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug Feedback Submission</h1>
+    
+    <button onclick="testDirectSubmission()">Test Direct Submission</button>
+    <button onclick="testCurrentFeedbackForm()">Test Current Form Logic</button>
+    
+    <div class="output">
+        <h2>Results:</h2>
+        <div id="results"></div>
+    </div>
+
+    <script src="data-collector.js"></script>
+    <script>
+        // Mock OnboardingState for testing
+        if (typeof OnboardingState === 'undefined') {
+            window.OnboardingState = {
+                data: { sessionId: 'debug-session-' + Date.now() },
+                get: (key) => window.OnboardingState.data[key] || '',
+                save: () => console.log('State saved')
+            };
+        }
+        
+        function logResult(title, data) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML += `
+                <h3>${title}</h3>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+                <hr>
+            `;
+        }
+        
+        async function testDirectSubmission() {
+            console.log('=== DIRECT SUBMISSION TEST ===');
+            
+            const testData = {
+                feedbackRating: 5,
+                restartLikelihood: 4, 
+                challengeInterest: 3,
+                uniquenessRating: 4,
+                trustRating: 5,
+                expectedRecommendations: "Debug test recommendations",
+                pricingExpectation: "6-10",
+                feedbackText: "Debug test feedback text"
+            };
+            
+            logResult('Direct Submission Data', testData);
+            
+            try {
+                const result = await DataCollector.submitToGoogleSheets(testData);
+                logResult('Direct Submission Result', result);
+                console.log('Direct submission result:', result);
+            } catch (error) {
+                logResult('Direct Submission Error', { error: error.message });
+                console.error('Direct submission error:', error);
+            }
+        }
+        
+        function testCurrentFeedbackForm() {
+            console.log('=== CURRENT FORM LOGIC TEST ===');
+            
+            // Simulate the current form's logic
+            const ratings = {
+                overall: 5,
+                restartLikelihood: 4,
+                challengeInterest: 3, 
+                uniqueness: 4,
+                trust: 5
+            };
+            
+            const selectedPrice = "6-10";
+            const expectedRecommendations = { value: "Form logic test recommendations" };
+            const feedbackText = { value: "Form logic test feedback" };
+            
+            // This matches the current feedback.html logic
+            const feedbackData = {
+                feedbackRating: ratings.overall || '',
+                restartLikelihood: ratings.restartLikelihood || '',
+                challengeInterest: ratings.challengeInterest || '',
+                uniquenessRating: ratings.uniqueness || '',
+                trustRating: ratings.trust || '',
+                expectedRecommendations: expectedRecommendations.value.trim(),
+                pricingExpectation: selectedPrice || '',
+                feedbackText: feedbackText.value.trim()
+            };
+            
+            logResult('Form Logic Data', {
+                rawRatings: ratings,
+                selectedPrice: selectedPrice,
+                processedData: feedbackData
+            });
+            
+            // Test submission
+            DataCollector.submitToGoogleSheets(feedbackData).then(result => {
+                logResult('Form Logic Result', result);
+                console.log('Form logic result:', result);
+            }).catch(error => {
+                logResult('Form Logic Error', { error: error.message });
+                console.error('Form logic error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
