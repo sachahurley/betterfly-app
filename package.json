@@ -1,6 +1,18 @@
 {
+  "name": "betterfly-app",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npx http-server ./src/flows/dashboard/v2 -p 8080 -o",
+    "dev:dashboard": "npx http-server ./src/flows/dashboard/v2 -p 8080 -o",
+    "dev:onboarding": "npx http-server ./src/flows/onboarding/v2 -p 8081 -o",
+    "dev:home": "npx http-server ./home -p 8082 -o",
+    "serve": "npx http-server . -p 8080"
+  },
   "dependencies": {
     "canvas-confetti": "^1.9.3",
     "lucide-react": "^0.539.0"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
   }
 }

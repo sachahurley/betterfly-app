@@ -21,7 +21,8 @@ const OnboardingState = {
     coins: {
       count: 0,
       completedQuestions: new Set()
-    }
+    },
+    prolificId: null // Store Prolific ID in state for consistency
   },
 
   // Constants
@@ -134,7 +135,8 @@ const OnboardingState = {
       coins: {
         count: 0,
         completedQuestions: new Set()
-      }
+      },
+      prolificId: null
     };
     sessionStorage.removeItem('onboardingState');
     sessionStorage.removeItem('onboardingStep');
@@ -368,6 +370,18 @@ const OnboardingState = {
       return 100;
     }
     return 0; // Already awarded
+  },
+
+  // Sync Prolific ID from DataCollector (if available)
+  syncProlificId() {
+    if (typeof DataCollector !== 'undefined') {
+      const prolificId = DataCollector.getProlificId();
+      if (prolificId && this.data.prolificId !== prolificId) {
+        this.data.prolificId = prolificId;
+        this.save();
+        console.log('🔗 Prolific ID synced to OnboardingState:', prolificId);
+      }
+    }
   }
 };
 

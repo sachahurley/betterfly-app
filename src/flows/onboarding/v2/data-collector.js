@@ -11,12 +11,37 @@ const DataCollector = {
         return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     },
     
+    // Capture Prolific ID from URL parameters
+    captureProlificId() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const prolificId = urlParams.get('PROLIFIC_PID') || urlParams.get('prolific_pid') || urlParams.get('participant_id');
+        
+        if (prolificId) {
+            localStorage.setItem('betterfly_prolific_id', prolificId);
+            console.log('🔗 Prolific ID captured:', prolificId);
+            return prolificId;
+        }
+        
+        // Check if we already have a stored Prolific ID
+        const storedId = localStorage.getItem('betterfly_prolific_id');
+        if (storedId) {
+            console.log('🔗 Using stored Prolific ID:', storedId);
+            return storedId;
+        }
+        
+        console.log('⚠️ No Prolific ID found in URL parameters');
+        return null;
+    },
+
     // Initialize session
     initSession() {
         if (!localStorage.getItem('betterfly_session_id')) {
             const sessionId = this.generateSessionId();
+            const prolificId = this.captureProlificId(); // Capture Prolific ID
+            
             const sessionData = {
                 sessionId: sessionId,
+                prolificId: prolificId, // Include Prolific ID in session data
                 startTime: new Date().toISOString(),
                 browser: navigator.userAgent,
                 platform: navigator.platform,
@@ -26,6 +51,16 @@ const DataCollector = {
             };
             localStorage.setItem('betterfly_session_id', sessionId);
             localStorage.setItem('betterfly_session_data', JSON.stringify(sessionData));
+        } else {
+            // If session exists but no Prolific ID, try to capture it
+            const sessionData = this.getSessionData();
+            if (!sessionData.prolificId) {
+                const prolificId = this.captureProlificId();
+                if (prolificId) {
+                    sessionData.prolificId = prolificId;
+                    localStorage.setItem('betterfly_session_data', JSON.stringify(sessionData));
+                }
+            }
         }
         return localStorage.getItem('betterfly_session_id');
     },
@@ -34,6 +69,12 @@ const DataCollector = {
     getSessionData() {
         const sessionData = localStorage.getItem('betterfly_session_data');
         return sessionData ? JSON.parse(sessionData) : {};
+    },
+    
+    // Get Prolific ID (helper method)
+    getProlificId() {
+        const sessionData = this.getSessionData();
+        return sessionData.prolificId || localStorage.getItem('betterfly_prolific_id') || null;
     },
     
     // Calculate duration in seconds
@@ -49,10 +90,12 @@ const DataCollector = {
         const onboardingData = OnboardingState.data;
         const endTime = new Date().toISOString();
         const duration = this.calculateDuration(sessionData.startTime);
+        const prolificId = this.getProlificId();
         
         return {
             ...sessionData,
             ...onboardingData,
+            prolificId: prolificId, // Ensure Prolific ID is always included
             endTime: endTime,
             duration: duration,
             coinsEarned: onboardingData.totalCoins || 0
@@ -70,6 +113,7 @@ const DataCollector = {
             
             console.log('📊 Submitting data to Google Sheets:', {
                 sessionId: payload.sessionId,
+                prolificId: payload.prolificId || 'Not provided',
                 type: payload.submissionType,
                 questionsAnswered: Object.keys(payload).filter(k => k.startsWith('q')).length,
                 url: this.GOOGLE_SCRIPT_URL.substring(0, 50) + '...'
@@ -165,6 +209,7 @@ const DataCollector = {
     clearSession() {
         localStorage.removeItem('betterfly_session_id');
         localStorage.removeItem('betterfly_session_data');
+        localStorage.removeItem('betterfly_prolific_id');
         localStorage.removeItem('betterfly_failed_submissions');
     }
 };
@@ -172,8 +217,10 @@ const DataCollector = {
 // Initialize session when script loads
 document.addEventListener('DOMContentLoaded', () => {
     const sessionId = DataCollector.initSession();
+    const prolificId = DataCollector.getProlificId();
     console.log('🚀 Betterfly Data Collection Initialized', {
         sessionId: sessionId,
+        prolificId: prolificId || 'Not provided',
         timestamp: new Date().toISOString(),
         url: window.location.pathname
     });

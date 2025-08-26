@@ -141,6 +141,11 @@
             
             // Clear any previous state for fresh start
             OnboardingState.clear();
+            
+            // Sync Prolific ID from DataCollector after clearing
+            setTimeout(() => {
+                OnboardingState.syncProlificId();
+            }, 100); // Small delay to ensure DataCollector has initialized
         });
     </script>
 </body>
