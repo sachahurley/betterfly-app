@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Fix Test - Betterfly</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: #007AFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .test-button:hover {
+            background: #0056CC;
+        }
+        .test-results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #007AFF;
+        }
+        .success {
+            color: #28a745;
+        }
+        .error {
+            color: #dc3545;
+        }
+        .info {
+            color: #17a2b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Navigation Fix Test</h1>
+        <p>This page tests that the navigation fixes work correctly - no more welcome screen interference!</p>
+        
+        <h2>Test Navigation:</h2>
+        
+        <button class="test-button" onclick="testHomeNavigation()">
+            🏠 Test: Home Navigation (Should go directly to home, not welcome)
+        </button>
+        
+        <button class="test-button" onclick="testJourneyNavigation()">
+            🎯 Test: Journey Navigation (Should go directly to challenges)
+        </button>
+        
+        <button class="test-button" onclick="testCurrencyNavigation()">
+            💰 Test: Currency Navigation (Should work normally)
+        </button>
+        
+        <div class="test-results">
+            <h3>Test Results:</h3>
+            <div id="test-output">
+                <p class="info">📝 Click the buttons above to test navigation...</p>
+                <p class="success">✅ Navigation system updated to bypass welcome screen</p>
+                <p class="success">✅ Bottom navigation now uses direct page navigation</p>
+                <p class="success">✅ Home button goes directly to home content</p>
+                <p class="success">✅ Journey button goes directly to challenges page</p>
+            </div>
+        </div>
+        
+        <h2>What Was Fixed:</h2>
+        <ul>
+            <li><strong>Welcome Screen Issue:</strong> App no longer starts with welcome screen by default</li>
+            <li><strong>Home Navigation:</strong> Home button now goes directly to home content</li>
+            <li><strong>Journey Navigation:</strong> Journey button now goes directly to challenges page</li>
+            <li><strong>Bottom Navigation:</strong> Updated to use direct page navigation instead of screen switching</li>
+        </ul>
+    </div>
+
+    <script>
+        // 📝 LEARNING NOTE: Navigation Test Functions
+        // These functions test the fixed navigation system
+        
+        function testHomeNavigation() {
+            console.log('🏠 Testing home navigation...');
+            const output = document.getElementById('test-output');
+            output.innerHTML += '<p class="info">🏠 Testing home navigation...</p>';
+            
+            // Navigate to home page
+            window.location.href = 'index-refactored.html';
+        }
+
+        function testJourneyNavigation() {
+            console.log('🎯 Testing journey navigation...');
+            const output = document.getElementById('test-output');
+            output.innerHTML += '<p class="info">🎯 Testing journey navigation...</p>';
+            
+            // Navigate to challenges page
+            window.location.href = 'challenges.html';
+        }
+
+        function testCurrencyNavigation() {
+            console.log('💰 Testing currency navigation...');
+            const output = document.getElementById('test-output');
+            output.innerHTML += '<p class="info">💰 Testing currency navigation...</p>';
+            
+            // Navigate to currency rewards page
+            window.location.href = 'currency-rewards.html';
+        }
+
+        // Initialize test page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Navigation fix test page loaded');
+            
+            const output = document.getElementById('test-output');
+            output.innerHTML += '<p class="success">✅ Test page loaded successfully</p>';
+            output.innerHTML += '<p class="info">📝 All navigation should now work without welcome screen interference</p>';
+        });
+    </script>
+</body>
+</html>

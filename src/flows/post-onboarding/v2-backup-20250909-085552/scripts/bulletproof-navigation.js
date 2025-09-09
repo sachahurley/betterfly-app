@@ -580,25 +580,25 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(`🔄 Hash navigation detected: ${hash}`);
             setTimeout(() => navigateToScreen(hash), 100);
         } else {
-            // Start with welcome screen
-            log('🔄 Starting with welcome screen...');
-            console.log('🔄 Starting with welcome screen...');
+            // Start with home screen by default (not welcome screen)
+            log('🔄 Starting with home screen...');
+            console.log('🔄 Starting with home screen...');
             
-            // Check if welcome screen exists
-            const welcomeScreen = document.getElementById('initial-load');
-            if (welcomeScreen) {
-                log('✅ Welcome screen found in DOM');
-                console.log('✅ Welcome screen found in DOM');
-                log(`   - Classes: ${welcomeScreen.className}`);
-                console.log(`   - Classes: ${welcomeScreen.className}`);
-                log(`   - Display: ${welcomeScreen.style.display}`);
-                console.log(`   - Display: ${welcomeScreen.style.display}`);
+            // Check if home screen exists
+            const homeScreen = document.getElementById('home-default');
+            if (homeScreen) {
+                log('✅ Home screen found in DOM');
+                console.log('✅ Home screen found in DOM');
+                log(`   - Classes: ${homeScreen.className}`);
+                console.log(`   - Classes: ${homeScreen.className}`);
+                log(`   - Display: ${homeScreen.style.display}`);
+                console.log(`   - Display: ${homeScreen.style.display}`);
             } else {
-                log('❌ Welcome screen NOT found in DOM');
-                console.log('❌ Welcome screen NOT found in DOM');
+                log('❌ Home screen NOT found in DOM');
+                console.log('❌ Home screen NOT found in DOM');
             }
             
-            navigateToScreen('initial-load');
+            navigateToScreen('home-default');
         }
         
         // Setup bottom navigation
@@ -617,19 +617,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function setupBottomNavigation() {
     try {
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach((item, index) => {
-            item.addEventListener('click', function() {
-                switch(index) {
-                    case 0: navigateToScreen('home-default'); break;
-                    case 1: log('Benefits clicked'); break;
-                    case 2: navigateToScreen('challenges-page'); break;
-                    case 3: log('Social clicked'); break;
-                    case 4: log('Buddy clicked'); break;
-                }
-            });
-        });
-        log('✅ Bottom navigation setup complete');
+        // 📝 LEARNING NOTE: Bottom Navigation is now handled by direct onclick handlers
+        // This prevents conflicts with the old navigation system
+        log('✅ Bottom navigation now uses direct onclick handlers - no setup needed');
     } catch (error) {
         handleError('Bottom navigation setup failed', error);
     }

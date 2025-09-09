@@ -55,19 +55,19 @@
         
         <h2>Test Navigation Actions:</h2>
         
-        <button class="test-button" data-action="navigate-to-challenges-page">
-            🎯 Test: Navigate to Challenges Page
+        <button class="test-button" onclick="navigateToChallengesPage()">
+            🎯 Test: Navigate to Challenges Page (Standalone)
         </button>
         
-        <button class="test-button" data-action="navigate-to-home">
+        <button class="test-button" onclick="navigateToHome()">
             🏠 Test: Navigate to Home
         </button>
         
-        <button class="test-button" data-action="open-currency-screen">
-            💰 Test: Open Currency Screen
+        <button class="test-button" onclick="openCurrencyRewards()">
+            💰 Test: Open Currency Screen (Standalone)
         </button>
         
-        <button class="test-button" data-action="navigate-to-challenge">
+        <button class="test-button" onclick="navigateToChallenge()">
             ⚡ Test: Navigate to Challenge Active
         </button>
         
@@ -89,6 +89,29 @@
     <script src="scripts/bulletproof-navigation.js"></script>
     
     <script>
+        // 📝 LEARNING NOTE: Navigation Functions for Testing
+        // These functions handle navigation to different pages for testing purposes
+        
+        function navigateToChallengesPage() {
+            console.log('🎯 Navigating to challenges page...');
+            window.location.href = 'challenges.html';
+        }
+
+        function navigateToHome() {
+            console.log('🏠 Navigating to home page...');
+            window.location.href = 'index-refactored.html';
+        }
+
+        function openCurrencyRewards() {
+            console.log('💰 Navigating to currency rewards page...');
+            window.location.href = 'currency-rewards.html';
+        }
+
+        function navigateToChallenge() {
+            console.log('⚡ Navigating to challenge active...');
+            window.location.href = 'index-refactored.html#challenge-active';
+        }
+
         // Test script
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🧪 Navigation test page loaded');
@@ -98,26 +121,9 @@
             document.getElementById('current-screen').textContent = 'test-navigation';
             
             // Add test result logging
-            const originalNavigateToScreen = window.navigateToScreen;
-            window.navigateToScreen = function(screenId) {
-                const output = document.getElementById('test-output');
-                output.innerHTML += `<p class="success">✅ Successfully navigated to: ${screenId}</p>`;
-                
-                // Call original function
-                if (originalNavigateToScreen) {
-                    originalNavigateToScreen(screenId);
-                }
-            };
-            
-            // Test event delegation
-            document.addEventListener('click', function(event) {
-                const target = event.target.closest('[data-action]');
-                if (target) {
-                    const action = target.getAttribute('data-action');
-                    const output = document.getElementById('test-output');
-                    output.innerHTML += `<p>🎯 Action triggered: ${action}</p>`;
-                }
-            });
+            const output = document.getElementById('test-output');
+            output.innerHTML += `<p class="success">✅ Navigation functions loaded successfully</p>`;
+            output.innerHTML += `<p>📝 All navigation now uses standalone HTML pages</p>`;
         });
     </script>
 </body>

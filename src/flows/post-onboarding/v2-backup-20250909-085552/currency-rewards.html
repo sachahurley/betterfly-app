@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Betterfly - Currency Rewards</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/post-onboarding.css">
+    <link rel="stylesheet" href="styles/currency-screen-fix.css">
+    <link rel="stylesheet" href="styles/figma-close-button.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        /* Standalone currency page styles */
+        body {
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .currency-page-container {
+            width: 100%;
+            max-width: 393px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: #ffffff;
+            position: relative;
+        }
+        
+        /* Ensure proper display for standalone page */
+        .currency-page-container .screen {
+            position: static !important;
+            display: flex !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            height: auto !important;
+            min-height: 100vh !important;
+        }
+        
+        /* Desktop responsive */
+        @media (min-width: 768px) {
+            body {
+                background: #f5f5f5;
+                padding: 20px;
+            }
+            
+            .currency-page-container {
+                border: 1px solid #dbdddc;
+                border-radius: 16px;
+                overflow: hidden;
+                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="currency-page-container">
+        <!-- Currency Rewards Screen -->
+        <div id="currency-rewards" class="screen active">
+            <!-- Lucide Close Button -->
+            <button onclick="goBack()" aria-label="Close currency rewards page" style="
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                width: 40px;
+                height: 40px;
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                color: #333;
+                transition: all 0.2s ease;
+            " onmouseover="this.style.color='#666'" onmouseout="this.style.color='#333'">
+                <i data-lucide="x" style="width: 32px; height: 32px;"></i>
+            </button>
+
+            <!-- Currency Content -->
+            <div class="currency-content" style="padding-top: 84px;">
+                <!-- Review Header Section -->
+                <div class="currency-review-header">
+                    <h1 class="currency-main-title">Betterfly Rewards</h1>
+                    <p class="currency-subtitle">Redeem your Butterflies for added benefits</p>
+                </div>
+
+                <!-- Progress Card Section -->
+                <div class="currency-progress-card">
+                    <div class="progress-card-container">
+                        <div class="progress-card-header">
+                            <h2 class="progress-card-title">Finish setting up your account</h2>
+                        </div>
+                        <div class="progress-card-progress">
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 37.5%"></div>
+                            </div>
+                            <div class="progress-text">3/8 completed</div>
+                        </div>
+                        <div class="progress-card-details">
+                            <h3 class="task-heading">Discover the Rewards Store</h3>
+                            <div class="task-meta-info">
+                                <span class="task-duration">1 min</span>
+                                <div class="task-reward-info">
+                                    <img src="./assets/betterflies-icon.svg" alt="25 butterflies" class="butterfly-svg-mini" style="width: 12px; height: 12px;">
+                                    <span>+25</span>
+                                </div>
+                            </div>
+                            <p class="task-description">Take a look around the store.</p>
+                            <div class="mark-complete-section">
+                                <button class="mark-complete-btn" onclick="markComplete()">Mark as Complete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Available Betterflies Section -->
+                <div class="available-betterflies-section">
+                    <div class="available-betterflies-card">
+                        <div class="available-content">
+                            <h3 class="available-title">Available Betterflies</h3>
+                            <div class="available-display">
+                                <div class="butterfly-large-icon">
+                                    <img src="./assets/betterflies-icon.svg" alt="Butterfly" class="butterfly-large-svg">
+                                </div>
+                                <div class="available-amount">165</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LSA Balance Boost Section -->
+                <div class="lsa-balance-section">
+                    <div class="lsa-balance-card">
+                        <div class="lsa-content">
+                            <div class="lsa-header">
+                                <div class="lsa-icon">💎</div>
+                                <div class="lsa-info">
+                                    <h3 class="lsa-title">LSA Balance Boost</h3>
+                                    <p class="lsa-description">Convert your Betterflies to LSA balance for more benefits</p>
+                                </div>
+                            </div>
+                            <div class="lsa-conversion">
+                                <div class="conversion-item">
+                                    <div class="conversion-amount">165 Betterflies</div>
+                                </div>
+                                <div class="conversion-arrow">→</div>
+                                <div class="conversion-result">
+                                    <div class="conversion-value">$16.50</div>
+                                    <div class="conversion-label">LSA Balance</div>
+                                </div>
+                            </div>
+                            <div class="redeem-button-section">
+                                <button class="redeem-button" onclick="redeemBalance()">Redeem Balance</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Section -->
+                <div class="recent-activity-section">
+                    <div class="recent-activity-card">
+                        <h3 class="activity-title">Recent Activity</h3>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-info">
+                                    <h4 class="activity-name">Completed Daily Challenge</h4>
+                                    <p class="activity-details">Morning meditation - 5 minutes</p>
+                                </div>
+                                <div class="activity-reward positive">
+                                    <span>+25</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-info">
+                                    <h4 class="activity-name">Weekly Goal Progress</h4>
+                                    <p class="activity-details">Exercise 3 times this week</p>
+                                </div>
+                                <div class="activity-reward positive">
+                                    <span>+50</span>
+                                </div>
+                            </div>
+                            <div class="activity-item last">
+                                <div class="activity-info">
+                                    <h4 class="activity-name">Redeemed LSA Balance</h4>
+                                    <p class="activity-details">Converted 100 Betterflies</p>
+                                </div>
+                                <div class="activity-reward negative">
+                                    <span>-100</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple navigation and interaction functions
+        function goBack() {
+            // Check if there's a previous page in history
+            if (window.history.length > 1) {
+                // Go back to the previous page
+                window.history.back();
+            } else {
+                // Fallback to the main post-onboarding page
+                window.location.href = 'index-refactored.html';
+            }
+        }
+        
+        function markComplete() {
+            alert('Task marked as complete! +25 Betterflies earned!');
+            // Update the currency amount
+            const currencyAmounts = document.querySelectorAll('.currency-amount, .available-amount');
+            currencyAmounts.forEach(element => {
+                const currentAmount = parseInt(element.textContent);
+                element.textContent = (currentAmount + 25).toString();
+            });
+        }
+        
+        function redeemBalance() {
+            alert('LSA Balance redeemed! $16.50 added to your account.');
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Currency Rewards page loaded successfully!');
+            
+            // Update all currency displays with the current amount
+            const currencyAmounts = document.querySelectorAll('.currency-amount, .available-amount');
+            currencyAmounts.forEach(element => {
+                element.textContent = '165';
+            });
+        });
+        
+        // Initialize Lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

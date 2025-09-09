@@ -1,0 +1,288 @@
+/* 📝 LEARNING NOTE: Betterfly Post-Onboarding Base Styles */
+/* This CSS file contains the foundation styles and design system variables */
+
+/* ==========================================
+   🎨 DESIGN SYSTEM FOUNDATION
+   ========================================== */
+
+:root {
+    /* 📝 Color System - Following Betterfly brand colors */
+    --primary-color: #0f1c14;
+    --secondary-color: #019866;
+    --accent-color: #f7ffd6;
+    --background-light: #f7f5eb;
+    --background-white: #ffffff;
+    --text-primary: #0f1c14;
+    --text-secondary: #6f7772;
+    --text-muted: #939995;
+    --border-color: #dbdddc;
+    --success-color: #00b578;
+    --warning-color: #ffedd4;
+    --error-color: #ff6b6b;
+    
+    /* 📝 Typography - Using Roboto as per Betterfly standards */
+    --font-primary: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-display: 'Obviously Narrow Bold', 'Obviously', 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+    
+    /* 📝 Spacing System */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-xxl: 48px;
+    
+    /* 📝 Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 32px;
+    --radius-full: 50%;
+    
+    /* 📝 Shadows */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================
+   🔧 BASE STYLES
+   ========================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-primary);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-primary);
+    background-color: var(--background-white);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+/* 📝 LEARNING NOTE: Screen Management System */
+/* Each screen is a full-screen container that can be shown/hidden */
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--background-white);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.5s ease-in-out;
+    z-index: 1;
+}
+
+.screen.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 10;
+}
+
+/* 🎯 MODAL OVERLAY SYSTEM */
+/* Modal overlays sit on top of current screen */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+    z-index: 100;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ==========================================
+   📱 RESPONSIVE DESIGN
+   ========================================== */
+
+/* Mobile-first approach */
+@media (max-width: 393px) {
+    body {
+        font-size: 13px;
+    }
+}
+
+@media (min-width: 394px) {
+    body {
+        font-size: 14px;
+    }
+}
+
+/* Desktop preview mode */
+@media (min-width: 768px) {
+    .screen {
+        max-width: 393px;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+    }
+}
+
+/* ==========================================
+   🎨 TYPOGRAPHY SYSTEM
+   ========================================== */
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: var(--spacing-sm);
+}
+
+h1 {
+    font-size: 28px;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+h3 {
+    font-size: 20px;
+}
+
+h4 {
+    font-size: 18px;
+}
+
+h5 {
+    font-size: 16px;
+}
+
+h6 {
+    font-size: 14px;
+}
+
+p {
+    margin-bottom: var(--spacing-md);
+    line-height: 1.6;
+}
+
+/* ==========================================
+   🔧 UTILITY CLASSES
+   ========================================== */
+
+.hidden {
+    display: none !important;
+}
+
+.visible {
+    display: block !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.flex-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-between {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flex-start {
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.flex-end {
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.h-full {
+    height: 100%;
+}
+
+/* ==========================================
+   🎯 ANIMATION UTILITIES
+   ========================================== */
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.fade-out {
+    animation: fadeOut 0.5s ease-in-out;
+}
+
+.slide-up {
+    animation: slideUp 0.5s ease-out;
+}
+
+.slide-down {
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from { 
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

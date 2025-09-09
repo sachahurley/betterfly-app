@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Betterfly - Settings</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/post-onboarding.css">
+    <link rel="stylesheet" href="styles/figma-close-button.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        /* 📝 LEARNING NOTE: Standalone Settings Page Styles */
+        /* Following the same pattern as currency-rewards.html for consistency */
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .settings-page-container {
+            width: 100%;
+            max-width: 393px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: #ffffff;
+            position: relative;
+        }
+        
+        /* Ensure proper display for standalone page */
+        .settings-page-container .screen {
+            position: static !important;
+            display: flex !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            height: auto !important;
+            min-height: 100vh !important;
+        }
+        
+        /* Desktop responsive */
+        @media (min-width: 768px) {
+            body {
+                background: #f5f5f5;
+                padding: 20px;
+            }
+            
+            .settings-page-container {
+                border: 1px solid #dbdddc;
+                border-radius: 16px;
+                overflow: hidden;
+                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            }
+        }
+        
+        /* 📝 LEARNING NOTE: Settings Page Specific Styles */
+        /* Custom styles for the settings page layout and components */
+        
+        .settings-content {
+            padding: 84px 20px 40px 20px;
+            max-width: 100%;
+        }
+        
+        .settings-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .settings-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0F1C14;
+            margin-bottom: 8px;
+        }
+        
+        .settings-subtitle {
+            font-size: 16px;
+            color: #6B7280;
+            line-height: 1.5;
+        }
+        
+        /* Settings Sections */
+        .settings-section {
+            margin-bottom: 32px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0F1C14;
+            margin-bottom: 16px;
+            padding-left: 4px;
+        }
+        
+        /* Settings Items */
+        .settings-item {
+            background: #ffffff;
+            border: 1px solid #dbdddc;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+        
+        .settings-item:hover {
+            border-color: #019866;
+            box-shadow: 0 2px 8px rgba(1, 152, 102, 0.1);
+        }
+        
+        .settings-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .settings-item-link {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            text-decoration: none;
+            color: inherit;
+            transition: background-color 0.2s ease;
+        }
+        
+        .settings-item-link:hover {
+            background-color: #f7f5eb;
+        }
+        
+        .settings-item-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 16px;
+            color: #019866;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .settings-item-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .settings-item-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #0F1C14;
+            margin-bottom: 2px;
+        }
+        
+        .settings-item-description {
+            font-size: 14px;
+            color: #6B7280;
+            line-height: 1.4;
+        }
+        
+        .settings-item-arrow {
+            width: 20px;
+            height: 20px;
+            color: #939995;
+            margin-left: 12px;
+        }
+        
+        /* Toggle Switch Styles */
+        .settings-item-toggle {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .settings-item-toggle:hover {
+            background-color: #f7f5eb;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 28px;
+            background: #dbdddc;
+            border-radius: 14px;
+            margin-left: auto;
+            transition: background-color 0.3s ease;
+        }
+        
+        .toggle-switch.active {
+            background: #019866;
+        }
+        
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .toggle-switch.active::after {
+            transform: translateX(20px);
+        }
+        
+        /* Profile Section */
+        .profile-section {
+            background: #f7f5eb;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: #019866;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: 600;
+        }
+        
+        .profile-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0F1C14;
+            margin-bottom: 4px;
+        }
+        
+        .profile-email {
+            font-size: 14px;
+            color: #6B7280;
+            margin-bottom: 16px;
+        }
+        
+        .profile-edit-button {
+            background: #019866;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .profile-edit-button:hover {
+            background: #017a52;
+            transform: translateY(-1px);
+        }
+        
+        /* Danger Zone */
+        .danger-zone {
+            border-top: 1px solid #ff6b6b;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+        
+        .danger-zone .section-title {
+            color: #ff6b6b;
+        }
+        
+        .danger-zone .settings-item {
+            border-color: #ff6b6b;
+        }
+        
+        .danger-zone .settings-item:hover {
+            border-color: #ff5252;
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.1);
+        }
+        
+        .danger-zone .settings-item-title {
+            color: #ff6b6b;
+        }
+        
+        .danger-zone .settings-item-icon {
+            color: #ff6b6b;
+        }
+        
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        
+        /* Progress bar animation */
+        @keyframes progressPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(34, 197, 94, 0.1);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-page-container">
+        <!-- Settings Screen -->
+        <div id="settings" class="screen active">
+            <!-- Lucide Close Button -->
+            <button onclick="goBack()" aria-label="Close settings page" style="
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                width: 40px;
+                height: 40px;
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                color: #333;
+                transition: all 0.2s ease;
+            " onmouseover="this.style.color='#666'" onmouseout="this.style.color='#333'">
+                <i data-lucide="x" style="width: 32px; height: 32px;"></i>
+            </button>
+
+            <!-- Settings Content -->
+            <div class="settings-content">
+                <!-- Settings Header -->
+                <div class="settings-header">
+                    <h1 class="settings-title">Settings</h1>
+                    <p class="settings-subtitle">Manage your account and preferences</p>
+                </div>
+
+                <!-- Profile Section -->
+                <div class="profile-section">
+                    <div class="profile-avatar">S</div>
+                    <h2 class="profile-name">Sarah Johnson</h2>
+                    <p class="profile-email">sarah.johnson@email.com</p>
+                    <button class="profile-edit-button" onclick="editProfile()">Edit Profile</button>
+                </div>
+
+                <!-- 📝 LEARNING NOTE: Final Challenge Todo Card -->
+                <!-- This is the 8th and final challenge - scroll and look at settings -->
+                <div class="todo-card">
+                    <!-- Overall Progress Section -->
+                    <div class="overall-progress-section">
+                        <h2 class="overall-progress-title">Complete your account setup</h2>
+                        <div class="overall-progress-bar-container">
+                            <div class="overall-progress-bar">
+                                <div class="overall-progress-fill" style="width: 87.5%"></div>
+                            </div>
+                            <span class="overall-progress-text">7/8 completed</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Spacer -->
+                    <div class="challenge-spacer"></div>
+                    
+                    <!-- Individual Challenge Section -->
+                    <div class="individual-challenge-section">
+                        <h3 class="individual-challenge-title">Explore your settings</h3>
+                        <div class="challenge-meta">
+                            <span class="challenge-duration">2 min</span>
+                            <div class="challenge-reward">
+                                <img src="./assets/betterflies-icon.svg" alt="25 butterflies" class="butterfly-svg-mini">
+                                <span>+25</span>
+                            </div>
+                        </div>
+                        <p class="challenge-description">Scroll through your settings to familiarize yourself with all the available options and preferences.</p>
+                        <button class="challenge-action-button" id="settings-challenge-button" onclick="handleSettingsComplete()">
+                            <div class="button-icon" id="settings-button-icon">
+                                <i data-lucide="check" data-fill="currentColor" data-stroke-width="0" style="width: 16px; height: 16px;"></i>
+                            </div>
+                            <span id="settings-button-text">Mark as complete</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Account Settings -->
+                <div class="settings-section">
+                    <h3 class="section-title">Account</h3>
+                    
+                    <div class="settings-item">
+                        <a href="#" class="settings-item-link" onclick="handleAccountSettings('personal-info')">
+                            <div class="settings-item-icon">
+                                <i data-lucide="user" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="settings-item-content">
+                                <div class="settings-item-title">Personal Information</div>
+                                <div class="settings-item-description">Update your name, email, and contact details</div>
+                            </div>
+                            <div class="settings-item-arrow">
+                                <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div class="settings-item">
+                        <a href="#" class="settings-item-link" onclick="handleAccountSettings('privacy')">
+                            <div class="settings-item-icon">
+                                <i data-lucide="shield" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="settings-item-content">
+                                <div class="settings-item-title">Privacy & Security</div>
+                                <div class="settings-item-description">Manage your privacy settings and security options</div>
+                            </div>
+                            <div class="settings-item-arrow">
+                                <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div class="settings-item">
+                        <a href="#" class="settings-item-link" onclick="handleAccountSettings('notifications')">
+                            <div class="settings-item-icon">
+                                <i data-lucide="bell" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="settings-item-content">
+                                <div class="settings-item-title">Notifications</div>
+                                <div class="settings-item-description">Control how and when you receive notifications</div>
+                            </div>
+                            <div class="settings-item-arrow">
+                                <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- App Preferences -->
+                <div class="settings-section">
+                    <h3 class="section-title">Preferences</h3>
+                    
+                    <div class="settings-item">
+                        <div class="settings-item-toggle" onclick="toggleSetting('dark-mode')">
+                            <div class="settings-item-icon">
+                                <i data-lucide="moon" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="settings-item-content">
+                                <div class="settings-item-title">Dark Mode</div>
+                                <div class="settings-item-description">Switch between light and dark themes</div>
+                            </div>
+                            <div class="toggle-switch" id="dark-mode-toggle"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-item">
+                        <div class="settings-item-toggle" onclick="toggleSetting('haptic-feedback')">
+                            <div class="settings-item-icon">
+                                <i data-lucide="smartphone" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="settings-item-content">
+                                <div class="settings-item-title">Haptic Feedback</div>
+                                <div class="settings-item-description">Vibrate when completing tasks</div>
+                            </div>
+                            <div class="toggle-switch active" id="haptic-feedback-toggle"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-item">
+                        <div class="settings-item-toggle" onclick="toggleSetting('sound-effects')">
+                            <div class="settings-item-icon">
+                                <i data-lucide="volume-2" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="settings-item-content">
+                                <div class="settings-item-title">Sound Effects</div>
+                                <div class="settings-item-description">Play sounds for task completions</div>
+                            </div>
+                            <div class="toggle-switch active" id="sound-effects-toggle"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health & Wellness -->
+                <div class="settings-section">
+                    <h3 class="section-title">Health & Wellness</h3>
+                    
+                    <div class="settings-item">
+                        <a href="#" class="settings-item-link" onclick="handleHealthSettings('goals')">
+                            <div class="settings-item-icon">
+                                <i data-lucide="target" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="settings-item-content">
+                                <div class="settings-item-title">Health Goals</div>
+                                <div class="settings-item-description">Set and manage your wellness objectives</div>
+                            </div>
+                            <div class="settings-item-arrow">
+                                <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div class="settings-item">
+                        <a href="#" class="settings-item-link" onclick="handleHealthSettings('wearable')">
+                            <div class="settings-item-icon">
+                                <i data-lucide="watch" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="settings-item-content">
+                                <div class="settings-item-title">Wearable Device</div>
+                                <div class="settings-item-description">Connect and manage your fitness tracker</div>
+                            </div>
+                            <div class="settings-item-arrow">
+                                <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div class="settings-item">
+                        <a href="#" class="settings-item-link" onclick="handleHealthSettings('data-export')">
+                            <div class="settings-item-icon">
+                                <i data-lucide="download" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="settings-item-content">
+                                <div class="settings-item-title">Export Data</div>
+                                <div class="settings-item-description">Download your health and activity data</div>
+                            </div>
+                            <div class="settings-item-arrow">
+                                <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Support & About -->
+                <div class="settings-section">
+                    <h3 class="section-title">Support & About</h3>
+                    
+                    <div class="settings-item">
+                        <a href="#" class="settings-item-link" onclick="handleSupportSettings('help')">
+                            <div class="settings-item-icon">
+                                <i data-lucide="help-circle" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="settings-item-content">
+                                <div class="settings-item-title">Help Center</div>
+                                <div class="settings-item-description">Find answers to common questions</div>
+                            </div>
+                            <div class="settings-item-arrow">
+                                <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div class="settings-item">
+                        <a href="#" class="settings-item-link" onclick="handleSupportSettings('contact')">
+                            <div class="settings-item-icon">
+                                <i data-lucide="mail" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="settings-item-content">
+                                <div class="settings-item-title">Contact Support</div>
+                                <div class="settings-item-description">Get help from our support team</div>
+                            </div>
+                            <div class="settings-item-arrow">
+                                <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div class="settings-item">
+                        <a href="#" class="settings-item-link" onclick="handleSupportSettings('about')">
+                            <div class="settings-item-icon">
+                                <i data-lucide="info" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="settings-item-content">
+                                <div class="settings-item-title">About Betterfly</div>
+                                <div class="settings-item-description">Version 1.0.0 • Learn more about our mission</div>
+                            </div>
+                            <div class="settings-item-arrow">
+                                <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="settings-section danger-zone">
+                    <h3 class="section-title">Danger Zone</h3>
+                    
+                    <div class="settings-item">
+                        <a href="#" class="settings-item-link" onclick="handleDangerAction('delete-account')">
+                            <div class="settings-item-icon">
+                                <i data-lucide="trash-2" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="settings-item-content">
+                                <div class="settings-item-title">Delete Account</div>
+                                <div class="settings-item-description">Permanently delete your account and all data</div>
+                            </div>
+                            <div class="settings-item-arrow">
+                                <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 🧭 CLEAN NAVIGATION SYSTEM -->
+    <script src="shared/navigation.js"></script>
+    
+    <script>
+        // 📝 LEARNING NOTE: Settings Page Functionality
+        // Handles all the interactive elements on the settings page
+        
+        // 📝 LEARNING NOTE: Toggle Switch Functionality
+        // Handles the toggle switches for various settings
+        
+        function toggleSetting(settingName) {
+            console.log(`🔄 Toggling setting: ${settingName}`);
+            
+            const toggle = document.getElementById(`${settingName}-toggle`);
+            if (!toggle) {
+                console.error(`❌ Toggle element not found: ${settingName}-toggle`);
+                return;
+            }
+            
+            // Toggle the active state
+            const isActive = toggle.classList.contains('active');
+            if (isActive) {
+                toggle.classList.remove('active');
+                console.log(`✅ ${settingName} disabled`);
+            } else {
+                toggle.classList.add('active');
+                console.log(`✅ ${settingName} enabled`);
+            }
+            
+            // Here you would typically save the setting to localStorage or send to server
+            saveSetting(settingName, !isActive);
+        }
+        
+        function saveSetting(settingName, value) {
+            console.log(`💾 Saving setting: ${settingName} = ${value}`);
+            
+            // Save to localStorage for persistence
+            localStorage.setItem(`betterfly_${settingName}`, value.toString());
+            
+            // Here you would typically send to your backend API
+            // Example: fetch('/api/settings', { method: 'POST', body: JSON.stringify({setting: settingName, value: value}) });
+        }
+        
+        function loadSettings() {
+            console.log('📥 Loading saved settings...');
+            
+            // Load settings from localStorage
+            const settings = ['dark-mode', 'haptic-feedback', 'sound-effects'];
+            
+            settings.forEach(setting => {
+                const savedValue = localStorage.getItem(`betterfly_${setting}`);
+                if (savedValue !== null) {
+                    const toggle = document.getElementById(`${setting}-toggle`);
+                    if (toggle) {
+                        if (savedValue === 'true') {
+                            toggle.classList.add('active');
+                        } else {
+                            toggle.classList.remove('active');
+                        }
+                        console.log(`📥 Loaded ${setting}: ${savedValue}`);
+                    }
+                }
+            });
+        }
+        
+        // 📝 LEARNING NOTE: Settings Navigation Handlers
+        // Handle clicks on different settings sections
+        
+        function handleAccountSettings(section) {
+            console.log(`⚙️ Opening account settings: ${section}`);
+            
+            switch(section) {
+                case 'personal-info':
+                    alert('This would open Personal Information settings');
+                    break;
+                case 'privacy':
+                    alert('This would open Privacy & Security settings');
+                    break;
+                case 'notifications':
+                    alert('This would open Notification settings');
+                    break;
+                default:
+                    console.log(`Unknown account setting: ${section}`);
+            }
+        }
+        
+        function handleHealthSettings(section) {
+            console.log(`🏥 Opening health settings: ${section}`);
+            
+            switch(section) {
+                case 'goals':
+                    alert('This would open Health Goals settings');
+                    break;
+                case 'wearable':
+                    alert('This would open Wearable Device settings');
+                    break;
+                case 'data-export':
+                    alert('This would open Data Export options');
+                    break;
+                default:
+                    console.log(`Unknown health setting: ${section}`);
+            }
+        }
+        
+        function handleSupportSettings(section) {
+            console.log(`🆘 Opening support settings: ${section}`);
+            
+            switch(section) {
+                case 'help':
+                    alert('This would open Help Center');
+                    break;
+                case 'contact':
+                    alert('This would open Contact Support');
+                    break;
+                case 'about':
+                    alert('This would open About Betterfly');
+                    break;
+                default:
+                    console.log(`Unknown support setting: ${section}`);
+            }
+        }
+        
+        function handleDangerAction(action) {
+            console.log(`⚠️ Handling danger action: ${action}`);
+            
+            if (action === 'delete-account') {
+                const confirmed = confirm('Are you sure you want to delete your account? This action cannot be undone.');
+                if (confirmed) {
+                    alert('Account deletion would be processed here');
+                    console.log('🗑️ Account deletion confirmed');
+                } else {
+                    console.log('❌ Account deletion cancelled');
+                }
+            }
+        }
+        
+        function editProfile() {
+            console.log('👤 Opening profile editor...');
+            alert('This would open the profile editor');
+        }
+        
+        // 📝 LEARNING NOTE: Final Challenge Completion Function
+        // Handles the completion of the 8th and final challenge
+        
+        function handleSettingsComplete() {
+            console.log('🎯 Handling final settings challenge completion...');
+            
+            const challengeButton = document.getElementById('settings-challenge-button');
+            if (!challengeButton) {
+                console.error('❌ Settings challenge button not found!');
+                return;
+            }
+            
+            // Check if already completed
+            if (challengeButton.classList.contains('completed')) {
+                console.log('✅ Settings challenge already completed!');
+                return;
+            }
+            
+            // 1. Update button to completed state
+            challengeButton.classList.add('completed');
+            challengeButton.disabled = true;
+            
+            // Update button text and icon
+            const buttonText = document.getElementById('settings-button-text');
+            const buttonIcon = document.getElementById('settings-button-icon');
+            if (buttonText) buttonText.textContent = 'Completed';
+            if (buttonIcon) {
+                buttonIcon.innerHTML = '<i data-lucide="check" data-fill="currentColor" data-stroke-width="0" style="width: 16px; height: 16px;"></i>';
+            }
+            
+            // 2. Update progress from 7/8 to 8/8 (100%)
+            updateProgressToComplete();
+            
+            // 3. Update currency
+            updateCurrency(25);
+            
+            // 4. Navigate to completion page after a short delay
+            setTimeout(() => {
+                console.log('🎉 Navigating to completion page...');
+                window.location.href = 'todo-complete.html';
+            }, 1500);
+            
+            console.log('🎉 Final challenge completed! All 8 challenges done!');
+        }
+        
+        function updateProgressToComplete() {
+            console.log('📊 Updating progress from 7/8 to 8/8 (100%)...');
+            
+            // Update progress text
+            const progressText = document.querySelector('.overall-progress-text');
+            if (progressText) {
+                progressText.textContent = '8/8 completed';
+                console.log('📊 Progress text updated to 8/8 completed');
+            }
+            
+            // Update progress bar to 100%
+            const progressFill = document.querySelector('.overall-progress-fill');
+            if (progressFill) {
+                // Add pulse effect for visual feedback
+                progressFill.style.animation = 'progressPulse 0.6s ease-in-out';
+                
+                // Update the width to 100%
+                setTimeout(() => {
+                    progressFill.style.width = '100%';
+                    console.log('📊 Progress bar width updated to 100%');
+                }, 100);
+                
+                // Remove animation class after animation completes
+                setTimeout(() => {
+                    progressFill.style.animation = '';
+                }, 600);
+                
+                console.log('📊 Progress bar animated to 100%');
+            } else {
+                console.error('📊 Progress fill element not found!');
+            }
+        }
+        
+        function updateCurrency(amount) {
+            console.log(`💰 Updating currency by +${amount} Betterflies`);
+            
+            // Update all currency displays across the app
+            const currencyAmounts = document.querySelectorAll('.currency-amount, .available-amount');
+            currencyAmounts.forEach(element => {
+                const currentAmount = parseInt(element.textContent) || 0;
+                element.textContent = (currentAmount + amount).toString();
+            });
+            
+            // Save to localStorage for persistence
+            const currentCurrency = parseInt(localStorage.getItem('butterflyCount') || '165');
+            localStorage.setItem('butterflyCount', (currentCurrency + amount).toString());
+            
+            console.log(`💰 Currency updated: +${amount} Betterflies`);
+        }
+        
+        
+        // 📝 LEARNING NOTE: Navigation Function
+        // Uses the shared navigation system for consistency
+        
+        function goBack() {
+            console.log('🔙 Going back from settings...');
+            
+            // Navigate back to benefits page since that's where users came from
+            window.location.href = 'benefits.html';
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Settings page loaded successfully!');
+            
+            // Load saved settings
+            loadSettings();
+            
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streak Success - Betterfly</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/post-onboarding.css">
+    <link rel="stylesheet" href="styles/currency-screen-fix.css">
+    <link rel="stylesheet" href="styles/figma-close-button.css">
+    <link rel="stylesheet" href="styles/streak-success.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        /* Full width layout */
+        body {
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+            font-family: 'Roboto', sans-serif;
+            width: 100%;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .streak-page-container {
+            width: 100%;
+            height: 100vh;
+            background: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Ensure proper display for standalone page */
+        .streak-page-container .screen {
+            position: static !important;
+            display: flex !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            height: 100vh !important;
+            width: 100% !important;
+        }
+        
+        /* Desktop responsive */
+        @media (min-width: 768px) {
+            body {
+                background: #f5f5f5;
+                padding: 20px;
+            }
+            
+            .streak-page-container {
+                max-width: 393px;
+                height: 100vh;
+                border: 1px solid #dbdddc;
+                border-radius: 16px;
+                overflow: hidden;
+                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="streak-page-container">
+        <!-- Streak Success Screen -->
+        <div id="streak-success" class="screen active">
+            <!-- Lucide Close Button -->
+            <button onclick="goBack()" aria-label="Close streak success page" style="
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                width: 40px;
+                height: 40px;
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                color: #333;
+                transition: all 0.2s ease;
+            " onmouseover="this.style.color='#666'" onmouseout="this.style.color='#333'">
+                <i data-lucide="x" style="width: 32px; height: 32px;"></i>
+            </button>
+
+            <!-- 📝 LEARNING NOTE: Clean Full Width Layout -->
+            <!-- Content centered on full screen with proper proportions -->
+            <div class="bg-white flex flex-col items-center justify-center relative w-full h-full" data-name="streak-success" data-node-id="419:39254">
+                <!-- Background Container -->
+                <div class="absolute inset-0 w-full h-full" data-name="container" data-node-id="419:39255">
+                    <div class="absolute inset-0 w-full h-full flex items-center justify-center">
+                        <img alt="" class="max-w-full max-h-full object-contain" src="http://localhost:3845/assets/c91dda3f4f4e171d278192178df92f331f29c5c1.svg" />
+                    </div>
+                </div>
+                
+                <!-- Main Content Container -->
+                <div class="flex flex-col gap-4 items-center justify-center px-6 py-8 relative w-full max-w-[393px]" data-name="Container" data-node-id="419:39258">
+                    <!-- Chat Bubble Container -->
+                    <div class="flex flex-col gap-2 items-center justify-center relative w-full" data-name="Chat bubble container" data-node-id="419:39259">
+                        <!-- Left Chat Bubble -->
+                        <div class="flex flex-col items-center justify-center relative w-full" data-name="Left chat bubble" data-node-id="419:39260">
+                            <!-- Chat Bubble Text Container -->
+                            <div class="bg-[#403f3f] box-border flex flex-col gap-3 items-center justify-center overflow-clip p-[20px] relative rounded-[16px] w-full" data-name="Chat bubble text container" data-node-id="419:39261">
+                                <div class="font-['Roboto:Regular',_sans-serif] font-normal leading-[0] relative text-[18px] text-white tracking-[0.27px] w-full" data-node-id="419:39262" style="font-variation-settings: 'wdth' 100;">
+                                    <p class="leading-[1.44]">2 Days in a row! Lets make it 3!</p>
+                                </div>
+                            </div>
+                            <!-- Avatar Pointer -->
+                            <div class="flex h-[14px] items-center justify-center relative w-[74px]">
+                                <div class="flex-none rotate-[270deg]">
+                                    <div class="h-[74px] relative w-3.5" data-name="Avatar" data-node-id="419:39263">
+                                        <div class="absolute bottom-0 left-0 right-[-50%] top-0">
+                                            <img alt="" class="block max-w-none size-full" src="http://localhost:3845/assets/e0c4d1133fed67738545202258f62a768bcf710f.svg" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Mascot Container -->
+                        <div class="flex items-center justify-center relative size-20" data-name="Mascot container" data-node-id="419:39265">
+                            <div class="aspect-[75/85.7658] bg-[47.55%_50%] bg-no-repeat bg-size-[154.71%_135.29%] w-full h-full" data-name="betterfly-mascot 1" data-node-id="419:39266" style="background-image: url('http://localhost:3845/assets/162ac2159f8a17d53149f14c9846ea5592fb33ba.png');"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Streak Container -->
+                    <div class="flex flex-col items-center justify-center relative w-full" data-name="Streak container" data-node-id="441:41194">
+                        <!-- Large Streak Number -->
+                        <div class="flex flex-col font-['Obviously:Narrow_Bold',_sans-serif] justify-center leading-[0] not-italic relative text-[96px] text-center text-green-500 text-nowrap tracking-[1.44px]" data-node-id="441:41193">
+                            <p class="leading-[1.44] whitespace-pre">2</p>
+                        </div>
+                        <!-- Day Streak Label -->
+                        <div class="font-['Obviously:Narrow_Bold',_sans-serif] leading-[0] not-italic relative text-[32px] text-center text-neutral-500 text-nowrap tracking-[0.48px]" data-node-id="441:41195">
+                            <p class="leading-[1.44] whitespace-pre">day streak</p>
+                        </div>
+                        <!-- Days Container -->
+                        <div class="box-border flex flex-col items-center justify-center pb-0 pt-4 px-0 relative w-40" data-name="Days container" data-node-id="441:41246">
+                            <!-- Days Row -->
+                            <div class="flex items-center justify-center relative w-full" data-name="Days row" data-node-id="441:41247">
+                                <div class="box-border flex gap-2.5 items-center justify-center p-[8px] relative size-8" data-name="Day container" data-node-id="441:41248">
+                                    <div class="font-['Roboto:Bold',_sans-serif] font-bold leading-[0] relative text-[16px] text-center text-neutral-600 text-nowrap tracking-[0.24px]" data-node-id="441:41249" style="font-variation-settings: 'wdth' 100;">
+                                        <p class="leading-[1.44] whitespace-pre">Mo</p>
+                                    </div>
+                                </div>
+                                <div class="box-border flex gap-2.5 items-center justify-center p-[8px] relative size-8" data-name="Day container" data-node-id="441:41250">
+                                    <div class="font-['Roboto:Bold',_sans-serif] font-bold leading-[0] relative text-[16px] text-center text-neutral-600 text-nowrap tracking-[0.24px]" data-node-id="441:41251" style="font-variation-settings: 'wdth' 100;">
+                                        <p class="leading-[1.44] whitespace-pre">Tu</p>
+                                    </div>
+                                </div>
+                                <div class="box-border flex gap-2.5 items-center justify-center p-[8px] relative size-8" data-name="Day container" data-node-id="441:41252">
+                                    <div class="font-['Roboto:Bold',_sans-serif] font-bold leading-[0] relative text-[16px] text-center text-neutral-600 text-nowrap tracking-[0.24px]" data-node-id="441:41253" style="font-variation-settings: 'wdth' 100;">
+                                        <p class="leading-[1.44] whitespace-pre">We</p>
+                                    </div>
+                                </div>
+                                <div class="box-border flex gap-2.5 items-center justify-center p-[8px] relative size-8" data-name="Day container" data-node-id="441:41254">
+                                    <div class="font-['Roboto:Bold',_sans-serif] font-bold leading-[0] relative text-[16px] text-center text-neutral-600 text-nowrap tracking-[0.24px]" data-node-id="441:41255" style="font-variation-settings: 'wdth' 100;">
+                                        <p class="leading-[1.44] whitespace-pre">Th</p>
+                                    </div>
+                                </div>
+                                <div class="box-border flex gap-2.5 items-center justify-center p-[8px] relative size-8" data-name="Day container" data-node-id="441:41256">
+                                    <div class="font-['Roboto:Bold',_sans-serif] font-bold leading-[0] relative text-[16px] text-center text-neutral-600 text-nowrap tracking-[0.24px]" data-node-id="441:41257" style="font-variation-settings: 'wdth' 100;">
+                                        <p class="leading-[1.44] whitespace-pre">Fr</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Checkmarks Row -->
+                            <div class="flex items-center justify-center relative w-full" data-name="Checkmarks row" data-node-id="441:41258">
+                                <!-- Completed Checkmark 1 -->
+                                <div class="box-border flex gap-2.5 h-6 items-center justify-center p-[8px] relative w-8" data-name="Checkmark container" data-node-id="441:41259">
+                                    <div class="overflow-clip relative size-6" data-name="circle-check, check radio, circle, checkbox, check, checkmark, confirm" data-node-id="441:41260">
+                                        <div class="absolute inset-[12.5%]" data-name="vector" id="node-I441_41260-5754_62097">
+                                            <div class="absolute inset-[-5.556%]" style="--stroke-0: rgba(34, 197, 94, 1);">
+                                                <img alt="" class="block max-w-none size-full" src="http://localhost:3845/assets/fdde23c19f8f304955d7e4947c9bb2c474046cc5.svg" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Completed Checkmark 2 -->
+                                <div class="box-border flex gap-2.5 h-6 items-center justify-center p-[8px] relative w-8" data-name="Checkmark container" data-node-id="441:41261">
+                                    <div class="overflow-clip relative size-6" data-name="circle-check, check radio, circle, checkbox, check, checkmark, confirm" data-node-id="441:41262">
+                                        <div class="absolute inset-[12.5%]" data-name="vector" id="node-I441_41262-5754_62097">
+                                            <div class="absolute inset-[-5.556%]" style="--stroke-0: rgba(34, 197, 94, 1);">
+                                                <img alt="" class="block max-w-none size-full" src="http://localhost:3845/assets/fdde23c19f8f304955d7e4947c9bb2c474046cc5.svg" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Pending Checkmark 3 -->
+                                <div class="box-border flex gap-2.5 h-6 items-center justify-center p-[8px] relative w-8" data-name="Checkmark container" data-node-id="441:41263">
+                                    <div class="overflow-clip relative size-6" data-name="circle-placeholder-on" data-node-id="441:41264">
+                                        <div class="absolute inset-[12.5%]" data-name="vector" id="node-I441_41264-9570_27130">
+                                            <div class="absolute inset-[-5.556%]" style="--stroke-0: rgba(163, 163, 163, 1);">
+                                                <img alt="" class="block max-w-none size-full" src="http://localhost:3845/assets/25ecfa11b2e873c27027a6e3cbd7896e4f05ab48.svg" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Pending Checkmark 4 -->
+                                <div class="box-border flex gap-2.5 h-6 items-center justify-center p-[8px] relative w-8" data-name="Checkmark container" data-node-id="441:41265">
+                                    <div class="overflow-clip relative size-6" data-name="circle-placeholder-on" data-node-id="441:41266">
+                                        <div class="absolute inset-[12.5%]" data-name="vector" id="node-I441_41266-9570_27130">
+                                            <div class="absolute inset-[-5.556%]" style="--stroke-0: rgba(163, 163, 163, 1);">
+                                                <img alt="" class="block max-w-none size-full" src="http://localhost:3845/assets/25ecfa11b2e873c27027a6e3cbd7896e4f05ab48.svg" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Pending Checkmark 5 -->
+                                <div class="box-border flex gap-2.5 h-6 items-center justify-center p-[8px] relative w-8" data-name="Checkmark container" data-node-id="441:41267">
+                                    <div class="overflow-clip relative size-6" data-name="circle-placeholder-on" data-node-id="441:41268">
+                                        <div class="absolute inset-[12.5%]" data-name="vector" id="node-I441_41268-9570_27130">
+                                            <div class="absolute inset-[-5.556%]" style="--stroke-0: rgba(163, 163, 163, 1);">
+                                                <img alt="" class="block max-w-none size-full" src="http://localhost:3845/assets/25ecfa11b2e873c27027a6e3cbd7896e4f05ab48.svg" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🧭 CLEAN NAVIGATION SYSTEM -->
+    <script src="shared/navigation.js"></script>
+    
+    <script>
+        // Simple interaction functions
+        
+        function goToNext() {
+            // Navigate back to challenges page with completed state
+            // Use replace to avoid adding to history stack
+            window.location.replace('challenges.html?completed=true');
+        }
+        
+        function goBack() {
+            // Navigate back to challenges page with completed state
+            // Use replace to avoid adding to history stack
+            window.location.replace('challenges.html?completed=true');
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎉 Streak success page loaded successfully!');
+        });
+        
+        // Initialize Lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

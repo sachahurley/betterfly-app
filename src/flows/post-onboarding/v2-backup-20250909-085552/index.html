@@ -62,7 +62,7 @@
         <div class="profile-header">
             <div class="header-nav">
                 <!-- User Avatar -->
-                <div class="avatar-section" onclick="navigateToSettings()" style="cursor: pointer;">
+                <div class="avatar-section">
                     <div class="avatar">
                         <div class="user-initials-container"></div>
                         <div class="user-initials">AB</div>
@@ -150,7 +150,7 @@
                     </div>
                     
                     <!-- Remaining pending tasks -->
-                    <div class="task pending" onclick="navigateToCurrency()" style="cursor: pointer;">
+                    <div class="task pending">
                         <div class="task-icon pending"></div>
                         <div class="task-info">
                             <span class="task-text">Discover The Rewards Store</span>
@@ -982,13 +982,5 @@
 
     <!-- 🛡️ BULLETPROOF NAVIGATION SYSTEM -->
     <script src="scripts/stable-navigation.js"></script>
-    
-    <!-- 📝 LEARNING NOTE: Avatar Navigation Function -->
-    <script>
-        function navigateToSettings() {
-            console.log('👤 Avatar tapped - navigating to settings...');
-            window.location.href = 'settings.html';
-        }
-    </script>
 </body>
 </html>

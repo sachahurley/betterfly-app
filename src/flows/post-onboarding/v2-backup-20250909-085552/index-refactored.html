@@ -94,7 +94,7 @@
                 </div>
                 
                 <!-- Menu Button -->
-                <div class="menu-button" data-action="navigate-to-challenge">
+                <div class="menu-button" onclick="navigateToChallengesPage()">
                     <div class="menu-icon"></div>
                 </div>
             </div>
@@ -151,7 +151,7 @@
                     </div>
                     
                     <!-- Active task - clickable -->
-                    <div class="task pending" data-action="navigate-to-challenges-page" style="cursor: pointer;">
+                    <div class="task pending" onclick="navigateToChallengesPage()" style="cursor: pointer;">
                         <div class="task-icon active"></div>
                         <div class="task-info">
                             <span class="task-text">Complete Your Next Challenge</span>
@@ -287,7 +287,7 @@
 
         <!-- Bottom Navigation -->
         <div class="bottom-nav">
-            <div class="nav-item active">
+            <div class="nav-item active" onclick="navigateToHome()">
                 <div class="nav-icon home"></div>
                 <span class="nav-label">Home</span>
             </div>
@@ -295,7 +295,7 @@
                 <div class="nav-icon benefits"></div>
                 <span class="nav-label">Benefits</span>
             </div>
-            <div class="nav-item">
+            <div class="nav-item" onclick="navigateToChallengesPage()">
                 <div class="nav-icon journey"></div>
                 <span class="nav-label">Journey</span>
             </div>
@@ -551,6 +551,22 @@
             console.log('Opening currency rewards page...');
             // Navigate to the separate currency rewards page
             window.location.href = 'currency-rewards.html';
+        }
+
+        // 📝 LEARNING NOTE: Challenges Page Navigation
+        // This function navigates to the standalone challenges page
+        function navigateToChallengesPage() {
+            console.log('Opening challenges page...');
+            // Navigate to the separate challenges page
+            window.location.href = 'challenges.html';
+        }
+
+        // 📝 LEARNING NOTE: Home Page Navigation
+        // This function navigates to the home page (stays on current page)
+        function navigateToHome() {
+            console.log('Staying on home page...');
+            // Since we're already on the home page, just scroll to top
+            window.scrollTo(0, 0);
         }
     </script>
 </body>

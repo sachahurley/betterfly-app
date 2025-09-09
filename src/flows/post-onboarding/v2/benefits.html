@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Benefits - Betterfly</title>
+    
+    <!-- 📝 LEARNING NOTE: Applying Betterfly Design System -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    
+    <!-- CSS includes -->
+    <link rel="stylesheet" href="styles/post-onboarding.css">
+    <link rel="stylesheet" href="styles/currency-screen-fix.css">
+    <link rel="stylesheet" href="styles/scroll-fixes.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- Debug mode toggle -->
+    <script>
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.classList.add('debug-mode');
+                console.log('🐛 Debug mode enabled');
+            });
+        }
+    </script>
+</head>
+<body>
+    <!-- 📝 LEARNING NOTE: Benefits Page -->
+    <div class="benefits-page" style="display: flex; flex-direction: column; max-width: 393px; margin: 0 auto; height: 100vh;">
+        <!-- Header -->
+        <div class="profile-header">
+            <div class="header-nav">
+                <!-- User Avatar -->
+                <div class="avatar-section" onclick="navigateToSettings()" style="cursor: pointer;">
+                    <div class="avatar">
+                        <div class="user-initials-container"></div>
+                        <div class="user-initials">AB</div>
+                        <div class="status-indicator"></div>
+                    </div>
+                </div>
+                
+                <!-- Currency Counter -->
+                <div class="currency-counter" onclick="navigateToCurrency()">
+                    <div class="butterfly-icon"></div>
+                    <div class="currency-amount">0</div>
+                </div>
+                
+                <!-- Menu Button -->
+                <div class="menu-button" onclick="goBack()">
+                    <div class="menu-icon"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" style="flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 24px; padding-bottom: 120px;">
+            <!-- Page Header -->
+            <div class="welcome-section">
+                <h1 class="welcome-title">Your Benefits</h1>
+                <p class="welcome-subtitle">See what's covered, track your usage, and make the most of your plan.</p>
+            </div>
+            
+            <!-- Active Challenge Card -->
+            <div class="todo-card">
+                <!-- Overall Progress Section -->
+                <div class="overall-progress-section">
+                    <h2 class="overall-progress-title">Complete your benefits setup</h2>
+                    <div class="overall-progress-bar-container">
+                        <div class="overall-progress-bar">
+                            <div class="overall-progress-fill" style="width: 75%"></div>
+                        </div>
+                        <span class="overall-progress-text">6/8 completed</span>
+                    </div>
+                </div>
+                
+                <!-- Spacer -->
+                <div class="challenge-spacer"></div>
+                
+                <!-- Individual Challenge Section -->
+                <div class="individual-challenge-section">
+                    <h3 class="individual-challenge-title">Explore your LSA benefit</h3>
+                    <div class="challenge-meta">
+                        <span class="challenge-duration">3 min</span>
+                        <div class="challenge-reward">
+                            <img src="./assets/betterflies-icon.svg" alt="0 butterflies" class="butterfly-svg-mini">
+                            <span>+0</span>
+                        </div>
+                    </div>
+                    <p class="challenge-description">Review your available LSA balance, track usage, and understand your benefits coverage.</p>
+                    <button class="challenge-action-button" onclick="handleLSAComplete()">
+                        <div class="button-icon">
+                            <i data-lucide="check" data-fill="currentColor" data-stroke-width="0" style="width: 16px; height: 16px;"></i>
+                        </div>
+                        <span>Mark as complete</span>
+                    </button>
+                </div>
+                
+                <!-- Next Challenge Section (initially hidden) -->
+                <div class="next-challenge-section hidden" id="next-challenge-section">
+                    <div class="challenge-spacer"></div>
+                    <div class="task pending" onclick="handleProfileReview()" style="cursor: pointer;">
+                        <div class="task-icon pending"></div>
+                        <div class="task-info">
+                            <span class="task-text">Review your profile</span>
+                            <div class="task-meta">
+                                <span class="task-time">2 min</span>
+                                <div class="task-reward">
+                                    <img src="./assets/betterflies-icon.svg" alt="0 butterflies" class="butterfly-svg-mini">
+                                    <span>+0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-chevron"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- LSA Balance Card -->
+            <div class="lsa-balance-card">
+                <div class="card-content">
+                    <div class="balance-header">
+                        <p class="balance-label">Available LSA Balance</p>
+                        <p class="balance-amount">$1,360.50</p>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Usage Stats -->
+                    <div class="usage-stats">
+                        <div class="usage-item">
+                            <p class="usage-text">Used: $639.50</p>
+                        </div>
+                        <div class="usage-item">
+                            <p class="usage-text">Total: $2,000.00</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Warning Message -->
+                    <div class="warning-message">
+                        <div class="warning-icon">⚠️</div>
+                        <div class="warning-text">
+                            <p>Plan year ends in 45 days. Use</p>
+                            <p>remaining funds or they'll be forfeited.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button class="btn-primary">Upload Receipt</button>
+                        <button class="btn-secondary">View Card Details</button>
+                        <button class="btn-secondary">Find Eligible Expenses</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item" onclick="navigateToHome()">
+                <div class="nav-icon home"></div>
+                <span class="nav-label">Home</span>
+            </div>
+            <div class="nav-item active">
+                <div class="nav-icon benefits"></div>
+                <span class="nav-label">Benefits</span>
+            </div>
+            <div class="nav-item" onclick="navigateToChallenges()">
+                <div class="nav-icon journey"></div>
+                <span class="nav-label">Journey</span>
+            </div>
+            <div class="nav-item" onclick="navigateToSocial()">
+                <div class="nav-icon social"></div>
+                <span class="nav-label">Social</span>
+            </div>
+            <div class="nav-item">
+                <img src="./assets/buddy.svg" alt="Buddy" class="nav-buddy-icon">
+            </div>
+        </div>
+    </div>
+
+    <!-- 📝 LEARNING NOTE: Toast Notification -->
+    <!-- Success toast that slides down when task is completed -->
+    <div class="toast-container" id="toast-container">
+        <div class="toast" id="success-toast">
+            <div class="toast-icon">
+                <div class="success-icon"></div>
+            </div>
+            <div class="toast-content">
+                <div class="toast-message">Task completed!</div>
+            </div>
+            <div class="toast-close" onclick="closeToast()">
+                <div class="close-icon"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🧭 CLEAN NAVIGATION SYSTEM -->
+    <script src="shared/navigation.js"></script>
+    
+    <!-- 📝 LEARNING NOTE: Benefits Page Task Management -->
+    <script>
+        function handleLSAComplete() {
+            console.log('🎯 Handling LSA benefit completion...');
+            
+            const challengeCard = document.querySelector('.todo-card');
+            const nextChallengeSection = document.getElementById('next-challenge-section');
+            const progressFill = document.querySelector('.overall-progress-fill');
+            const progressText = document.querySelector('.overall-progress-text');
+            
+            if (!challengeCard) {
+                console.log('✅ LSA task already completed!');
+                return;
+            }
+            
+            // Mark challenge as completed
+            challengeCard.classList.add('challenge-completed');
+            
+            // Update progress bar to 87.5% (7/8)
+            if (progressFill) {
+                progressFill.style.width = '87.5%';
+            }
+            
+            // Update progress text
+            if (progressText) {
+                progressText.textContent = '7/8 completed';
+            }
+            
+            // Show the next challenge section
+            if (nextChallengeSection) {
+                nextChallengeSection.classList.remove('hidden');
+            }
+            
+            // Show completion toast
+            showRewardToast(0);
+            
+            console.log('✅ LSA benefit task completed!');
+        }
+        
+        function handleProfileReview() {
+            console.log('🎯 Handling profile review - navigating to settings...');
+            
+            const profileTask = document.querySelector('.next-challenge-section .task');
+            
+            if (!profileTask || profileTask.classList.contains('completed')) {
+                console.log('✅ Profile review task already completed!');
+                return;
+            }
+            
+            // Mark profile task as completed
+            profileTask.classList.add('completed');
+            profileTask.classList.remove('pending');
+            profileTask.style.cursor = 'default';
+            
+            // Update task icon to checkmark
+            const taskIcon = profileTask.querySelector('.task-icon');
+            if (taskIcon) {
+                taskIcon.classList.remove('pending');
+                taskIcon.classList.add('check');
+                taskIcon.innerHTML = '✓';
+            }
+            
+            // Show completion toast
+            showRewardToast(0);
+            
+            // 📝 LEARNING NOTE: Navigate to Settings Page
+            // After completing the profile review task, navigate to the settings page
+            setTimeout(() => {
+                console.log('🧭 Navigating to settings page...');
+                window.location.href = 'settings.html';
+            }, 1500);
+            
+            console.log('✅ Profile review task completed! Navigating to settings...');
+        }
+        
+        // 📝 LEARNING NOTE: Reward Toast - Matches Component Reference
+        function showRewardToast(amount) {
+            console.log(`🎉 Showing reward toast for ${amount} Betterflies...`);
+            const toast = document.getElementById('success-toast');
+            if (toast) {
+                // Update the message with the actual amount
+                const messageElement = toast.querySelector('.toast-message');
+                if (messageElement) {
+                    messageElement.textContent = `Task completed!`;
+                    console.log('🎉 Toast message updated');
+                }
+                
+                // Show the toast with animation
+                toast.classList.add('show');
+                console.log('🎉 Toast shown successfully');
+                
+                // Auto-hide after 4 seconds
+                setTimeout(() => {
+                    closeToast();
+                }, 4000);
+            } else {
+                console.error('❌ Toast element not found!');
+            }
+        }
+        
+        function closeToast() {
+            console.log('❌ Closing toast...');
+            const toast = document.getElementById('success-toast');
+            if (toast) {
+                toast.classList.remove('show');
+                console.log('❌ Toast closed');
+            }
+        }
+        
+        // 📝 LEARNING NOTE: Avatar Navigation Function
+        // Handles navigation to settings page when avatar is tapped
+        function navigateToSettings() {
+            console.log('👤 Avatar tapped - navigating to settings...');
+            window.location.href = 'settings.html';
+        }
+    </script>
+</body>
+</html>

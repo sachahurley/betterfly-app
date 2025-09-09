@@ -40,13 +40,9 @@
 /* Ensure bottom navigation stays fixed */
 .bottom-nav {
     flex-shrink: 0 !important;
-    position: fixed !important;
+    position: sticky !important;
     bottom: 0 !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
     z-index: 30 !important;
-    width: 100% !important;
-    max-width: 393px !important;
 }
 
 /* ==========================================
@@ -87,6 +83,14 @@
    🎯 CHALLENGES PAGE SCROLLING
    ========================================== */
 
+#challenges-page {
+    display: flex !important;
+    flex-direction: column !important;
+    max-width: 393px !important;
+    margin: 0 auto !important;
+    height: 100vh !important;
+    overflow: hidden !important;
+}
 
 .challenges-main-content {
     flex: 1 !important;

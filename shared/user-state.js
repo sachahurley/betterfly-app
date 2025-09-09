@@ -79,6 +79,91 @@ const UserState = {
     return null;
   },
 
+  // 🔴 NEW FUNCTION: Complete a specific challenge
+  completeChallenge: (challengeId, reward = 100) => {
+    const userData = UserState.getUserData();
+    
+    // Initialize challenges if not exists
+    if (!userData.challenges) {
+      userData.challenges = {};
+    }
+    
+    // Mark challenge as completed
+    userData.challenges[challengeId] = {
+      completed: true,
+      completedAt: new Date().toISOString(),
+      reward: reward
+    };
+    
+    // Update currency
+    userData.currency = (userData.currency || 165) + reward;
+    
+    // Update last modified
+    userData.lastModified = new Date().toISOString();
+    
+    // Save to localStorage
+    localStorage.setItem('userData', JSON.stringify(userData));
+    
+    console.log(`✅ Challenge ${challengeId} completed! Earned ${reward} butterflies. Total: ${userData.currency}`);
+    return userData;
+  },
+
+  // 🔴 NEW FUNCTION: Check if challenge is completed
+  isChallengeCompleted: (challengeId) => {
+    const userData = UserState.getUserData();
+    return userData.challenges && userData.challenges[challengeId] && userData.challenges[challengeId].completed;
+  },
+
+  // 🔴 NEW FUNCTION: Get current currency
+  getCurrency: () => {
+    const userData = UserState.getUserData();
+    return userData.currency || 165;
+  },
+
+  // 🔴 NEW FUNCTION: Update currency across all pages
+  updateCurrency: (amount) => {
+    const userData = UserState.getUserData();
+    userData.currency = amount;
+    userData.lastModified = new Date().toISOString();
+    localStorage.setItem('userData', JSON.stringify(userData));
+    
+    // Update currency display on current page
+    UserState.updateCurrencyDisplay();
+  },
+
+  // 🔴 NEW FUNCTION: Update currency display on current page
+  updateCurrencyDisplay: () => {
+    const currency = UserState.getCurrency();
+    const currencyElements = document.querySelectorAll('.currency-amount');
+    currencyElements.forEach(element => {
+      element.textContent = currency.toString();
+    });
+    console.log(`💰 Updated currency display: ${currency}`);
+  },
+
+  // 🔴 NEW FUNCTION: Get next pending challenge
+  getNextPendingChallenge: () => {
+    const userData = UserState.getUserData();
+    const challenges = userData.challenges || {};
+    
+    // Define challenge order
+    const challengeOrder = [
+      'stand-and-stretch',
+      'discover-rewards-store',
+      'connect-wearable',
+      'create-profile'
+    ];
+    
+    // Find first incomplete challenge
+    for (const challengeId of challengeOrder) {
+      if (!challenges[challengeId] || !challenges[challengeId].completed) {
+        return challengeId;
+      }
+    }
+    
+    return null; // All challenges completed
+  },
+
   // 🔴 NEW FUNCTION: Save user preferences during onboarding
   saveUserPreferences: (preferences) => {
     const userData = JSON.parse(localStorage.getItem('userData') || '{}');

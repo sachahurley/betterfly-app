@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Active Challenge - Betterfly</title>
+    
+    <!-- 📝 LEARNING NOTE: Applying Betterfly Design System -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    
+    <!-- CSS includes -->
+    <link rel="stylesheet" href="styles/post-onboarding.css">
+    <link rel="stylesheet" href="styles/currency-screen-fix.css">
+    <link rel="stylesheet" href="styles/scroll-fixes.css">
+    
+    <!-- Debug mode toggle -->
+    <script>
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.classList.add('debug-mode');
+                console.log('🐛 Debug mode enabled');
+            });
+        }
+    </script>
+</head>
+<body>
+    <!-- 📝 LEARNING NOTE: Challenge Active Screen -->
+    <div class="challenge-page" style="display: flex; flex-direction: column; max-width: 393px; margin: 0 auto; height: 100vh;">
+        <!-- Header with back button -->
+        <div class="challenge-header">
+            <button class="back-button" onclick="goBack()">
+                <div class="back-icon"></div>
+            </button>
+            <h1 class="challenge-title">Challenges</h1>
+            <div class="currency-counter" onclick="navigateToCurrency()">
+                <div class="butterfly-icon"></div>
+                <div class="currency-amount">165</div>
+            </div>
+        </div>
+
+        <!-- Challenge Content -->
+        <div class="challenge-content">
+            <div class="challenge-intro">
+                <h1>Your Challenges</h1>
+                <p>Track progress, adjust settings, and stay on top of your goals.</p>
+            </div>
+
+            <!-- Active Challenge Card -->
+            <div class="challenge-card active">
+                <h2>Finish setting up your account</h2>
+                <div class="progress-card-progress">
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: 37.5%"></div>
+                    </div>
+                    <div class="progress-text">3/8 completed</div>
+                </div>
+                
+                <!-- Current Challenge -->
+                <div class="current-challenge">
+                    <h3>Stand and Stretch</h3>
+                    <div class="challenge-meta">
+                        <span class="challenge-time">2 min</span>
+                        <div class="challenge-reward">
+                            <img src="./assets/betterflies-icon.svg" alt="100 butterflies" class="butterfly-svg-mini">
+                            <span>+100</span>
+                        </div>
+                    </div>
+                    <p class="challenge-description">Do a 2-minute stretch routine or stand up and move around.</p>
+                    
+                    <!-- Challenge Controls -->
+                    <div class="challenge-controls">
+                        <button id="challenge-btn" class="challenge-button start" onclick="handleChallengeAction()">
+                            <div class="button-icon play"></div>
+                            <span id="challenge-btn-text">Start Challenge</span>
+                        </button>
+                        <button id="mark-complete-btn" class="mark-complete-button hidden" onclick="markChallengeComplete()">
+                            Mark as complete
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon streak"></div>
+                    <div class="stat-value">1</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon butterflies"></div>
+                    <div class="stat-value">165</div>
+                    <div class="stat-label">Total BFs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon completion"></div>
+                    <div class="stat-value">85%</div>
+                    <div class="stat-label">Week Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon achievements"></div>
+                    <div class="stat-value">1</div>
+                    <div class="stat-label">Achievements</div>
+                </div>
+            </div>
+
+            <!-- Monthly Challenge Section -->
+            <div class="monthly-challenge">
+                <div class="challenge-header-section">
+                    <div class="challenge-subtitle">Monthly Challenge</div>
+                    <h2>September Splash</h2>
+                    <p>Complete daily micro-habits to earn points and build lasting wellness routines.</p>
+                </div>
+                
+                <!-- Week Groups -->
+                <div class="week-groups">
+                    <!-- Week 1 - Completed -->
+                    <div class="week-group completed">
+                        <div class="week-header">
+                            <div class="week-info">
+                                <h3>Week 1: Hydration Habit</h3>
+                                <div class="status-chip completed">Complete (5/5 days)</div>
+                            </div>
+                            <div class="expand-icon"></div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill completed" style="width: 100%"></div>
+                            <span class="progress-percent">100%</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Week 2 - Active -->
+                    <div class="week-group active expanded">
+                        <div class="week-header">
+                            <div class="week-info">
+                                <h3>Week 2: Hydration Habit</h3>
+                                <div class="status-chip active">Active (1/5 days)</div>
+                            </div>
+                            <div class="expand-icon up"></div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill active" style="width: 20%"></div>
+                            <span class="progress-percent">20%</span>
+                        </div>
+                        
+                        <!-- Daily Challenges -->
+                        <div class="daily-challenges">
+                            <div class="challenge-item completed">
+                                <div class="challenge-icon check"></div>
+                                <div class="challenge-info">
+                                    <div class="challenge-day">Day 1:</div>
+                                    <div class="challenge-task">Drink 8 glasses of water</div>
+                                </div>
+                                <div class="challenge-menu"></div>
+                            </div>
+                            
+                            <div class="challenge-item active">
+                                <div class="challenge-icon arrow"></div>
+                                <div class="challenge-info">
+                                    <div class="challenge-day">Day 2: <span class="today">Today</span></div>
+                                    <div class="challenge-task">Drink 8 glasses of water</div>
+                                </div>
+                                <div class="challenge-menu"></div>
+                            </div>
+                            
+                            <div class="challenge-item pending">
+                                <div class="challenge-icon clock"></div>
+                                <div class="challenge-info">
+                                    <div class="challenge-day">Day 3:</div>
+                                    <div class="challenge-task">Drink 8 glasses of water</div>
+                                </div>
+                                <div class="challenge-menu"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item" onclick="navigateToHome()">
+                <div class="nav-icon home"></div>
+                <span class="nav-label">Home</span>
+            </div>
+            <div class="nav-item" onclick="navigateToBenefits()">
+                <div class="nav-icon benefits"></div>
+                <span class="nav-label">Benefits</span>
+            </div>
+            <div class="nav-item active">
+                <div class="nav-icon journey"></div>
+                <span class="nav-label">Journey</span>
+            </div>
+            <div class="nav-item" onclick="navigateToSocial()">
+                <div class="nav-icon social"></div>
+                <span class="nav-label">Social</span>
+            </div>
+            <div class="nav-item">
+                <img src="./assets/buddy.svg" alt="Buddy" class="nav-buddy-icon">
+            </div>
+        </div>
+    </div>
+
+    <!-- 🧭 CLEAN NAVIGATION SYSTEM -->
+    <script src="shared/navigation.js"></script>
+    
+    <!-- Challenge-specific functionality -->
+    <script>
+        // Challenge state
+        let challengeActive = false;
+        let timeRemaining = 120;
+        let challengeTimer = null;
+
+        function handleChallengeAction() {
+            if (challengeActive) {
+                pauseChallenge();
+            } else {
+                startChallenge();
+            }
+        }
+
+        function startChallenge() {
+            challengeActive = true;
+            updateChallengeDisplay();
+            
+            if (challengeTimer) {
+                clearInterval(challengeTimer);
+            }
+            
+            challengeTimer = setInterval(() => {
+                timeRemaining--;
+                updateChallengeDisplay();
+                
+                if (timeRemaining <= 0) {
+                    completeChallenge();
+                }
+            }, 1000);
+        }
+
+        function pauseChallenge() {
+            challengeActive = false;
+            if (challengeTimer) {
+                clearInterval(challengeTimer);
+                challengeTimer = null;
+            }
+            updateChallengeDisplay();
+        }
+
+        function completeChallenge() {
+            challengeActive = false;
+            timeRemaining = 120;
+            if (challengeTimer) {
+                clearInterval(challengeTimer);
+                challengeTimer = null;
+            }
+            navigateToClaimRewards();
+        }
+
+        function markChallengeComplete() {
+            completeChallenge();
+        }
+
+        function updateChallengeDisplay() {
+            const challengeBtnText = document.getElementById('challenge-btn-text');
+            if (challengeBtnText) {
+                if (challengeActive) {
+                    challengeBtnText.textContent = `Pause ${formatTime(timeRemaining)}`;
+                } else {
+                    challengeBtnText.textContent = 'Start Challenge';
+                }
+            }
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateChallengeDisplay();
+        });
+    </script>
+</body>
+</html>

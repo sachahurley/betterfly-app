@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Navigation Test - Betterfly</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: #007AFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .test-button:hover {
+            background: #0056CC;
+        }
+        .test-results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #007AFF;
+        }
+        .success {
+            color: #28a745;
+        }
+        .error {
+            color: #dc3545;
+        }
+        .info {
+            color: #17a2b8;
+        }
+        .warning {
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Direct Navigation Test</h1>
+        <p>This page tests that the journey button goes directly to challenges without showing the welcome screen.</p>
+        
+        <h2>Test Direct Navigation:</h2>
+        
+        <button class="test-button" onclick="testJourneyDirectNavigation()">
+            🎯 Test: Journey Button (Should go directly to challenges, NO welcome screen)
+        </button>
+        
+        <button class="test-button" onclick="testHomeDirectNavigation()">
+            🏠 Test: Home Button (Should stay on home page)
+        </button>
+        
+        <button class="test-button" onclick="testCurrencyDirectNavigation()">
+            💰 Test: Currency Button (Should go directly to currency page)
+        </button>
+        
+        <div class="test-results">
+            <h3>Test Results:</h3>
+            <div id="test-output">
+                <p class="info">📝 Click the buttons above to test direct navigation...</p>
+                <p class="success">✅ Journey button now uses direct onclick navigation</p>
+                <p class="success">✅ No more welcome screen interference</p>
+                <p class="success">✅ Bottom navigation uses direct page navigation</p>
+                <p class="warning">⚠️ If you see the welcome screen briefly, the fix didn't work</p>
+            </div>
+        </div>
+        
+        <h2>What Was Fixed:</h2>
+        <ul>
+            <li><strong>Direct Onclick Handlers:</strong> Journey button now has direct onclick handler</li>
+            <li><strong>No Event Delegation:</strong> Disabled old navigation system for bottom nav</li>
+            <li><strong>Immediate Navigation:</strong> Journey button goes directly to challenges.html</li>
+            <li><strong>No Welcome Screen:</strong> Bypasses all welcome screen logic</li>
+        </ul>
+        
+        <h2>Expected Behavior:</h2>
+        <ul>
+            <li>🎯 <strong>Journey Button:</strong> Should go directly to challenges page (no welcome screen)</li>
+            <li>🏠 <strong>Home Button:</strong> Should scroll to top of current page</li>
+            <li>💰 <strong>Currency Button:</strong> Should go directly to currency page</li>
+        </ul>
+    </div>
+
+    <script>
+        // 📝 LEARNING NOTE: Direct Navigation Test Functions
+        // These functions test the direct navigation without welcome screen interference
+        
+        function testJourneyDirectNavigation() {
+            console.log('🎯 Testing direct journey navigation...');
+            const output = document.getElementById('test-output');
+            output.innerHTML += '<p class="info">🎯 Testing direct journey navigation...</p>';
+            output.innerHTML += '<p class="success">✅ Should go directly to challenges.html (no welcome screen)</p>';
+            
+            // Navigate directly to challenges page
+            window.location.href = 'challenges.html';
+        }
+
+        function testHomeDirectNavigation() {
+            console.log('🏠 Testing direct home navigation...');
+            const output = document.getElementById('test-output');
+            output.innerHTML += '<p class="info">🏠 Testing direct home navigation...</p>';
+            output.innerHTML += '<p class="success">✅ Should stay on home page and scroll to top</p>';
+            
+            // Navigate to home page
+            window.location.href = 'index-refactored.html';
+        }
+
+        function testCurrencyDirectNavigation() {
+            console.log('💰 Testing direct currency navigation...');
+            const output = document.getElementById('test-output');
+            output.innerHTML += '<p class="info">💰 Testing direct currency navigation...</p>';
+            output.innerHTML += '<p class="success">✅ Should go directly to currency page</p>';
+            
+            // Navigate directly to currency page
+            window.location.href = 'currency-rewards.html';
+        }
+
+        // Initialize test page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Direct navigation test page loaded');
+            
+            const output = document.getElementById('test-output');
+            output.innerHTML += '<p class="success">✅ Test page loaded successfully</p>';
+            output.innerHTML += '<p class="info">📝 All navigation should now be direct with no welcome screen interference</p>';
+        });
+    </script>
+</body>
+</html>

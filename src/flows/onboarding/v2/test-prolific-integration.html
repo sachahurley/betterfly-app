@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Prolific Integration</title>
+    <link rel="stylesheet" href="styles/shared.css">
+    <style>
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        .test-section {
+            margin-bottom: 24px;
+            padding: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .test-result {
+            font-family: monospace;
+            background: #fff;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 8px;
+        }
+        .success {
+            color: #22c55e;
+            font-weight: bold;
+        }
+        .warning {
+            color: #f59e0b;
+            font-weight: bold;
+        }
+        .error {
+            color: #ef4444;
+            font-weight: bold;
+        }
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 4px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="test-container">
+            <h1>🔗 Prolific Integration Test</h1>
+            <p>This page tests the Prolific ID integration functionality.</p>
+            
+            <div class="test-section">
+                <h3>📋 Test Instructions</h3>
+                <p>To properly test this integration:</p>
+                <ol>
+                    <li><strong>Add Prolific ID to URL:</strong> Add <code>?PROLIFIC_PID=test_123456</code> to this page's URL</li>
+                    <li><strong>Refresh the page</strong> to test automatic capture</li>
+                    <li><strong>Check the test results below</strong></li>
+                </ol>
+                <p><strong>Example URL:</strong> <code>test-prolific-integration.html?PROLIFIC_PID=test_123456</code></p>
+            </div>
+
+            <div class="test-section">
+                <h3>🔍 URL Parameter Detection</h3>
+                <div id="urlTest" class="test-result">Testing...</div>
+            </div>
+
+            <div class="test-section">
+                <h3>💾 Data Storage Test</h3>
+                <div id="storageTest" class="test-result">Testing...</div>
+            </div>
+
+            <div class="test-section">
+                <h3>🔄 State Synchronization</h3>
+                <div id="stateTest" class="test-result">Testing...</div>
+            </div>
+
+            <div class="test-section">
+                <h3>📊 Data Export Test</h3>
+                <div id="exportTest" class="test-result">Testing...</div>
+                <button onclick="testDataExport()">Test Data Export Structure</button>
+            </div>
+
+            <div class="test-section">
+                <h3>🧹 Testing Controls</h3>
+                <button onclick="clearAllData()">Clear All Data</button>
+                <button onclick="runAllTests()">Re-run Tests</button>
+                <button onclick="simulateProlificUrl()">Simulate Prolific URL</button>
+            </div>
+
+            <div class="test-section">
+                <h3>📝 Console Logs</h3>
+                <p>Check the browser console for detailed logging information.</p>
+                <div id="consoleLog" class="test-result" style="max-height: 200px; overflow-y: auto;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="data-collector.js"></script>
+    <script src="state.js"></script>
+    <script>
+        let consoleOutput = [];
+        
+        // Override console.log to capture logs
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            consoleOutput.push(args.join(' '));
+            updateConsoleDisplay();
+        };
+
+        function updateConsoleDisplay() {
+            const logContainer = document.getElementById('consoleLog');
+            if (logContainer) {
+                logContainer.innerHTML = consoleOutput.slice(-10).join('<br>');
+                logContainer.scrollTop = logContainer.scrollHeight;
+            }
+        }
+
+        function testUrlParameters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const prolificId = urlParams.get('PROLIFIC_PID') || urlParams.get('prolific_pid') || urlParams.get('participant_id');
+            
+            const urlTest = document.getElementById('urlTest');
+            if (prolificId) {
+                urlTest.innerHTML = `<span class="success">✅ Found Prolific ID in URL: ${prolificId}</span>`;
+                return true;
+            } else {
+                urlTest.innerHTML = `<span class="warning">⚠️ No Prolific ID in URL parameters. Add ?PROLIFIC_PID=test_123456 to test.</span>`;
+                return false;
+            }
+        }
+
+        function testDataStorage() {
+            const storageTest = document.getElementById('storageTest');
+            const sessionData = DataCollector.getSessionData();
+            const storedProlificId = DataCollector.getProlificId();
+            
+            let result = '';
+            if (storedProlificId) {
+                result += `<span class="success">✅ Prolific ID stored: ${storedProlificId}</span><br>`;
+            } else {
+                result += `<span class="error">❌ No Prolific ID in storage</span><br>`;
+            }
+            
+            result += `<strong>Session Data:</strong><br>`;
+            result += `Session ID: ${sessionData.sessionId || 'None'}<br>`;
+            result += `Start Time: ${sessionData.startTime || 'None'}<br>`;
+            result += `Prolific ID: ${sessionData.prolificId || 'None'}`;
+            
+            storageTest.innerHTML = result;
+        }
+
+        function testStateSynchronization() {
+            const stateTest = document.getElementById('stateTest');
+            OnboardingState.syncProlificId();
+            
+            const stateProlificId = OnboardingState.data.prolificId;
+            const collectorProlificId = DataCollector.getProlificId();
+            
+            let result = '';
+            if (stateProlificId && stateProlificId === collectorProlificId) {
+                result = `<span class="success">✅ State synchronized: ${stateProlificId}</span>`;
+            } else if (stateProlificId) {
+                result = `<span class="warning">⚠️ State has ID but doesn't match collector: ${stateProlificId} vs ${collectorProlificId}</span>`;
+            } else {
+                result = `<span class="error">❌ No Prolific ID in OnboardingState</span>`;
+            }
+            
+            stateTest.innerHTML = result;
+        }
+
+        function testDataExport() {
+            const exportTest = document.getElementById('exportTest');
+            const payload = DataCollector.prepareDataPayload();
+            
+            let result = '<strong>Data Export Payload:</strong><br>';
+            result += `Prolific ID: ${payload.prolificId || 'Missing'}<br>`;
+            result += `Session ID: ${payload.sessionId || 'Missing'}<br>`;
+            result += `Start Time: ${payload.startTime || 'Missing'}<br>`;
+            result += `Duration: ${payload.duration || 0} seconds<br>`;
+            
+            if (payload.prolificId) {
+                result += `<span class="success">✅ Prolific ID will be included in data exports</span>`;
+            } else {
+                result += `<span class="error">❌ Prolific ID missing from data exports</span>`;
+            }
+            
+            exportTest.innerHTML = result;
+            
+            console.log('🧪 Test Data Export Payload:', JSON.stringify(payload, null, 2));
+        }
+
+        function clearAllData() {
+            DataCollector.clearSession();
+            OnboardingState.clearPersistent();
+            console.log('🧹 All data cleared');
+            setTimeout(runAllTests, 100);
+        }
+
+        function simulateProlificUrl() {
+            const testUrl = window.location.pathname + '?PROLIFIC_PID=test_' + Math.random().toString(36).substr(2, 9);
+            window.location.href = testUrl;
+        }
+
+        function runAllTests() {
+            console.log('🧪 Running Prolific Integration Tests...');
+            testUrlParameters();
+            testDataStorage();
+            testStateSynchronization();
+            testDataExport();
+        }
+
+        // Initialize tests when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Prolific Integration Test Page Loaded');
+            setTimeout(runAllTests, 100);
+        });
+    </script>
+</body>
+</html>
+

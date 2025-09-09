@@ -8,12 +8,13 @@
     <title>Betterfly - Post Onboarding Experience</title>
     
     <!-- 📝 LEARNING NOTE: Applying Betterfly Design System -->
-    <!-- Consolidated font loading strategy with font-display: swap for better performance -->
+    <!-- Using Roboto font family to match existing typography standards -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Obviously font from local assets -->
     <link rel="stylesheet" href="assets/fonts/fonts.css">
-    <!-- Using Obviously Narrow Bold for the logo from local assets -->
+    <!-- Using Obviously Narrow Bold for the logo -->
     
-    <!-- Original CSS with correct design -->
     <link rel="stylesheet" href="styles/post-onboarding.css">
 </head>
 <body>
@@ -62,7 +63,7 @@
         <div class="profile-header">
             <div class="header-nav">
                 <!-- User Avatar -->
-                <div class="avatar-section" onclick="navigateToSettings()" style="cursor: pointer;">
+                <div class="avatar-section">
                     <div class="avatar">
                         <div class="user-initials-container"></div>
                         <div class="user-initials">AB</div>
@@ -134,7 +135,7 @@
                     </div>
                     
                     <!-- Active task - clickable -->
-                    <div class="task pending" onclick="navigateToChallengesPage()" style="cursor: pointer;">
+                    <div class="task pending">
                         <div class="task-icon active"></div>
                         <div class="task-info">
                             <span class="task-text">Complete Your Next Challenge</span>
@@ -150,7 +151,7 @@
                     </div>
                     
                     <!-- Remaining pending tasks -->
-                    <div class="task pending" onclick="navigateToCurrency()" style="cursor: pointer;">
+                    <div class="task pending">
                         <div class="task-icon pending"></div>
                         <div class="task-info">
                             <span class="task-text">Discover The Rewards Store</span>
@@ -797,28 +798,28 @@
         </div>
     </div>
 
-    <!-- 🎯 CURRENCY REWARDS PAGE -->
-    <!-- Regular screen for currency rewards -->
+    <!-- 📝 LEARNING NOTE: Betterfly Rewards Screen -->
+    <!-- Full-page currency/rewards screen that opens when currency counter is clicked -->
     <div id="currency-rewards" class="screen">
-            <!-- Header with close button only -->
-            <div class="currency-header">
-                <div class="currency-header-nav">
-                    <!-- Close Button -->
-                    <button class="currency-close-button" onclick="closeCurrencyScreen()">
-                        <div class="close-icon"></div>
-                    </button>
-                    
-                    <!-- Empty space for balance -->
-                    <div class="currency-title">
-                        <div class="currency-title-text"></div>
-                    </div>
-                    
-                    <!-- Empty space where currency counter was -->
-                    <div class="currency-counter-display">
-                        <!-- Currency counter removed from this screen -->
-                    </div>
+        <!-- Header with close button only -->
+        <div class="currency-header">
+            <div class="currency-header-nav">
+                <!-- Close Button -->
+                <button class="currency-close-button" onclick="closeCurrencyScreen()">
+                    <div class="close-icon"></div>
+                </button>
+                
+                <!-- Empty space for balance -->
+                <div class="currency-title">
+                    <div class="currency-title-text"></div>
+                </div>
+                
+                <!-- Empty space where currency counter was -->
+                <div class="currency-counter-display">
+                    <!-- Currency counter removed from this screen -->
                 </div>
             </div>
+        </div>
 
         <!-- Main Content Container -->
         <div class="currency-content">
@@ -857,7 +858,7 @@
                         
                         <!-- Mark Complete Button -->
                         <div class="mark-complete-section">
-                            <button class="mark-complete-btn" onclick="markCompleteInCurrency()">Mark as Complete</button>
+                            <button class="mark-complete-btn">Mark as Complete</button>
                         </div>
                     </div>
                 </div>
@@ -978,17 +979,10 @@
                     </div>
                 </div>
             </div>
+        </div>
     </div>
 
-    <!-- 🛡️ BULLETPROOF NAVIGATION SYSTEM -->
-    <script src="scripts/stable-navigation.js"></script>
-    
-    <!-- 📝 LEARNING NOTE: Avatar Navigation Function -->
-    <script>
-        function navigateToSettings() {
-            console.log('👤 Avatar tapped - navigating to settings...');
-            window.location.href = 'settings.html';
-        }
-    </script>
+    <!-- 📝 LEARNING NOTE: JavaScript for Screen Management and Interactions -->
+    <script src="scripts/post-onboarding.js"></script>
 </body>
 </html>
