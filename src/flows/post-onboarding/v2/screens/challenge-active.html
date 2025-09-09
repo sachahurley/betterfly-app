@@ -1,0 +1,241 @@
+<!-- 📝 LEARNING NOTE: Challenge Active Screen -->
+<!-- Interactive challenge screen with timer and progress -->
+<div id="challenge-active" class="screen">
+    <!-- Header with back button -->
+    <div class="challenge-header">
+        <button class="back-button" onclick="navigateToHome()">
+            <div class="back-icon"></div>
+        </button>
+        <h1 class="challenge-title">Challenges</h1>
+        <div class="currency-counter" onclick="openCurrencyScreen()">
+            <div class="butterfly-icon"></div>
+            <div class="currency-amount">165</div>
+        </div>
+    </div>
+
+    <!-- Challenge Content -->
+    <div class="challenge-content">
+        <div class="challenge-intro">
+            <h1>Your Challenges</h1>
+            <p>Track progress, adjust settings, and stay on top of your goals.</p>
+        </div>
+
+        <!-- Active Challenge Card -->
+        <div class="challenge-card active">
+            <h2>Finish setting up your account</h2>
+            <div class="progress-card-progress">
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: 37.5%"></div>
+                </div>
+                <div class="progress-text">3/8 completed</div>
+            </div>
+            
+            <!-- Current Challenge -->
+            <div class="current-challenge">
+                <h3>Stand and Stretch</h3>
+                <div class="challenge-meta">
+                    <span class="challenge-time">2 min</span>
+                    <div class="challenge-reward">
+                        <img src="./assets/betterflies-icon.svg" alt="100 butterflies" class="butterfly-svg-mini">
+                        <span>+100</span>
+                    </div>
+                </div>
+                <p class="challenge-description">Do a 2-minute stretch routine or stand up and move around.</p>
+                
+                <!-- Challenge Controls -->
+                <div class="challenge-controls">
+                    <button id="challenge-btn" class="challenge-button start" onclick="handleChallengeAction()">
+                        <div class="button-icon play"></div>
+                        <span id="challenge-btn-text">Start Challenge</span>
+                    </button>
+                    <button id="mark-complete-btn" class="mark-complete-button hidden" onclick="markChallengeComplete()">
+                        Mark as complete
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon-container streak">
+                    <div class="stat-icon streak-icon"></div>
+                </div>
+                <div class="stat-value">1</div>
+                <div class="stat-label">Day Streak</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-container butterflies">
+                    <div class="stat-icon butterfly-icon"></div>
+                </div>
+                <div class="stat-value">165</div>
+                <div class="stat-label">Total BFs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-container completion">
+                    <div class="stat-icon completion-icon"></div>
+                </div>
+                <div class="stat-value">85%</div>
+                <div class="stat-label">Week Rate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-container achievements">
+                    <div class="stat-icon achievements-icon"></div>
+                </div>
+                <div class="stat-value">1</div>
+                <div class="stat-label">Achievements</div>
+            </div>
+        </div>
+
+        <!-- Monthly Challenge Section -->
+        <div class="monthly-challenge-section">
+            <div class="monthly-challenge-header">
+                <div class="monthly-challenge-subtitle">Monthly Challenge</div>
+                <h2 class="monthly-challenge-title">September Splash</h2>
+                <p class="monthly-challenge-description">Complete daily micro-habits to earn points and build lasting wellness routines.</p>
+            </div>
+            
+            <!-- Weekly Challenge Groups -->
+            <div class="weekly-challenge-groups">
+                <!-- Week 1 - Completed -->
+                <div class="week-group completed">
+                    <div class="week-group-header">
+                        <div class="week-info">
+                            <h3 class="week-title">Week 1: Hydration Habit</h3>
+                            <div class="status-chip completed">Complete (5/5 days)</div>
+                        </div>
+                        <div class="expand-icon down"></div>
+                    </div>
+                    <div class="week-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill completed" style="width: 100%"></div>
+                        </div>
+                        <span class="progress-percent">100%</span>
+                    </div>
+                </div>
+                
+                <!-- Week 2 - Active and Expanded -->
+                <div class="week-group active expanded">
+                    <div class="week-group-header">
+                        <div class="week-info">
+                            <h3 class="week-title">Week 2: Hydration Habit</h3>
+                            <div class="status-chip active">Active (1/5 days)</div>
+                        </div>
+                        <div class="expand-icon up"></div>
+                    </div>
+                    <div class="week-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill active" style="width: 20%"></div>
+                        </div>
+                        <span class="progress-percent">20%</span>
+                    </div>
+                    
+                    <!-- Daily Challenges List -->
+                    <div class="daily-challenges-list">
+                        <div class="challenge-item completed">
+                            <div class="challenge-item-icon check"></div>
+                            <div class="challenge-item-info">
+                                <div class="challenge-item-day">Day 1:</div>
+                                <div class="challenge-item-task">Drink 8 glasses of water</div>
+                            </div>
+                            <div class="challenge-item-menu"></div>
+                        </div>
+                        
+                        <div class="challenge-item active">
+                            <div class="challenge-item-icon arrow"></div>
+                            <div class="challenge-item-info">
+                                <div class="challenge-item-day">Day 2: <span class="today-badge">Today</span></div>
+                                <div class="challenge-item-task">Drink 8 glasses of water</div>
+                            </div>
+                            <div class="challenge-item-menu"></div>
+                        </div>
+                        
+                        <div class="challenge-item pending">
+                            <div class="challenge-item-icon clock"></div>
+                            <div class="challenge-item-info">
+                                <div class="challenge-item-day">Day 3:</div>
+                                <div class="challenge-item-task">Drink 8 glasses of water</div>
+                            </div>
+                            <div class="challenge-item-menu"></div>
+                        </div>
+                        
+                        <div class="challenge-item pending">
+                            <div class="challenge-item-icon clock"></div>
+                            <div class="challenge-item-info">
+                                <div class="challenge-item-day">Day 4:</div>
+                                <div class="challenge-item-task">Drink 8 glasses of water</div>
+                            </div>
+                            <div class="challenge-item-menu"></div>
+                        </div>
+                        
+                        <div class="challenge-item pending">
+                            <div class="challenge-item-icon clock"></div>
+                            <div class="challenge-item-info">
+                                <div class="challenge-item-day">Day 5:</div>
+                                <div class="challenge-item-task">Drink 8 glasses of water</div>
+                            </div>
+                            <div class="challenge-item-menu"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Week 3 - Inactive -->
+                <div class="week-group inactive">
+                    <div class="week-group-header">
+                        <div class="week-info">
+                            <h3 class="week-title">Week 3: Hydration Habit</h3>
+                            <div class="status-chip inactive">Inactive (0/5 days)</div>
+                        </div>
+                        <div class="expand-icon down"></div>
+                    </div>
+                    <div class="week-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill inactive" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-percent">0%</span>
+                    </div>
+                </div>
+                
+                <!-- Week 4 - Inactive -->
+                <div class="week-group inactive">
+                    <div class="week-group-header">
+                        <div class="week-info">
+                            <h3 class="week-title">Week 4: Hydration Habit</h3>
+                            <div class="status-chip inactive">Inactive (0/5 days)</div>
+                        </div>
+                        <div class="expand-icon down"></div>
+                    </div>
+                    <div class="week-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill inactive" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-percent">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item">
+            <div class="nav-icon home"></div>
+            <span class="nav-label">Home</span>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon benefits"></div>
+            <span class="nav-label">Benefits</span>
+        </div>
+        <div class="nav-item active">
+            <div class="nav-icon journey"></div>
+            <span class="nav-label">Journey</span>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon social"></div>
+            <span class="nav-label">Social</span>
+        </div>
+        <div class="nav-item">
+            <img src="./assets/buddy.svg" alt="Buddy" class="nav-buddy-icon">
+        </div>
+    </div>
+</div>

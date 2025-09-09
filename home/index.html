@@ -38,6 +38,11 @@
     <!-- Header Navigation -->
     <div class="header-nav">
         <div class="header-title">Betterfly</div>
+        <!-- Currency Counter -->
+        <div class="currency-counter" onclick="openCurrencyRewards()">
+            <div class="butterfly-icon"></div>
+            <div class="currency-amount">165</div>
+        </div>
     </div>
 
     <!-- Main Container -->
@@ -68,12 +73,14 @@
         <div class="progress-section">
             <div class="section-header">
                 <h2 class="section-title">Today's Progress</h2>
-                <div class="progress-percentage" id="todayProgress">0%</div>
             </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
+            <div class="progress-card-progress">
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: 37.5%"></div>
+                </div>
+                <div class="progress-text">3/8 completed</div>
             </div>
-            <p class="progress-text">Complete your daily habits to earn points</p>
+            <p class="progress-description">Complete your daily habits to earn points</p>
         </div>
 
         <!-- Quick Actions -->

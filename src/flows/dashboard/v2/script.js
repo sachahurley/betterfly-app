@@ -624,6 +624,13 @@ function setupEventListeners() {
     });
 }
 
+// 🔴 NEW FUNCTION: Open currency rewards page
+function openCurrencyRewards() {
+    console.log('Opening currency rewards page');
+    // Navigate to the standalone currency rewards page
+    window.location.href = '../post-onboarding/v2/currency-rewards.html';
+}
+
 // Initialize app when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeApp);

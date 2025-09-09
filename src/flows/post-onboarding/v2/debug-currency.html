@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Betterfly - Currency Screen Debug</title>
+    <link rel="stylesheet" href="styles/post-onboarding.css">
+    <link rel="stylesheet" href="styles/currency-screen-fix.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        /* Debug styles */
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: monospace;
+            background: #f0f0f0;
+        }
+        
+        .debug-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #000;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            z-index: 1000;
+            max-width: 300px;
+        }
+        
+        .debug-button {
+            background: #019866;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 2px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        
+        .debug-button:hover {
+            background: #00b578;
+        }
+        
+        .debug-status {
+            margin: 5px 0;
+            padding: 5px;
+            border-radius: 4px;
+            background: #333;
+        }
+        
+        .debug-pass {
+            background: #00b578;
+            color: white;
+        }
+        
+        .debug-fail {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .debug-info {
+            background: #2196f3;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Debug Panel -->
+    <div class="debug-panel">
+        <h3>🔍 Currency Screen Debug</h3>
+        <div id="debug-status" class="debug-status debug-info">Ready to test currency screen...</div>
+        <div>
+            <button class="debug-button" onclick="testCurrencyScreen()">Test Currency Screen</button>
+            <button class="debug-button" onclick="checkVisibility()">Check Visibility</button>
+            <button class="debug-button" onclick="forceShow()">Force Show</button>
+        </div>
+        <div id="debug-results"></div>
+    </div>
+
+    <!-- Home Screen (simplified) -->
+    <div id="home-default" class="screen active">
+        <div style="padding: 20px;">
+            <h1>Home Screen</h1>
+            <p>Click the currency counter to test the currency screen.</p>
+            <div class="currency-counter" data-action="open-currency-screen" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: #f7ffd6; border-radius: 20px; cursor: pointer;">
+                <div class="butterfly-icon" style="width: 18px; height: 14px; background: url('./assets/betterflies-icon.svg') no-repeat center; background-size: contain;"></div>
+                <div class="currency-amount">165</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Currency Screen -->
+    <div id="currency-rewards" class="screen">
+        <!-- Lucide Close Button -->
+        <button data-action="close-currency-screen" aria-label="Close currency rewards page" style="
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            color: #333;
+            transition: all 0.2s ease;
+        " onmouseover="this.style.color='#666'" onmouseout="this.style.color='#333'">
+            <i data-lucide="x" style="width: 32px; height: 32px;"></i>
+        </button>
+        <div class="currency-content" style="padding-top: 84px;">
+            <div class="currency-review-header">
+                <h1 class="currency-main-title">Betterfly Rewards</h1>
+                <p class="currency-subtitle">Redeem your Butterflies for added benefits</p>
+            </div>
+            <div class="currency-progress-card">
+                <div class="progress-card-container">
+                    <div class="progress-card-header">
+                        <h2 class="progress-card-title">Finish setting up your account</h2>
+                    </div>
+                    <div class="progress-card-progress">
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: 37.5%"></div>
+                        </div>
+                        <div class="progress-text">3/8 completed</div>
+                    </div>
+                    <div class="progress-card-details">
+                        <h3 class="task-heading">Discover the Rewards Store</h3>
+                        <div class="task-meta-info">
+                            <span class="task-duration">1 min</span>
+                            <div class="task-reward-info">
+                                <img src="./assets/betterflies-icon.svg" alt="25 butterflies" class="butterfly-svg-mini" style="width: 12px; height: 12px;">
+                                <span>+25</span>
+                            </div>
+                        </div>
+                        <p class="task-description">Take a look around the store.</p>
+                        <div class="mark-complete-section">
+                            <button class="mark-complete-btn" data-action="mark-complete-in-currency">Mark as Complete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the bulletproof navigation script -->
+    <script src="scripts/bulletproof-navigation.js"></script>
+    
+    <!-- Debug Script -->
+    <script>
+        function updateDebugStatus(message, type = 'info') {
+            const status = document.getElementById('debug-status');
+            status.textContent = message;
+            status.className = `debug-status debug-${type}`;
+        }
+        
+        function addDebugResult(test, passed, message) {
+            const results = document.getElementById('debug-results');
+            const div = document.createElement('div');
+            div.className = `debug-status debug-${passed ? 'pass' : 'fail'}`;
+            div.textContent = `${passed ? '✅' : '❌'} ${test}: ${message}`;
+            results.appendChild(div);
+        }
+        
+        function testCurrencyScreen() {
+            updateDebugStatus('Testing currency screen...', 'info');
+            document.getElementById('debug-results').innerHTML = '';
+            
+            // Test 1: Try to open currency screen
+            try {
+                navigateToScreen('currency-rewards');
+                const currencyScreen = document.getElementById('currency-rewards');
+                const isVisible = currencyScreen.classList.contains('active') && currencyScreen.style.display !== 'none';
+                addDebugResult('Open Currency Screen', isVisible, isVisible ? 'Success' : 'Failed to show');
+                
+                // Test 2: Check computed styles
+                if (currencyScreen) {
+                    const computedStyle = window.getComputedStyle(currencyScreen);
+                    const display = computedStyle.display;
+                    const opacity = computedStyle.opacity;
+                    const visibility = computedStyle.visibility;
+                    
+                    addDebugResult('Display Style', display !== 'none', `Display: ${display}`);
+                    addDebugResult('Opacity Style', parseFloat(opacity) > 0, `Opacity: ${opacity}`);
+                    addDebugResult('Visibility Style', visibility !== 'hidden', `Visibility: ${visibility}`);
+                }
+                
+            } catch (error) {
+                addDebugResult('Currency Screen Test', false, error.message);
+            }
+        }
+        
+        function checkVisibility() {
+            const currencyScreen = document.getElementById('currency-rewards');
+            if (currencyScreen) {
+                const computedStyle = window.getComputedStyle(currencyScreen);
+                updateDebugStatus(`Display: ${computedStyle.display}, Opacity: ${computedStyle.opacity}, Visibility: ${computedStyle.visibility}`, 'info');
+            } else {
+                updateDebugStatus('Currency screen not found!', 'fail');
+            }
+        }
+        
+        function forceShow() {
+            const currencyScreen = document.getElementById('currency-rewards');
+            if (currencyScreen) {
+                currencyScreen.style.display = 'flex';
+                currencyScreen.style.opacity = '1';
+                currencyScreen.style.visibility = 'visible';
+                currencyScreen.classList.add('active');
+                updateDebugStatus('Forced currency screen to show', 'pass');
+            } else {
+                updateDebugStatus('Currency screen not found!', 'fail');
+            }
+        }
+        
+        // Auto-test on load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                updateDebugStatus('System loaded. Click "Test Currency Screen" to test.', 'info');
+            }, 1000);
+            
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>

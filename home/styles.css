@@ -84,6 +84,44 @@ body {
     transform: translateX(-50%);
 }
 
+/* Currency Counter */
+.currency-counter {
+    background: #f7ffd6;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: auto;
+}
+
+.currency-counter:hover {
+    background: rgba(247, 255, 214, 0.8);
+    transform: translateY(-1px);
+}
+
+.currency-counter:active {
+    transform: translateY(0);
+    background: rgba(247, 255, 214, 0.9);
+}
+
+.butterfly-icon {
+    width: 18px;
+    height: 14.5px;
+    background: url('../src/flows/post-onboarding/v2/assets/betterflies-icon.svg') no-repeat center;
+    background-size: contain;
+}
+
+.currency-amount {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f1c14;
+    text-transform: uppercase;
+    letter-spacing: 0.42px;
+}
+
 
 
 /* Main Container */
@@ -160,30 +198,37 @@ body {
     color: #0f1c14;
 }
 
-.progress-percentage {
-    font-size: 16px;
-    font-weight: 600;
-    color: #0167fe;
+/* Progress Container - holds both bar and text */
+.progress-card-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
 }
 
-.progress-bar {
-    width: 100%;
+.progress-bar-container {
+    flex: 1;
     height: 8px;
-    background: #f2f2f7;
-    border-radius: 4px;
+    background: #E5E5E5; /* Light gray for remaining portion - matches design exactly */
+    border-radius: 999px; /* Fully rounded ends (pill shape) */
     overflow: hidden;
-    margin-bottom: 8px;
 }
 
-.progress-fill {
+.progress-bar-fill {
     height: 100%;
-    background: #0167fe;
-    border-radius: 4px;
-    width: 0%;
+    background: #019866; /* Betterfly green for completed portion - matches design exactly */
+    border-radius: 999px; /* Fully rounded ends (pill shape) */
     transition: width 0.3s ease;
 }
 
 .progress-text {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333333; /* Dark gray text - matches design */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.progress-description {
     font-size: 14px;
     color: #6f7772;
     line-height: 1.5;

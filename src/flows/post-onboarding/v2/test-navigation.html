@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Test - Betterfly</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: #007AFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .test-button:hover {
+            background: #0056CC;
+        }
+        .test-results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #007AFF;
+        }
+        .success {
+            color: #28a745;
+        }
+        .error {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Betterfly Navigation Test</h1>
+        <p>This page tests the navigation system to ensure all routes work correctly.</p>
+        
+        <h2>Test Navigation Actions:</h2>
+        
+        <button class="test-button" data-action="navigate-to-challenges-page">
+            🎯 Test: Navigate to Challenges Page
+        </button>
+        
+        <button class="test-button" data-action="navigate-to-home">
+            🏠 Test: Navigate to Home
+        </button>
+        
+        <button class="test-button" data-action="open-currency-screen">
+            💰 Test: Open Currency Screen
+        </button>
+        
+        <button class="test-button" data-action="navigate-to-challenge">
+            ⚡ Test: Navigate to Challenge Active
+        </button>
+        
+        <div class="test-results">
+            <h3>Test Results:</h3>
+            <div id="test-output">
+                <p>Click the buttons above to test navigation...</p>
+            </div>
+        </div>
+        
+        <h2>Debug Information:</h2>
+        <div id="debug-info">
+            <p>Navigation system status: <span id="nav-status">Loading...</span></p>
+            <p>Current screen: <span id="current-screen">Unknown</span></p>
+        </div>
+    </div>
+
+    <!-- Include the navigation system -->
+    <script src="scripts/bulletproof-navigation.js"></script>
+    
+    <script>
+        // Test script
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Navigation test page loaded');
+            
+            // Update debug info
+            document.getElementById('nav-status').textContent = 'Ready';
+            document.getElementById('current-screen').textContent = 'test-navigation';
+            
+            // Add test result logging
+            const originalNavigateToScreen = window.navigateToScreen;
+            window.navigateToScreen = function(screenId) {
+                const output = document.getElementById('test-output');
+                output.innerHTML += `<p class="success">✅ Successfully navigated to: ${screenId}</p>`;
+                
+                // Call original function
+                if (originalNavigateToScreen) {
+                    originalNavigateToScreen(screenId);
+                }
+            };
+            
+            // Test event delegation
+            document.addEventListener('click', function(event) {
+                const target = event.target.closest('[data-action]');
+                if (target) {
+                    const action = target.getAttribute('data-action');
+                    const output = document.getElementById('test-output');
+                    output.innerHTML += `<p>🎯 Action triggered: ${action}</p>`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

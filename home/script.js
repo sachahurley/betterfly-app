@@ -56,17 +56,21 @@ function loadUserData() {
     document.getElementById('currentStreak').textContent = gameState.currentStreak || 0;
     document.getElementById('habitsCompleted').textContent = gameState.habitsCompleted || 0;
     
-    // Update progress bar
+    // Update progress bar (assuming todayProgress is number of completed tasks)
     updateProgressBar(gameState.todayProgress || 0);
 }
 
-// Update progress bar
-function updateProgressBar(percentage) {
+// Update progress bar with X/Y completed format
+function updateProgressBar(completed, total = 8) {
     const progressFill = document.getElementById('progressFill');
-    const progressText = document.getElementById('todayProgress');
+    const progressText = document.getElementById('progressCompleted');
     
+    // Calculate percentage for the visual bar
+    const percentage = (completed / total) * 100;
     progressFill.style.width = percentage + '%';
-    progressText.textContent = percentage + '%';
+    
+    // Update the text to show "X/Y completed"
+    progressText.textContent = `${completed}/${total} completed`;
 }
 
 // Update stats display
@@ -128,6 +132,13 @@ function viewProfile() {
     // Navigate to profile page (placeholder)
     console.log('Navigate to profile page');
     // window.location.href = '../profile/index.html';
+}
+
+// 🔴 NEW FUNCTION: Open currency rewards page
+function openCurrencyRewards() {
+    console.log('Opening currency rewards page');
+    // Navigate to the integrated post-onboarding currency screen
+    window.location.href = '../src/flows/post-onboarding/v2/index.html#currency-rewards';
 }
 
 // Utility functions

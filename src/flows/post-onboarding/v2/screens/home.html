@@ -1,0 +1,236 @@
+<!-- 📝 LEARNING NOTE: Home Default Screen -->
+<!-- Main dashboard with tasks, insurance cards, and navigation -->
+<div id="home-default" class="screen">
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="header-nav">
+            <!-- User Avatar -->
+            <div class="avatar-section">
+                <div class="avatar">
+                    <div class="user-initials-container"></div>
+                    <div class="user-initials">AB</div>
+                    <div class="status-indicator"></div>
+                </div>
+            </div>
+            
+            <!-- Currency Counter -->
+            <div class="currency-counter" onclick="openCurrencyScreen()">
+                <div class="butterfly-icon"></div>
+                <div class="currency-amount">165</div>
+            </div>
+            
+            <!-- Menu Button -->
+            <div class="menu-button" onclick="navigateToChallenge()">
+                <div class="menu-icon"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1 class="welcome-title">¡Hola,<br>Camilo!</h1>
+            <p class="welcome-subtitle">Welcome to Betterfly. Everything you need to protect, prevent, and empower your health journey is right here.</p>
+            
+            <!-- Action Button -->
+            <div class="action-section">
+                <button class="primary-button">See Details</button>
+                <div class="progress-dots">
+                    <div class="dot active"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Todo Card Section -->
+        <div class="todo-card">
+            <h2 class="todo-title">Finish setting up your account</h2>
+            <div class="progress-card-progress">
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: 37.5%"></div>
+                </div>
+                <div class="progress-text">3/8 completed</div>
+            </div>
+            
+            <!-- Task List -->
+            <div class="task-list">
+                <!-- Completed tasks -->
+                <div class="task completed">
+                    <div class="task-icon check"></div>
+                    <span class="task-text">Questionnaire</span>
+                    <div class="task-chevron"></div>
+                </div>
+                
+                <div class="task completed">
+                    <div class="task-icon check"></div>
+                    <span class="task-text">Connect Wearable</span>
+                    <div class="task-chevron"></div>
+                </div>
+                
+                <div class="task completed">
+                    <div class="task-icon check"></div>
+                    <span class="task-text">Create Profile</span>
+                    <div class="task-chevron"></div>
+                </div>
+                
+                <!-- Active task - clickable -->
+                <div class="task pending" onclick="navigateToChallengesPage()" style="cursor: pointer;">
+                    <div class="task-icon active"></div>
+                    <div class="task-info">
+                        <span class="task-text">Complete Your Next Challenge</span>
+                        <div class="task-meta">
+                            <span class="task-time">5 min</span>
+                            <div class="task-reward">
+                                <img src="./assets/betterflies-icon.svg" alt="100 butterflies" class="butterfly-svg-mini">
+                                <span>+100</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-chevron"></div>
+                </div>
+                
+                <!-- Remaining pending tasks -->
+                <div class="task pending">
+                    <div class="task-icon pending"></div>
+                    <div class="task-info">
+                        <span class="task-text">Discover The Rewards Store</span>
+                        <div class="task-meta">
+                            <span class="task-time">3 min</span>
+                            <div class="task-reward">
+                                <img src="./assets/betterflies-icon.svg" alt="25 butterflies" class="butterfly-svg-mini">
+                                <span>+25</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-chevron"></div>
+                </div>
+                
+                <div class="task pending">
+                    <div class="task-icon pending"></div>
+                    <div class="task-info">
+                        <span class="task-text">Redeem Your First Reward</span>
+                        <div class="task-meta">
+                            <span class="task-time">2 min</span>
+                            <div class="task-reward">
+                                <img src="./assets/betterflies-icon.svg" alt="0 butterflies" class="butterfly-svg-mini">
+                                <span>+0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-chevron"></div>
+                </div>
+                
+                <div class="task pending">
+                    <div class="task-icon pending"></div>
+                    <div class="task-info">
+                        <span class="task-text">Explore Your LSA Benefit Card</span>
+                        <div class="task-meta">
+                            <span class="task-time">2 min</span>
+                            <div class="task-reward">
+                                <img src="./assets/betterflies-icon.svg" alt="50 butterflies" class="butterfly-svg-mini">
+                                <span>+50</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-chevron"></div>
+                </div>
+                
+                <div class="task pending">
+                    <div class="task-icon pending"></div>
+                    <div class="task-info">
+                        <span class="task-text">Review Your Profile</span>
+                        <div class="task-meta">
+                            <span class="task-time">1 min</span>
+                            <div class="task-reward">
+                                <img src="./assets/betterflies-icon.svg" alt="25 butterflies" class="butterfly-svg-mini">
+                                <span>+25</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-chevron"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Insurance Section -->
+        <div class="insurance-section">
+            <h2 class="section-title">Mis seguros</h2>
+            <div class="insurance-cards">
+                <div class="insurance-card">
+                    <div class="card-content">
+                        <div class="insurance-icon complementario"></div>
+                        <h3>Complementario</h3>
+                        <p>Hasta un 70% de cobertura<br>en consultas médicas.</p>
+                    </div>
+                    <button class="card-action-btn"></button>
+                </div>
+                
+                <div class="insurance-card">
+                    <div class="card-content">
+                        <div class="insurance-icon vida"></div>
+                        <h3>Vida</h3>
+                        <p>Protección por invalidez<br>y respaldo para tu familia.</p>
+                    </div>
+                    <button class="card-action-btn"></button>
+                </div>
+                
+                <div class="insurance-card">
+                    <div class="card-content">
+                        <div class="insurance-icon dental"></div>
+                        <h3>Dental</h3>
+                        <p>Coberturas en el cuidado<br>de tu salud dental.</p>
+                    </div>
+                    <button class="card-action-btn"></button>
+                </div>
+            </div>
+            <div class="carousel-dots">
+                <div class="carousel-dot active"></div>
+            </div>
+        </div>
+
+        <!-- Quick Access Section -->
+        <div class="quick-access-section">
+            <h2 class="section-title">Acciones rápidas</h2>
+            <div class="quick-access-grid">
+                <div class="quick-access-item">
+                    <div class="quick-icon telemedicine"></div>
+                    <span>Agenda<br>telemedicina</span>
+                </div>
+                <div class="quick-access-item">
+                    <div class="quick-icon reimbursement"></div>
+                    <span>Pide tus reembolsos</span>
+                </div>
+                <div class="quick-access-item">
+                    <div class="quick-icon pharmacy"></div>
+                    <span>Ahorra en Farmacia</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active">
+            <div class="nav-icon home"></div>
+            <span class="nav-label">Home</span>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon benefits"></div>
+            <span class="nav-label">Benefits</span>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon journey"></div>
+            <span class="nav-label">Journey</span>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon social"></div>
+            <span class="nav-label">Social</span>
+        </div>
+        <div class="nav-item">
+            <img src="./assets/buddy.svg" alt="Buddy" class="nav-buddy-icon">
+        </div>
+    </div>
+</div>

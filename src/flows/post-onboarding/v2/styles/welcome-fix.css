@@ -1,0 +1,28 @@
+/* 🚀 WELCOME SCREEN FIX */
+/* Ensure welcome screen is visible by default */
+
+#initial-load {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 999 !important;
+}
+
+#initial-load.screen.active {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 999 !important;
+}
+
+/* Debug mode - make all screens visible for testing */
+.debug-mode .screen {
+    display: block !important;
+    opacity: 0.5 !important;
+    visibility: visible !important;
+}
+
+.debug-mode .screen.active {
+    opacity: 1 !important;
+    z-index: 999 !important;
+}

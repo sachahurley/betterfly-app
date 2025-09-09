@@ -1,0 +1,191 @@
+<!-- 🎯 CURRENCY REWARDS PAGE -->
+<!-- Regular screen for currency rewards -->
+<div id="currency-rewards" class="screen">
+    <!-- Lucide Close Button -->
+    <button onclick="closeCurrencyScreen()" aria-label="Close currency rewards page" style="
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        width: 40px;
+        height: 40px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        color: #333;
+        transition: all 0.2s ease;
+    " onmouseover="this.style.color='#666'" onmouseout="this.style.color='#333'">
+        <i data-lucide="x" style="width: 32px; height: 32px;"></i>
+    </button>
+
+    <!-- Main Content Container -->
+    <div class="currency-content" style="padding-top: 84px;">
+        <!-- Review Header Section -->
+        <div class="currency-review-header">
+            <h1 class="currency-main-title">Betterfly Rewards</h1>
+            <p class="currency-subtitle">Redeem your Butterflies for added benefits</p>
+        </div>
+
+        <!-- Progress Card Section -->
+        <div class="currency-progress-card">
+            <div class="progress-card-container">
+                <div class="progress-card-header">
+                    <h2 class="progress-card-title">Finish setting up your account</h2>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="progress-card-progress">
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: 37.5%;"></div>
+                    </div>
+                    <div class="progress-text">3/8 completed</div>
+                </div>
+                
+                <!-- Task Details -->
+                <div class="progress-card-details">
+                    <h3 class="task-heading">Discover the Rewards Store</h3>
+                    <div class="task-meta-info">
+                        <span class="task-duration">1 min</span>
+                        <div class="task-reward-info">
+                            <img src="./assets/betterflies-icon.svg" alt="25 butterflies" class="butterfly-svg-mini">
+                            <span>+25</span>
+                        </div>
+                    </div>
+                    <p class="task-description">Take a look around the store.</p>
+                    
+                    <!-- Mark Complete Button -->
+                    <div class="mark-complete-section">
+                        <button class="mark-complete-btn">Mark as Complete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Available Betterflies Section -->
+        <div class="available-betterflies-section">
+            <div class="available-betterflies-card">
+                <div class="available-content">
+                    <h3 class="available-title">Available Betterflies</h3>
+                    <div class="available-display">
+                        <div class="butterfly-large-icon">
+                            <img src="./assets/betterflies-icon.svg" alt="Betterflies" class="butterfly-large-svg">
+                        </div>
+                        <div class="available-amount">265</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LSA Balance Boost Section -->
+        <div class="lsa-balance-section">
+            <div class="lsa-balance-card">
+                <div class="lsa-content">
+                    <div class="lsa-header">
+                        <div class="lsa-icon">💳</div>
+                        <div class="lsa-info">
+                            <h3 class="lsa-title">LSA Balance Boost</h3>
+                            <p class="lsa-description">Add funds to your health spending<br>account</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Conversion Display -->
+                    <div class="lsa-conversion">
+                        <div class="conversion-item">
+                            <span class="conversion-amount">100 Betterflies</span>
+                        </div>
+                        <div class="conversion-arrow">→</div>
+                        <div class="conversion-result">
+                            <span class="conversion-value">$25</span>
+                            <span class="conversion-label"> LSA Credit</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Redeem Button -->
+                    <div class="redeem-button-section">
+                        <button class="redeem-button">Redeem Betterflies (100)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Section -->
+        <div class="recent-activity-section">
+            <div class="recent-activity-card">
+                <h3 class="activity-title">Recent Activity</h3>
+                
+                <!-- Activity Items -->
+                <div class="activity-list">
+                    <!-- Activity Item 1 -->
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <h4 class="activity-name">Challenge Completed</h4>
+                            <p class="activity-details">Daily Steps Goal • Jan 2, 2025</p>
+                        </div>
+                        <div class="activity-reward positive">
+                            <div class="butterfly-icon">
+                                <img src="./assets/betterflies-icon.svg" alt="butterfly" class="butterfly-svg-mini">
+                            </div>
+                            <span>+50</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Activity Item 2 -->
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <h4 class="activity-name">LSA Balance Boost</h4>
+                            <p class="activity-details">Redeemed for $25 • Dec 28,<br>2024</p>
+                        </div>
+                        <div class="activity-reward negative">
+                            <span>-100</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Activity Item 3 -->
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <h4 class="activity-name">Weekly Exercise Challenge</h4>
+                            <p class="activity-details">Completed workout streak • Dec<br>25, 2024</p>
+                        </div>
+                        <div class="activity-reward positive">
+                            <div class="butterfly-icon">
+                                <img src="./assets/betterflies-icon.svg" alt="butterfly" class="butterfly-svg-mini">
+                            </div>
+                            <span>+50</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Activity Item 4 -->
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <h4 class="activity-name">Health Checkup</h4>
+                            <p class="activity-details">Annual physical completed • Dec<br>20, 2024</p>
+                        </div>
+                        <div class="activity-reward positive">
+                            <div class="butterfly-icon">
+                                <img src="./assets/betterflies-icon.svg" alt="butterfly" class="butterfly-svg-mini">
+                            </div>
+                            <span>+100</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Activity Item 5 -->
+                    <div class="activity-item last">
+                        <div class="activity-info">
+                            <h4 class="activity-name">Nutrition Challenge</h4>
+                            <p class="activity-details">Healthy eating week • Dec 18,<br>2024</p>
+                        </div>
+                        <div class="activity-reward positive">
+                            <div class="butterfly-icon">
+                                <img src="./assets/betterflies-icon.svg" alt="butterfly" class="butterfly-svg-mini">
+                            </div>
+                            <span>+25</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

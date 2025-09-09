@@ -1,0 +1,222 @@
+/* 🛡️ SCROLL FIXES
+   This file ensures proper scrolling behavior across all screens
+*/
+
+/* ==========================================
+   🎯 MAIN CONTENT SCROLLING FIXES
+   ========================================== */
+
+/* Ensure home screen has proper flex layout and scrolling */
+#home-default {
+    display: flex !important;
+    flex-direction: column !important;
+    max-width: 393px !important;
+    margin: 0 auto !important;
+    height: 100vh !important;
+    overflow: hidden !important;
+}
+
+/* Main content area should scroll */
+.main-content {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 24px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+    padding-bottom: 120px !important; /* Space for bottom nav */
+    -webkit-overflow-scrolling: touch !important; /* Smooth scrolling on iOS */
+}
+
+/* Ensure profile header stays fixed */
+.profile-header {
+    flex-shrink: 0 !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 20 !important;
+}
+
+/* Ensure bottom navigation stays fixed */
+.bottom-nav {
+    flex-shrink: 0 !important;
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 30 !important;
+}
+
+/* ==========================================
+   🎯 CHALLENGE SCREENS SCROLLING
+   ========================================== */
+
+/* Challenge active screen */
+#challenge-active {
+    display: flex !important;
+    flex-direction: column !important;
+    max-width: 393px !important;
+    margin: 0 auto !important;
+    height: 100vh !important;
+    overflow: hidden !important;
+}
+
+.challenge-content {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 24px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+    padding-bottom: 120px !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+/* Challenge header stays fixed */
+.challenge-header {
+    flex-shrink: 0 !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 20 !important;
+}
+
+/* ==========================================
+   🎯 CHALLENGES PAGE SCROLLING
+   ========================================== */
+
+#challenges-page {
+    display: flex !important;
+    flex-direction: column !important;
+    max-width: 393px !important;
+    margin: 0 auto !important;
+    height: 100vh !important;
+    overflow: hidden !important;
+}
+
+.challenges-main-content {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 24px !important;
+    padding-top: 16px !important;
+    padding-bottom: 100px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+/* ==========================================
+   🎯 CLAIM BUTTERFLIES SCREEN SCROLLING
+   ========================================== */
+
+#claim-butterflies {
+    display: flex !important;
+    flex-direction: column !important;
+    max-width: 393px !important;
+    margin: 0 auto !important;
+    height: 100vh !important;
+    overflow: hidden !important;
+}
+
+.claim-container {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 24px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+    padding-bottom: 150px !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+/* ==========================================
+   🎯 CURRENCY REWARDS SCREEN SCROLLING
+   ========================================== */
+
+#currency-rewards {
+    display: flex !important;
+    flex-direction: column !important;
+    max-width: 393px !important;
+    margin: 0 auto !important;
+    height: 100vh !important;
+    overflow: hidden !important;
+}
+
+.currency-content {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 0 24px 24px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+    padding-bottom: 120px !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+/* Currency header stays fixed */
+.currency-header {
+    flex-shrink: 0 !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 20 !important;
+}
+
+/* ==========================================
+   🎯 GENERAL SCROLLING IMPROVEMENTS
+   ========================================== */
+
+/* Ensure all screens have proper height */
+.screen {
+    min-height: 100vh !important;
+}
+
+/* Smooth scrolling for all scrollable areas */
+* {
+    scroll-behavior: smooth;
+}
+
+/* Custom scrollbar styling for webkit browsers */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================
+   🎯 MOBILE SCROLLING FIXES
+   ========================================== */
+
+/* Prevent horizontal scrolling on mobile */
+body {
+    overflow-x: hidden !important;
+}
+
+/* Ensure proper touch scrolling on iOS */
+.scrollable {
+    -webkit-overflow-scrolling: touch !important;
+    overflow-scrolling: touch !important;
+}
+
+/* Fix for iOS Safari bottom bar */
+@supports (-webkit-touch-callout: none) {
+    .main-content,
+    .challenge-content,
+    .challenges-main-content,
+    .claim-container,
+    .currency-content {
+        padding-bottom: calc(120px + env(safe-area-inset-bottom)) !important;
+    }
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Currency Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .currency-display {
+            background: #f7ffd6;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .back-button {
+            background: #0f1c14;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🦋 Currency Rewards Test Page</h1>
+        <p>If you can see this, the page is loading correctly!</p>
+        
+        <div class="currency-display">
+            <h2>💰 Available Betterflies</h2>
+            <div style="font-size: 48px; font-weight: bold; color: #0f1c14;">165</div>
+        </div>
+        
+        <p>This is a simple test page to verify that navigation is working.</p>
+        
+        <button class="back-button" onclick="goBack()">← Go Back</button>
+    </div>
+
+    <script>
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = 'home/index.html';
+            }
+        }
+        
+        console.log('✅ Test currency page loaded successfully!');
+    </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Q3 to Q4 Navigation</title>
+</head>
+<body>
+    <h1>Testing Q3 to Q4 Navigation</h1>
+    <button onclick="clearAndTest()">Clear Storage and Test</button>
+    <button onclick="goToQ3()">Go to Q3</button>
+    <button onclick="goToQ4()">Go to Q4 Directly</button>
+    <div id="status"></div>
+    
+    <script>
+        function clearAndTest() {
+            // Clear all storage
+            localStorage.clear();
+            sessionStorage.clear();
+            document.getElementById('status').innerHTML = 'Storage cleared. Navigating to Q3...';
+            setTimeout(() => {
+                window.location.href = 'http://127.0.0.1:8083/q3-biggest-challenge.html';
+            }, 1000);
+        }
+        
+        function goToQ3() {
+            window.location.href = 'http://127.0.0.1:8083/q3-biggest-challenge.html';
+        }
+        
+        function goToQ4() {
+            window.location.href = 'http://127.0.0.1:8083/q4-past-experience.html';
+        }
+    </script>
+</body>
+</html>

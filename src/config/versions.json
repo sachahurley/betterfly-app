@@ -44,6 +44,17 @@
       }
     }
   },
+  "post-onboarding": {
+    "active": "v2",
+    "versions": {
+      "v2": {
+        "name": "Day 2 Post-Onboarding Experience",
+        "created": "2025-01-27",
+        "status": "stable",
+        "description": "Interactive post-onboarding flow with challenge system, reward claiming, and seamless navigation. Converted from React to vanilla HTML/CSS/JS."
+      }
+    }
+  },
   "user-state": {
     "active": "v1",
     "versions": {

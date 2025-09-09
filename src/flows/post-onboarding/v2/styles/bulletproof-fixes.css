@@ -1,0 +1,319 @@
+/* 🛡️ BULLETPROOF CSS FIXES
+   This file fixes CSS conflicts and specificity issues while maintaining exact design
+   Add this file AFTER the main post-onboarding.css file
+*/
+
+/* ==========================================
+   🎯 PROGRESS BAR FIXES
+   ========================================== */
+
+/* Ensure progress bars have proper rounded pill shape */
+.progress-bar-container,
+.progress-card-progress .progress-bar-container,
+.challenge-progress-section .progress-bar-container {
+    position: relative;
+    width: 100%;
+    height: 8px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar-fill,
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #019866 0%, #00b578 100%);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+    position: relative;
+}
+
+/* Specific progress bar states */
+.progress-fill.completed {
+    background: linear-gradient(90deg, #00b578 0%, #019866 100%);
+}
+
+.progress-fill.active {
+    background: linear-gradient(90deg, #019866 0%, #00b578 100%);
+}
+
+.progress-fill.inactive {
+    background: #e0e0e0;
+}
+
+/* ==========================================
+   🎯 SCREEN VISIBILITY FIXES
+   ========================================== */
+
+/* Ensure screens are properly hidden/shown */
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #ffffff;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+    z-index: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.screen.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 10;
+}
+
+/* Force visibility for active screens */
+.screen.active[style*="display: block"] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+}
+
+/* ==========================================
+   🎯 CURRENCY COUNTER FIXES
+   ========================================== */
+
+/* Ensure currency counters are clickable and visible */
+.currency-counter {
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s ease;
+}
+
+.currency-counter:hover {
+    transform: scale(1.05);
+}
+
+.currency-counter:active {
+    transform: scale(0.95);
+}
+
+/* ==========================================
+   🎯 BUTTON INTERACTION FIXES
+   ========================================== */
+
+/* Ensure all interactive elements are properly styled */
+[data-action] {
+    cursor: pointer;
+    user-select: none;
+}
+
+[data-action]:hover {
+    opacity: 0.8;
+}
+
+[data-action]:active {
+    transform: scale(0.98);
+}
+
+/* ==========================================
+   🎯 TASK INTERACTION FIXES
+   ========================================== */
+
+/* Make task items properly interactive */
+.task.pending[data-action] {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.task.pending[data-action]:hover {
+    background-color: #f8f9fa;
+}
+
+.task.pending[data-action]:active {
+    background-color: #e9ecef;
+}
+
+/* ==========================================
+   🎯 CHALLENGE BUTTON FIXES
+   ========================================== */
+
+/* Ensure challenge buttons work properly */
+.challenge-button,
+.challenge-action-button {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.challenge-button:hover,
+.challenge-action-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.challenge-button:active,
+.challenge-action-button:active {
+    transform: translateY(0);
+}
+
+/* ==========================================
+   🎯 NAVIGATION FIXES
+   ========================================== */
+
+/* Ensure navigation items work properly */
+.nav-item {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+    opacity: 0.7;
+}
+
+.nav-item.active {
+    opacity: 1;
+}
+
+/* ==========================================
+   🎯 MODAL AND OVERLAY FIXES
+   ========================================== */
+
+/* Ensure currency screen displays properly */
+#currency-rewards {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    min-height: 100vh;
+}
+
+#currency-rewards.active {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* ==========================================
+   🎯 RESPONSIVE FIXES
+   ========================================== */
+
+/* Ensure proper display on different screen sizes */
+@media (min-width: 768px) {
+    .screen {
+        max-width: 393px;
+        margin: 0 auto;
+        border: 1px solid #e0e0e0;
+        border-radius: 16px;
+        overflow: hidden;
+    }
+    
+    #currency-rewards {
+        max-width: 393px;
+        margin: 0 auto;
+    }
+}
+
+/* ==========================================
+   🎯 ANIMATION FIXES
+   ========================================== */
+
+/* Ensure smooth transitions */
+.screen {
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+/* Prevent flash of unstyled content */
+.screen:not(.active) {
+    display: none;
+}
+
+.screen.active {
+    display: block;
+}
+
+/* ==========================================
+   🎯 ERROR STATE FIXES
+   ========================================== */
+
+/* Add error state styling */
+.error-state {
+    border: 2px solid #ff6b6b;
+    background-color: #fff5f5;
+}
+
+.error-message {
+    color: #ff6b6b;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* ==========================================
+   🎯 LOADING STATE FIXES
+   ========================================== */
+
+/* Add loading state styling */
+.loading-state {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #019866;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ==========================================
+   🎯 ACCESSIBILITY FIXES
+   ========================================== */
+
+/* Ensure proper focus states */
+[data-action]:focus {
+    outline: 2px solid #019866;
+    outline-offset: 2px;
+}
+
+/* Ensure proper contrast for text */
+.currency-amount,
+.progress-text,
+.task-text {
+    color: #0f1c14;
+    font-weight: 500;
+}
+
+/* ==========================================
+   🎯 DEBUGGING HELPERS
+   ========================================== */
+
+/* Debug mode - highlight interactive elements */
+.debug-mode [data-action] {
+    outline: 1px dashed #019866;
+}
+
+.debug-mode .screen.active {
+    outline: 2px solid #00b578;
+}
+
+/* ==========================================
+   🎯 FALLBACK FIXES
+   ========================================== */
+
+/* Ensure elements are visible even if JavaScript fails */
+.no-js .screen {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+
+.no-js .screen:not(:first-child) {
+    display: none;
+}
+
+/* Ensure currency counter works without JavaScript */
+.no-js .currency-counter {
+    pointer-events: none;
+    opacity: 0.5;
+}

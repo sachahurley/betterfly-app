@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Betterfly - Simple Post Onboarding</title>
+    
+    <!-- Simple, reliable fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 🎯 SIMPLE, RELIABLE STYLES */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #ffffff;
+            color: #0f1c14;
+            line-height: 1.5;
+        }
+        
+        /* 📱 Simple Screen Management */
+        .screen {
+            display: none;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        /* 🎨 Simple Design System */
+        .btn {
+            background: #019866;
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            margin: 16px 0;
+        }
+        
+        .btn:hover {
+            background: #017a52;
+        }
+        
+        .btn-secondary {
+            background: #f7f5eb;
+            color: #0f1c14;
+            border: 1px solid #dbdddc;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin: 16px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            color: #6f7772;
+            font-size: 16px;
+        }
+        
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border: 1px solid #dbdddc;
+            border-radius: 12px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .task-item:hover {
+            background: #f7f5eb;
+        }
+        
+        .task-item.completed {
+            background: #f0f9f4;
+            border-color: #019866;
+        }
+        
+        .task-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .task-icon.pending {
+            background: #e5e7eb;
+            color: #6b7280;
+        }
+        
+        .task-icon.active {
+            background: #019866;
+            color: white;
+        }
+        
+        .task-icon.completed {
+            background: #019866;
+            color: white;
+        }
+        
+        .task-text {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .task-meta {
+            font-size: 12px;
+            color: #6f7772;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #019866;
+            transition: width 0.3s ease;
+        }
+        
+        .currency-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-weight: 500;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .challenge-timer {
+            text-align: center;
+            font-size: 48px;
+            font-weight: 700;
+            color: #019866;
+            margin: 32px 0;
+        }
+        
+        .challenge-description {
+            text-align: center;
+            color: #6f7772;
+            margin-bottom: 32px;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- 🏠 Home Screen -->
+    <div id="home" class="screen active">
+        <div class="currency-display">
+            🦋 165 Betterflies
+        </div>
+        
+        <div class="header">
+            <h1>¡Hola, Camilo!</h1>
+            <p>Welcome to Betterfly. Everything you need to protect, prevent, and empower your health journey is right here.</p>
+        </div>
+        
+        <div class="card">
+            <h2>Finish setting up your account</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 37.5%"></div>
+            </div>
+            <p style="text-align: center; color: #6f7772; margin-top: 8px;">3/8 completed</p>
+            
+            <div class="task-item completed">
+                <div class="task-icon completed">✓</div>
+                <div class="task-text">Questionnaire</div>
+            </div>
+            
+            <div class="task-item completed">
+                <div class="task-icon completed">✓</div>
+                <div class="task-text">Connect Wearable</div>
+            </div>
+            
+            <div class="task-item completed">
+                <div class="task-icon completed">✓</div>
+                <div class="task-text">Create Profile</div>
+            </div>
+            
+            <div class="task-item" onclick="startChallenge()">
+                <div class="task-icon active">→</div>
+                <div class="task-text">Complete Your Next Challenge</div>
+                <div class="task-meta">5 min • +100 🦋</div>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-icon pending">○</div>
+                <div class="task-text">Discover The Rewards Store</div>
+                <div class="task-meta">3 min • +25 🦋</div>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-icon pending">○</div>
+                <div class="task-text">Redeem Your First Reward</div>
+                <div class="task-meta">2 min • +0 🦋</div>
+            </div>
+        </div>
+        
+        <button class="btn" onclick="openRewards()">
+            View Rewards Store
+        </button>
+    </div>
+    
+    <!-- 🎯 Challenge Screen -->
+    <div id="challenge" class="screen">
+        <button class="back-btn" onclick="goHome()">← Back</button>
+        
+        <div class="header">
+            <h1>Stand and Stretch</h1>
+            <p>Do a 2-minute stretch routine or stand up and move around.</p>
+        </div>
+        
+        <div class="challenge-timer" id="timer">2:00</div>
+        
+        <div class="challenge-description">
+            <p>Take a moment to stretch your body and get your blood flowing.</p>
+        </div>
+        
+        <button class="btn" id="challengeBtn" onclick="toggleChallenge()">
+            Start Challenge
+        </button>
+        
+        <button class="btn btn-secondary hidden" id="markCompleteBtn" onclick="completeChallenge()">
+            Mark as Complete
+        </button>
+    </div>
+    
+    <!-- 🎁 Rewards Screen -->
+    <div id="rewards" class="screen">
+        <button class="back-btn" onclick="goHome()">← Back</button>
+        
+        <div class="header">
+            <h1>Betterfly Rewards</h1>
+            <p>Redeem your Butterflies for added benefits</p>
+        </div>
+        
+        <div class="card">
+            <h2>Available Betterflies</h2>
+            <div style="text-align: center; font-size: 48px; margin: 24px 0;">
+                🦋 165
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>LSA Balance Boost</h2>
+            <p>Add funds to your health spending account</p>
+            <div style="text-align: center; margin: 16px 0;">
+                <div>100 Betterflies → $25 LSA Credit</div>
+            </div>
+            <button class="btn">Redeem Betterflies (100)</button>
+        </div>
+    </div>
+    
+    <!-- 🎉 Completion Screen -->
+    <div id="completion" class="screen">
+        <div class="header">
+            <h1>Amazing work!</h1>
+            <p>You've completed a wellness challenge and earned Betterflies</p>
+        </div>
+        
+        <div style="text-align: center; margin: 48px 0;">
+            <div style="font-size: 72px; margin-bottom: 16px;">🎉</div>
+            <div style="font-size: 36px; font-weight: 700; color: #019866;">+100 Betterflies</div>
+        </div>
+        
+        <button class="btn" onclick="claimReward()">
+            Claim Betterflies
+        </button>
+    </div>
+    
+    <script>
+        // 🎯 SIMPLE, RELIABLE JAVASCRIPT
+        
+        let currentScreen = 'home';
+        let challengeTimer = null;
+        let timeRemaining = 120; // 2 minutes
+        let challengeActive = false;
+        
+        // 📱 Simple Screen Navigation
+        function showScreen(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Show target screen
+            document.getElementById(screenId).classList.add('active');
+            currentScreen = screenId;
+            
+            console.log(`Switched to: ${screenId}`);
+        }
+        
+        // 🏠 Navigation Functions
+        function goHome() {
+            showScreen('home');
+        }
+        
+        function startChallenge() {
+            showScreen('challenge');
+        }
+        
+        function openRewards() {
+            showScreen('rewards');
+        }
+        
+        // 🎯 Challenge Functions
+        function toggleChallenge() {
+            if (!challengeActive) {
+                startChallengeTimer();
+            } else {
+                pauseChallenge();
+            }
+        }
+        
+        function startChallengeTimer() {
+            challengeActive = true;
+            document.getElementById('challengeBtn').textContent = 'Pause Challenge';
+            
+            challengeTimer = setInterval(() => {
+                timeRemaining--;
+                updateTimer();
+                
+                if (timeRemaining <= 0) {
+                    completeChallenge();
+                }
+            }, 1000);
+            
+            // Show mark complete button after 3 seconds
+            setTimeout(() => {
+                document.getElementById('markCompleteBtn').classList.remove('hidden');
+            }, 3000);
+        }
+        
+        function pauseChallenge() {
+            challengeActive = false;
+            clearInterval(challengeTimer);
+            document.getElementById('challengeBtn').textContent = 'Resume Challenge';
+        }
+        
+        function completeChallenge() {
+            challengeActive = false;
+            clearInterval(challengeTimer);
+            showScreen('completion');
+        }
+        
+        function updateTimer() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function claimReward() {
+            // Add reward logic here
+            alert('🎉 Congratulations! You earned 100 Betterflies!');
+            showScreen('home');
+        }
+        
+        // 🚀 Initialize
+        console.log('✅ Simple Betterfly app loaded successfully!');
+    </script>
+</body>
+</html>

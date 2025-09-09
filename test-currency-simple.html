@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Currency Rewards</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+            color: #0f1c14;
+        }
+        
+        .test-container {
+            padding: 20px;
+            max-width: 393px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-bottom: 1px solid #f2f2f7;
+        }
+        
+        .back-button {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 10px;
+        }
+        
+        .title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .currency-section {
+            background: #f7ffd6;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .currency-amount {
+            font-size: 32px;
+            font-weight: bold;
+            color: #0f1c14;
+        }
+        
+        .currency-label {
+            font-size: 16px;
+            color: #6f7772;
+            margin-top: 8px;
+        }
+        
+        .section {
+            background: white;
+            border: 1px solid #dbdddc;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .test-button {
+            background: #019866;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 16px;
+        }
+        
+        .test-button:hover {
+            background: #017a52;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="header">
+            <button class="back-button" onclick="window.history.back()">←</button>
+            <div class="title">Betterfly Rewards</div>
+            <div></div>
+        </div>
+        
+        <div class="currency-section">
+            <div class="currency-amount">165</div>
+            <div class="currency-label">Available Betterflies</div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Finish setting up your account</div>
+            <p>Complete your profile to unlock more rewards and features.</p>
+            <button class="test-button">Mark as Complete</button>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">LSA Balance Boost</div>
+            <p>Add funds to your health spending account</p>
+            <button class="test-button">Redeem Betterflies (100)</button>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Recent Activity</div>
+            <p>Challenge Completed • Jan 2, 2025</p>
+            <p>LSA Balance Boost • Dec 28, 2024</p>
+            <p>Weekly Exercise Challenge • Dec 25, 2024</p>
+        </div>
+    </div>
+    
+    <script>
+        console.log('Test currency page loaded successfully');
+    </script>
+</body>
+</html>

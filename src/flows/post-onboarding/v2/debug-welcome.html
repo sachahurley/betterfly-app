@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Welcome Page - Betterfly</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .debug-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .debug-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #007AFF;
+        }
+        .screen {
+            display: none;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .screen.active {
+            display: block;
+            border-color: #007AFF;
+        }
+        .welcome-screen-container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .welcome-mascot-icon {
+            width: 100px;
+            height: 100px;
+            background: #007AFF;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+        }
+        .welcome-logo-svg {
+            width: 200px;
+            height: 60px;
+            margin: 20px 0;
+        }
+        .welcome-cta-button {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h1>🐛 Debug Welcome Page</h1>
+        
+        <div class="debug-section">
+            <h2>Debug Information:</h2>
+            <p><strong>Current URL:</strong> <span id="current-url"></span></p>
+            <p><strong>Current Screen:</strong> <span id="current-screen">Unknown</span></p>
+            <p><strong>Navigation System Status:</strong> <span id="nav-status">Loading...</span></p>
+            <p><strong>Welcome Screen Element:</strong> <span id="welcome-element-status">Checking...</span></p>
+        </div>
+        
+        <div class="debug-section">
+            <h2>Console Output:</h2>
+            <div id="console-output" style="background: #000; color: #0f0; padding: 10px; border-radius: 4px; font-family: monospace; height: 200px; overflow-y: auto;">
+                Console output will appear here...
+            </div>
+        </div>
+        
+        <div class="debug-section">
+            <h2>Screen Preview:</h2>
+            <div id="screen-preview">
+                <p>Screen content will appear here...</p>
+            </div>
+        </div>
+        
+        <div class="debug-section">
+            <h2>Test Actions:</h2>
+            <button onclick="testWelcomeScreen()" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin: 5px;">
+                Test Welcome Screen
+            </button>
+            <button onclick="testNavigation()" style="background: #007AFF; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin: 5px;">
+                Test Navigation
+            </button>
+            <button onclick="clearConsole()" style="background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin: 5px;">
+                Clear Console
+            </button>
+        </div>
+    </div>
+
+    <!-- Include the navigation system -->
+    <script src="scripts/bulletproof-navigation.js"></script>
+    
+    <script>
+        // Debug script
+        function logToConsole(message) {
+            const consoleOutput = document.getElementById('console-output');
+            const timestamp = new Date().toLocaleTimeString();
+            consoleOutput.innerHTML += `[${timestamp}] ${message}\n`;
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        function clearConsole() {
+            document.getElementById('console-output').innerHTML = 'Console cleared...\n';
+        }
+        
+        function testWelcomeScreen() {
+            logToConsole('🧪 Testing welcome screen...');
+            
+            const welcomeScreen = document.getElementById('initial-load');
+            if (welcomeScreen) {
+                logToConsole('✅ Welcome screen element found');
+                logToConsole(`   - Display: ${welcomeScreen.style.display}`);
+                logToConsole(`   - Classes: ${welcomeScreen.className}`);
+                logToConsole(`   - Height: ${welcomeScreen.offsetHeight}px`);
+                logToConsole(`   - Visible: ${welcomeScreen.offsetHeight > 0}`);
+                
+                // Show in preview
+                document.getElementById('screen-preview').innerHTML = welcomeScreen.outerHTML;
+            } else {
+                logToConsole('❌ Welcome screen element NOT found');
+            }
+        }
+        
+        function testNavigation() {
+            logToConsole('🧪 Testing navigation...');
+            
+            if (typeof navigateToScreen === 'function') {
+                logToConsole('✅ navigateToScreen function exists');
+                try {
+                    navigateToScreen('initial-load');
+                    logToConsole('✅ navigateToScreen called successfully');
+                } catch (error) {
+                    logToConsole(`❌ navigateToScreen error: ${error.message}`);
+                }
+            } else {
+                logToConsole('❌ navigateToScreen function NOT found');
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            logToConsole('🚀 Debug page loaded');
+            
+            // Update debug info
+            document.getElementById('current-url').textContent = window.location.href;
+            document.getElementById('nav-status').textContent = 'Ready';
+            
+            // Check welcome screen
+            const welcomeScreen = document.getElementById('initial-load');
+            if (welcomeScreen) {
+                document.getElementById('welcome-element-status').textContent = 'Found';
+                document.getElementById('current-screen').textContent = 'initial-load';
+            } else {
+                document.getElementById('welcome-element-status').textContent = 'NOT FOUND';
+            }
+            
+            // Override console.log to capture output
+            const originalLog = console.log;
+            console.log = function(...args) {
+                originalLog.apply(console, args);
+                logToConsole(args.join(' '));
+            };
+            
+            // Test welcome screen immediately
+            setTimeout(() => {
+                testWelcomeScreen();
+                testNavigation();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

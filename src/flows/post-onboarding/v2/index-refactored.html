@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Betterfly - Post Onboarding Experience</title>
+    
+    <!-- 📝 LEARNING NOTE: Applying Betterfly Design System -->
+    <!-- Consolidated font loading strategy with font-display: swap for better performance -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    <!-- Using Obviously Narrow Bold for the logo from local assets -->
+    
+    <!-- Original CSS with correct design -->
+    <link rel="stylesheet" href="styles/post-onboarding.css">
+    <!-- Currency screen visibility fix -->
+    <link rel="stylesheet" href="styles/currency-screen-fix.css">
+    <!-- Scroll fixes -->
+    <link rel="stylesheet" href="styles/scroll-fixes.css">
+    <!-- Welcome screen fix -->
+    <link rel="stylesheet" href="styles/welcome-fix.css">
+    
+    <!-- Debug mode toggle -->
+    <script>
+        // Add debug mode class to body for CSS debugging
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.classList.add('debug-mode');
+                console.log('🐛 Debug mode enabled');
+            });
+        }
+    </script>
+</head>
+<body>
+    <!-- 📝 LEARNING NOTE: Welcome Screen - Updated with Figma Design and CTA -->
+    <!-- This screen shows welcome content with CTA button to progress -->
+    <!-- Features animated gradient background and matches Figma spacing exactly -->
+    <div id="initial-load" class="screen active">
+        <div class="welcome-screen-container">
+            <!-- Animated gradient background -->
+            <div class="gradient-background"></div>
+            
+            <!-- Main content area -->
+            <div class="welcome-content-area">
+                <!-- Content container -->
+                <div class="welcome-content-container">
+                    <!-- Mascot icon with bounce animation -->
+                    <div class="welcome-mascot-container">
+                        <div class="welcome-mascot-icon" style="background-image: url('./assets/162ac2159f8a17d53149f14c9846ea5592fb33ba.png')"></div>
+                    </div>
+                    
+                    <!-- Betterfly logo SVG -->
+                    <div class="welcome-logo-container">
+                        <img src="./assets/betterfly-logo.svg" alt="Betterfly" class="welcome-logo-svg">
+                    </div>
+                    
+                    <!-- Header text matching Figma design -->
+                    <div class="welcome-header-text">
+                        <p>Select to personalize your experience. You can change these at a later time.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CTA Button Container -->
+            <div class="welcome-cta-container">
+                <button class="welcome-cta-button" data-action="progress-to-homepage">
+                    Get started
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📝 LEARNING NOTE: Home Default Screen -->
+    <!-- Main dashboard with tasks, insurance cards, and navigation -->
+    <div id="home-default" class="screen" style="display: flex; flex-direction: column; max-width: 393px; margin: 0 auto; height: 100vh;">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="header-nav">
+                <!-- User Avatar -->
+                <div class="avatar-section">
+                    <div class="avatar">
+                        <div class="user-initials-container"></div>
+                        <div class="user-initials">AB</div>
+                        <div class="status-indicator"></div>
+                    </div>
+                </div>
+                
+                <!-- Currency Counter -->
+                <div class="currency-counter" onclick="openCurrencyRewards()">
+                    <div class="butterfly-icon"></div>
+                    <div class="currency-amount">165</div>
+                </div>
+                
+                <!-- Menu Button -->
+                <div class="menu-button" data-action="navigate-to-challenge">
+                    <div class="menu-icon"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" style="flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 24px; padding-bottom: 120px;">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h1 class="welcome-title">¡Hola,<br>Camilo!</h1>
+                <p class="welcome-subtitle">Welcome to Betterfly. Everything you need to protect, prevent, and empower your health journey is right here.</p>
+                
+                <!-- Action Button -->
+                <div class="action-section">
+                    <button class="primary-button">See Details</button>
+                    <div class="progress-dots">
+                        <div class="dot active"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Todo Card Section -->
+            <div class="todo-card">
+                <h2 class="todo-title">Finish setting up your account</h2>
+                <div class="progress-card-progress">
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: 37.5%"></div>
+                    </div>
+                    <div class="progress-text">3/8 completed</div>
+                </div>
+                
+                <!-- Task List -->
+                <div class="task-list">
+                    <!-- Completed tasks -->
+                    <div class="task completed">
+                        <div class="task-icon check"></div>
+                        <span class="task-text">Questionnaire</span>
+                        <div class="task-chevron"></div>
+                    </div>
+                    
+                    <div class="task completed">
+                        <div class="task-icon check"></div>
+                        <span class="task-text">Connect Wearable</span>
+                        <div class="task-chevron"></div>
+                    </div>
+                    
+                    <div class="task completed">
+                        <div class="task-icon check"></div>
+                        <span class="task-text">Create Profile</span>
+                        <div class="task-chevron"></div>
+                    </div>
+                    
+                    <!-- Active task - clickable -->
+                    <div class="task pending" data-action="navigate-to-challenges-page" style="cursor: pointer;">
+                        <div class="task-icon active"></div>
+                        <div class="task-info">
+                            <span class="task-text">Complete Your Next Challenge</span>
+                            <div class="task-meta">
+                                <span class="task-time">5 min</span>
+                                <div class="task-reward">
+                                    <img src="./assets/betterflies-icon.svg" alt="100 butterflies" class="butterfly-svg-mini">
+                                    <span>+100</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-chevron"></div>
+                    </div>
+                    
+                    <!-- Remaining pending tasks -->
+                    <div class="task pending">
+                        <div class="task-icon pending"></div>
+                        <div class="task-info">
+                            <span class="task-text">Discover The Rewards Store</span>
+                            <div class="task-meta">
+                                <span class="task-time">3 min</span>
+                                <div class="task-reward">
+                                    <img src="./assets/betterflies-icon.svg" alt="25 butterflies" class="butterfly-svg-mini">
+                                    <span>+25</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-chevron"></div>
+                    </div>
+                    
+                    <div class="task pending">
+                        <div class="task-icon pending"></div>
+                        <div class="task-info">
+                            <span class="task-text">Redeem Your First Reward</span>
+                            <div class="task-meta">
+                                <span class="task-time">2 min</span>
+                                <div class="task-reward">
+                                    <img src="./assets/betterflies-icon.svg" alt="0 butterflies" class="butterfly-svg-mini">
+                                    <span>+0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-chevron"></div>
+                    </div>
+                    
+                    <div class="task pending">
+                        <div class="task-icon pending"></div>
+                        <div class="task-info">
+                            <span class="task-text">Explore Your LSA Benefit Card</span>
+                            <div class="task-meta">
+                                <span class="task-time">2 min</span>
+                                <div class="task-reward">
+                                    <img src="./assets/betterflies-icon.svg" alt="50 butterflies" class="butterfly-svg-mini">
+                                    <span>+50</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-chevron"></div>
+                    </div>
+                    
+                    <div class="task pending">
+                        <div class="task-icon pending"></div>
+                        <div class="task-info">
+                            <span class="task-text">Review Your Profile</span>
+                            <div class="task-meta">
+                                <span class="task-time">1 min</span>
+                                <div class="task-reward">
+                                    <img src="./assets/betterflies-icon.svg" alt="25 butterflies" class="butterfly-svg-mini">
+                                    <span>+25</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-chevron"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insurance Section -->
+            <div class="insurance-section">
+                <h2 class="section-title">Mis seguros</h2>
+                <div class="insurance-cards">
+                    <div class="insurance-card">
+                        <div class="card-content">
+                            <div class="insurance-icon complementario"></div>
+                            <h3>Complementario</h3>
+                            <p>Hasta un 70% de cobertura<br>en consultas médicas.</p>
+                        </div>
+                        <button class="card-action-btn"></button>
+                    </div>
+                    
+                    <div class="insurance-card">
+                        <div class="card-content">
+                            <div class="insurance-icon vida"></div>
+                            <h3>Vida</h3>
+                            <p>Protección por invalidez<br>y respaldo para tu familia.</p>
+                        </div>
+                        <button class="card-action-btn"></button>
+                    </div>
+                    
+                    <div class="insurance-card">
+                        <div class="card-content">
+                            <div class="insurance-icon dental"></div>
+                            <h3>Dental</h3>
+                            <p>Coberturas en el cuidado<br>de tu salud dental.</p>
+                        </div>
+                        <button class="card-action-btn"></button>
+                    </div>
+                </div>
+                <div class="carousel-dots">
+                    <div class="carousel-dot active"></div>
+                </div>
+            </div>
+
+            <!-- Quick Access Section -->
+            <div class="quick-access-section">
+                <h2 class="section-title">Acciones rápidas</h2>
+                <div class="quick-access-grid">
+                    <div class="quick-access-item">
+                        <div class="quick-icon telemedicine"></div>
+                        <span>Agenda<br>telemedicina</span>
+                    </div>
+                    <div class="quick-access-item">
+                        <div class="quick-icon reimbursement"></div>
+                        <span>Pide tus reembolsos</span>
+                    </div>
+                    <div class="quick-access-item">
+                        <div class="quick-icon pharmacy"></div>
+                        <span>Ahorra en Farmacia</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <div class="nav-icon home"></div>
+                <span class="nav-label">Home</span>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon benefits"></div>
+                <span class="nav-label">Benefits</span>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon journey"></div>
+                <span class="nav-label">Journey</span>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon social"></div>
+                <span class="nav-label">Social</span>
+            </div>
+            <div class="nav-item">
+                <img src="./assets/buddy.svg" alt="Buddy" class="nav-buddy-icon">
+            </div>
+        </div>
+    </div>
+
+    <!-- 📝 LEARNING NOTE: Challenge Active Screen -->
+    <!-- Interactive challenge screen with timer and progress -->
+    <div id="challenge-active" class="screen">
+        <!-- Header with back button -->
+        <div class="challenge-header">
+            <button class="back-button" data-action="navigate-to-home">
+                <div class="back-icon"></div>
+            </button>
+            <h1 class="challenge-title">Challenges</h1>
+            <div class="currency-counter" data-action="open-currency-screen">
+                <div class="butterfly-icon"></div>
+                <div class="currency-amount">165</div>
+            </div>
+        </div>
+
+        <!-- Challenge Content -->
+        <div class="challenge-content">
+            <div class="challenge-intro">
+                <h1>Your Challenges</h1>
+                <p>Track progress, adjust settings, and stay on top of your goals.</p>
+            </div>
+
+            <!-- Active Challenge Card -->
+            <div class="challenge-card active">
+                <h2>Finish setting up your account</h2>
+                <div class="progress-card-progress">
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: 37.5%"></div>
+                    </div>
+                    <div class="progress-text">3/8 completed</div>
+                </div>
+                
+                <!-- Current Challenge -->
+                <div class="current-challenge">
+                    <h3>Stand and Stretch</h3>
+                    <div class="challenge-meta">
+                        <span class="challenge-time">2 min</span>
+                        <div class="challenge-reward">
+                            <img src="./assets/betterflies-icon.svg" alt="100 butterflies" class="butterfly-svg-mini">
+                            <span>+100</span>
+                        </div>
+                    </div>
+                    <p class="challenge-description">Do a 2-minute stretch routine or stand up and move around.</p>
+                    
+                    <!-- Challenge Controls -->
+                    <div class="challenge-controls">
+                        <button id="challenge-btn" class="challenge-button start" data-action="handle-challenge-action">
+                            <div class="button-icon play"></div>
+                            <span id="challenge-btn-text">Start Challenge</span>
+                        </button>
+                        <button id="mark-complete-btn" class="mark-complete-button hidden" data-action="mark-challenge-complete">
+                            Mark as complete
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon streak"></div>
+                    <div class="stat-value">1</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon butterflies"></div>
+                    <div class="stat-value">165</div>
+                    <div class="stat-label">Total BFs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon completion"></div>
+                    <div class="stat-value">85%</div>
+                    <div class="stat-label">Week Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon achievements"></div>
+                    <div class="stat-value">1</div>
+                    <div class="stat-label">Achievements</div>
+                </div>
+            </div>
+
+            <!-- Monthly Challenge Section -->
+            <div class="monthly-challenge">
+                <div class="challenge-header-section">
+                    <div class="challenge-subtitle">Monthly Challenge</div>
+                    <h2>September Splash</h2>
+                    <p>Complete daily micro-habits to earn points and build lasting wellness routines.</p>
+                </div>
+                
+                <!-- Week Groups -->
+                <div class="week-groups">
+                    <!-- Week 1 - Completed -->
+                    <div class="week-group completed">
+                        <div class="week-header">
+                            <div class="week-info">
+                                <h3>Week 1: Hydration Habit</h3>
+                                <div class="status-chip completed">Complete (5/5 days)</div>
+                            </div>
+                            <div class="expand-icon"></div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill completed" style="width: 100%"></div>
+                            <span class="progress-percent">100%</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Week 2 - Active -->
+                    <div class="week-group active expanded">
+                        <div class="week-header">
+                            <div class="week-info">
+                                <h3>Week 2: Hydration Habit</h3>
+                                <div class="status-chip active">Active (1/5 days)</div>
+                            </div>
+                            <div class="expand-icon up"></div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill active" style="width: 20%"></div>
+                            <span class="progress-percent">20%</span>
+                        </div>
+                        
+                        <!-- Daily Challenges -->
+                        <div class="daily-challenges">
+                            <div class="challenge-item completed">
+                                <div class="challenge-icon check"></div>
+                                <div class="challenge-info">
+                                    <div class="challenge-day">Day 1:</div>
+                                    <div class="challenge-task">Drink 8 glasses of water</div>
+                                </div>
+                                <div class="challenge-menu"></div>
+                            </div>
+                            
+                            <div class="challenge-item active">
+                                <div class="challenge-icon arrow"></div>
+                                <div class="challenge-info">
+                                    <div class="challenge-day">Day 2: <span class="today">Today</span></div>
+                                    <div class="challenge-task">Drink 8 glasses of water</div>
+                                </div>
+                                <div class="challenge-menu"></div>
+                            </div>
+                            
+                            <div class="challenge-item pending">
+                                <div class="challenge-icon clock"></div>
+                                <div class="challenge-info">
+                                    <div class="challenge-day">Day 3:</div>
+                                    <div class="challenge-task">Drink 8 glasses of water</div>
+                                </div>
+                                <div class="challenge-menu"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item">
+                <div class="nav-icon home"></div>
+                <span class="nav-label">Home</span>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon benefits"></div>
+                <span class="nav-label">Benefits</span>
+            </div>
+            <div class="nav-item active">
+                <div class="nav-icon journey"></div>
+                <span class="nav-label">Journey</span>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon social"></div>
+                <span class="nav-label">Social</span>
+            </div>
+            <div class="nav-item">
+                <img src="./assets/buddy.svg" alt="Buddy" class="nav-buddy-icon">
+            </div>
+        </div>
+    </div>
+
+    <!-- 📝 LEARNING NOTE: Claim Butterflies Screen -->
+    <!-- Celebration screen for earning rewards -->
+    <div id="claim-butterflies" class="screen">
+        <div class="claim-container">
+            <!-- Mascot and Chat Bubble -->
+            <div class="mascot-chat-section">
+                <div class="mascot-container">
+                    <div class="mascot-icon" style="background-image: url('./assets/162ac2159f8a17d53149f14c9846ea5592fb33ba.png')"></div>
+                </div>
+                <div class="chat-bubble">
+                    <div class="avatar-small"></div>
+                    <div class="bubble-content">
+                        <p>Congratulations. You've earned 100 Betterflies and completed a challenge</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Message -->
+            <div class="success-section">
+                <h1>Amazing work!</h1>
+                <p>You've completed a wellness challenge and earned Betterflies</p>
+            </div>
+
+            <!-- Reward Display -->
+            <div class="reward-display">
+                <div class="butterfly-large"></div>
+                <h2>100 Betterflies</h2>
+            </div>
+
+            <!-- Description -->
+            <div class="reward-description">
+                <p>Use your Betterflies to unlock rewards and track your wellness journey.</p>
+            </div>
+        </div>
+
+        <!-- Fixed Bottom Button -->
+        <div class="fixed-bottom-action">
+            <button class="animated-claim-button" data-action="claim-reward">
+                <span>Claim Betterflies (100)</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 📝 LEARNING NOTE: Challenges Page Screen - Using Standalone File -->
+    <!-- Challenges page is now loaded from screens/challenges-page.html -->
+    <div id="challenges-page" class="screen">
+        <!-- Content will be loaded from screens/challenges-page.html -->
+    </div>
+
+    <!-- 🎯 CURRENCY REWARDS PAGE - Using Standalone File -->
+    <!-- Currency rewards page is now loaded from screens/currency-rewards.html -->
+    <div id="currency-rewards" class="screen">
+        <!-- Content will be loaded from screens/currency-rewards.html -->
+    </div>
+
+    <!-- 🛡️ BULLETPROOF NAVIGATION SYSTEM -->
+    <script src="scripts/bulletproof-navigation.js"></script>
+    
+    <!-- Currency Rewards Navigation -->
+    <script>
+        function openCurrencyRewards() {
+            console.log('Opening currency rewards page...');
+            // Navigate to the separate currency rewards page
+            window.location.href = 'currency-rewards.html';
+        }
+    </script>
+</body>
+</html>
