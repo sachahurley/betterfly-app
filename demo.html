@@ -3,304 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Betterfly App - Demo</title>
+    <title>Betterfly - Post Onboarding Demo</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            min-height: 100vh;
-            color: white;
-            padding: 40px 20px;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        
-        .logo {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            background: linear-gradient(45deg, #ffffff, #f0f9ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .subtitle {
-            font-size: 20px;
-            opacity: 0.9;
-            margin-bottom: 8px;
-        }
-        
-        .description {
-            font-size: 16px;
-            opacity: 0.8;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-        
-        .demo-section {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
             padding: 40px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .section-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             display: flex;
             align-items: center;
-            gap: 12px;
+            justify-content: center;
         }
-        
-        .demo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .demo-card {
-            background: rgba(255, 255, 255, 0.95);
-            color: #1f2937;
-            border-radius: 16px;
-            padding: 24px;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        .demo-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        .card-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #059669;
-        }
-        
-        .card-description {
-            font-size: 14px;
-            color: #6b7280;
-            margin-bottom: 16px;
-            line-height: 1.4;
-        }
-        
-        .demo-btn {
-            display: inline-block;
-            background: #0F1C14;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            text-align: center;
-        }
-        
-        .demo-btn:hover {
-            background: #1a2e1f;
-            transform: translateY(-1px);
-        }
-        
-        .demo-btn.primary {
-            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
-            color: white;
-            font-size: 16px;
-            padding: 16px 32px;
-            margin-bottom: 12px;
-        }
-        
-        .demo-btn.primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
-        }
-        
-        .flow-nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 16px;
-        }
-        
-        .flow-btn {
-            background: rgba(16, 185, 129, 0.1);
-            color: #059669;
-            padding: 8px 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-        
-        .flow-btn:hover {
-            background: rgba(16, 185, 129, 0.2);
-            transform: translateY(-1px);
-        }
-        
-        .status-badge {
-            display: inline-block;
-            background: #059669;
-            color: white;
-            padding: 4px 12px;
+        .demo-container {
+            background: white;
             border-radius: 20px;
-            font-size: 12px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 500px;
+        }
+        .logo {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .demo-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
             font-weight: 500;
-            margin-left: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s;
         }
-        
-        .update-list {
-            list-style: none;
-            margin-top: 16px;
+        .demo-button:hover {
+            transform: translateY(-2px);
         }
-        
-        .update-list li {
-            padding: 8px 0;
-            padding-left: 24px;
-            position: relative;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 14px;
-        }
-        
-        .update-list li::before {
-            content: "✅";
-            position: absolute;
-            left: 0;
-            font-size: 12px;
-        }
-        
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 36px;
-            }
-            
-            .demo-section {
-                padding: 24px;
-            }
-            
-            .demo-grid {
-                grid-template-columns: 1fr;
-            }
+        .description {
+            margin-top: 20px;
+            color: #888;
+            font-size: 0.9em;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">🦋 Betterfly</div>
-            <div class="subtitle">5-Day Wellness Challenge</div>
-            <div class="description">
-                Interactive demo of the complete onboarding flow with progress bars, phone validation, and celebration animations.
-            </div>
-        </div>
-        
-        <div class="demo-section">
-            <div class="section-title">
-                🚀 Start Demo
-            </div>
-            <div style="text-align: center;">
-                <a href="src/flows/onboarding/v2/welcome.html" class="demo-btn primary">
-                    Launch Full Onboarding Flow
-                </a>
-                <div style="font-size: 14px; opacity: 0.8; margin-top: 8px;">
-                    Complete experience from welcome to profile creation
-                </div>
-            </div>
-        </div>
-        
-        <div class="demo-section">
-            <div class="section-title">
-                📱 Key Pages
-                <span class="status-badge">Recently Updated</span>
-            </div>
-            <div class="demo-grid">
-                <div class="demo-card">
-                    <div class="card-title">📊 Verification Page</div>
-                    <div class="card-description">Fixed progress bar visibility and improved mobile responsive design</div>
-                    <a href="src/flows/onboarding/v2/signup-verification.html" class="demo-btn">View Page</a>
-                </div>
-                
-                <div class="demo-card">
-                    <div class="card-title">📞 Phone Input</div>
-                    <div class="card-description">Intelligent country detection, searchable dropdown, and real-time validation</div>
-                    <a href="src/flows/onboarding/v2/signup-phone.html" class="demo-btn">View Page</a>
-                </div>
-                
-                <div class="demo-card">
-                    <div class="card-title">🎉 Profile Celebration</div>
-                    <div class="card-description">Updated to match profile prompt styling with proper speech bubble positioning</div>
-                    <a href="src/flows/onboarding/v2/profile-celebration.html" class="demo-btn">View Page</a>
-                </div>
-                
-                <div class="demo-card">
-                    <div class="card-title">💰 Coin Animations</div>
-                    <div class="card-description">Enhanced toast system with dimmer overlays and improved tap-to-close</div>
-                    <a href="src/flows/onboarding/v2/challenges-intro.html" class="demo-btn">View Page</a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="demo-section">
-            <div class="section-title">
-                🗺️ Complete Flow Navigation
-            </div>
-            <div class="flow-nav">
-                <a href="src/flows/onboarding/v2/welcome.html" class="flow-btn">Welcome</a>
-                <a href="src/flows/onboarding/v2/get-started.html" class="flow-btn">Get Started</a>
-                <a href="src/flows/onboarding/v2/expectations.html" class="flow-btn">Expectations</a>
-                <a href="src/flows/onboarding/v2/profile-prompt.html" class="flow-btn">Profile Prompt</a>
-                <a href="src/flows/onboarding/v2/signup-name.html" class="flow-btn">Name Signup</a>
-                <a href="src/flows/onboarding/v2/signup-phone.html" class="flow-btn">Phone Signup</a>
-                <a href="src/flows/onboarding/v2/signup-verification.html" class="flow-btn">Verification</a>
-                <a href="src/flows/onboarding/v2/profile-celebration.html" class="flow-btn">Celebration</a>
-                <a href="src/flows/onboarding/v2/challenges-intro.html" class="flow-btn">Challenges</a>
-            </div>
-        </div>
-        
-        <div class="demo-section">
-            <div class="section-title">
-                ✨ Recent Updates
-            </div>
-            <ul class="update-list">
-                <li>Fixed progress bar visibility on verification page by restructuring layout</li>
-                <li>Enhanced phone input with intelligent country detection and formatting</li>
-                <li>Updated profile celebration styling to match design system</li>
-                <li>Improved coin toast animations with dimmer overlay system</li>
-                <li>Fixed mobile responsive padding (32px top, 24px sides)</li>
-                <li>Added progress-container width: 100% for consistent display</li>
-            </ul>
-        </div>
-        
-        <div style="text-align: center; margin-top: 40px; opacity: 0.8;">
-            <div style="font-size: 14px;">
-                💻 Built with HTML, CSS, and JavaScript • 🔄 Auto-updates from GitHub
-            </div>
+    <div class="demo-container">
+        <div class="logo">Betterfly</div>
+        <div class="subtitle">Post-Onboarding Experience Demo</div>
+        <a href="src/flows/post-onboarding/v2/index.html" class="demo-button">
+            🚀 Launch Demo
+        </a>
+        <div class="description">
+            Experience the complete post-onboarding flow with navigation, 
+            challenges, settings, and currency rewards system.
         </div>
     </div>
 </body>
