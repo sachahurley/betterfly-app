@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Challenges - Betterfly</title>
+    
+    <!-- 📝 LEARNING NOTE: Applying Betterfly Design System -->
+    <!-- Consolidated font loading strategy with font-display: swap for better performance -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    <!-- Using Obviously Narrow Bold for the logo from local assets -->
+    
+    <!-- Original CSS with correct design -->
+    <link rel="stylesheet" href="styles/post-onboarding.css">
+    <!-- Currency screen visibility fix -->
+    <link rel="stylesheet" href="styles/currency-screen-fix.css">
+    <!-- Scroll fixes -->
+    <link rel="stylesheet" href="styles/scroll-fixes.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- Progress bar animation styles -->
+    <style>
+        /* 📝 LEARNING NOTE: Progress Bar Animation Styles */
+        .overall-progress-fill {
+            transition: width 0.8s ease-in-out;
+        }
+        
+        /* Ensure smooth animation for progress bar */
+        .overall-progress-bar {
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        
+        .overall-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #19f578 0%, #16e06a 100%);
+            border-radius: 8px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Progress bar pulse animation */
+        @keyframes progressPulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(25, 245, 120, 0.4);
+            }
+            50% {
+                transform: scale(1.02);
+                box-shadow: 0 0 0 8px rgba(25, 245, 120, 0.1);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(25, 245, 120, 0);
+            }
+        }
+        
+        /* 📝 LEARNING NOTE: Completed Challenge State Styles */
+        .challenge-completed {
+            background: #f7f5eb !important;
+            border: 1px solid #dbdddc;
+        }
+        
+        .challenge-completed .individual-challenge-section {
+            opacity: 0.6;
+        }
+        
+        .challenge-completed .challenge-action-button {
+            background: #22c55e !important;
+            color: white !important;
+        }
+        
+        .challenge-completed .challenge-action-button .button-icon::before {
+            content: "✓";
+            color: white;
+            font-weight: bold;
+        }
+        
+        .challenge-completed .challenge-action-button .button-text {
+            color: white !important;
+        }
+        
+        /* Next challenge section styles */
+        .next-challenge-section {
+            margin-top: 0;
+        }
+        
+        .next-challenge-section .task {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 8px 0;
+            margin: 0;
+            transition: all 0.2s ease;
+        }
+        
+        .next-challenge-section .task:hover {
+            background: rgba(0, 0, 0, 0.02);
+            transform: none;
+        }
+        
+        /* 📝 LEARNING NOTE: Lucide Icon Styling */
+        /* Ensure Lucide icons are solid black fill with no borders or multiple colors */
+        .button-icon svg {
+            fill: currentColor !important;
+            stroke: none !important;
+            color: currentColor !important;
+        }
+        
+        .button-icon svg path {
+            fill: currentColor !important;
+            stroke: none !important;
+            stroke-width: 0 !important;
+        }
+        
+        .button-icon svg circle,
+        .button-icon svg rect,
+        .button-icon svg polygon {
+            fill: currentColor !important;
+            stroke: none !important;
+            stroke-width: 0 !important;
+        }
+        
+        /* More specific overrides for Lucide icons */
+        .button-icon svg.lucide {
+            fill: currentColor !important;
+            stroke: none !important;
+            color: currentColor !important;
+        }
+        
+        .button-icon svg.lucide * {
+            fill: currentColor !important;
+            stroke: none !important;
+            stroke-width: 0 !important;
+        }
+        
+        /* Force solid fill for all SVG children */
+        .button-icon svg * {
+            fill: currentColor !important;
+            stroke: none !important;
+            stroke-width: 0 !important;
+        }
+    </style>
+    
+    <!-- Debug mode toggle -->
+    <script>
+        // Add debug mode class to body for CSS debugging
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.classList.add('debug-mode');
+                console.log('🐛 Debug mode enabled');
+            });
+        }
+    </script>
+</head>
+<body>
+    <!-- 📝 LEARNING NOTE: Challenges Page Screen - Pixel Perfect Figma Match -->
+    <!-- Challenges page matching Figma design node-id=419-36539 exactly -->
+    <div class="home-page" style="display: flex; flex-direction: column; max-width: 393px; margin: 0 auto; height: 100vh;">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="header-nav">
+                <!-- User Avatar -->
+                <div class="avatar-section" onclick="navigateToSettings()" style="cursor: pointer;">
+                    <div class="avatar">
+                        <div class="user-initials-container"></div>
+                        <div class="user-initials">AB</div>
+                        <div class="status-indicator"></div>
+                    </div>
+                </div>
+                
+                <!-- Currency Counter -->
+                <div class="currency-counter" onclick="navigateToCurrency()">
+                    <div class="butterfly-icon"></div>
+                    <div class="currency-amount">165</div>
+                </div>
+                
+                <!-- Menu Button -->
+                <div class="menu-button" onclick="navigateToChallenges()">
+                    <div class="menu-icon"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" style="flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 24px; padding-bottom: 120px;">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h1 class="welcome-title">Your Challenges</h1>
+                <p class="welcome-subtitle">Track progress, adjust settings, and stay on top of your goals.</p>
+            </div>
+
+            <!-- 📝 LEARNING NOTE: New Active Challenge Card -->
+            <!-- This card shows overall progress at top, then individual page challenge below -->
+            <div class="todo-card">
+                <!-- Overall Progress Section -->
+                <div class="overall-progress-section">
+                    <h2 class="overall-progress-title">Finish setting up your account</h2>
+                    <div class="overall-progress-bar-container">
+                        <div class="overall-progress-bar">
+                            <div class="overall-progress-fill" style="width: 37.5%"></div>
+                        </div>
+                        <span class="overall-progress-text">3/8 completed</span>
+                    </div>
+                </div>
+                
+                <!-- Spacer -->
+                <div class="challenge-spacer"></div>
+                
+                <!-- Individual Challenge Section -->
+                <div class="individual-challenge-section">
+                    <h3 class="individual-challenge-title">Stand and Stretch</h3>
+                    <div class="challenge-meta">
+                        <span class="challenge-duration">2 min</span>
+                        <div class="challenge-reward">
+                            <img src="./assets/betterflies-icon.svg" alt="100 butterflies" class="butterfly-svg-mini">
+                            <span>+100</span>
+                        </div>
+                    </div>
+                    <p class="challenge-description">Do a 2-minute stretch routine or stand up and move around.</p>
+                    <button class="challenge-action-button" id="challenge-button" onclick="toggleChallenge()">
+                        <div class="button-icon" id="button-icon">
+                            <i data-lucide="play" data-fill="currentColor" data-stroke-width="0" style="width: 16px; height: 16px;"></i>
+                        </div>
+                        <span id="button-text">Start Challenge</span>
+                        <span id="countdown-timer" class="countdown-timer" style="display: none;"></span>
+                    </button>
+                </div>
+                
+                <!-- Next Challenge Section (initially hidden) -->
+                <div class="next-challenge-section" id="next-challenge-section" style="display: none;">
+                    <div class="challenge-spacer"></div>
+                    <div class="task pending" onclick="navigateToCurrency()" style="cursor: pointer;">
+                        <div class="task-icon pending"></div>
+                        <div class="task-info">
+                            <span class="task-text">Redeem Your First Reward</span>
+                            <div class="task-meta">
+                                <span class="task-time">2 min</span>
+                                <div class="task-reward">
+                                    <img src="./assets/betterflies-icon.svg" alt="0 butterflies" class="butterfly-svg-mini">
+                                    <span>+0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-chevron"></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon-container streak">
+                        <div class="stat-icon streak-icon"></div>
+                    </div>
+                    <div class="stat-value">1</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-container butterflies">
+                        <div class="stat-icon butterfly-icon"></div>
+                    </div>
+                    <div class="stat-value">165</div>
+                    <div class="stat-label">Total BFs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-container completion">
+                        <div class="stat-icon completion-icon"></div>
+                    </div>
+                    <div class="stat-value">85%</div>
+                    <div class="stat-label">Week Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-container achievements">
+                        <div class="stat-icon achievements-icon"></div>
+                    </div>
+                    <div class="stat-value">1</div>
+                    <div class="stat-label">Achievements</div>
+                </div>
+            </div>
+
+            <!-- Monthly Challenge Section -->
+            <div class="monthly-challenge-section">
+                <div class="monthly-challenge-header">
+                    <div class="monthly-challenge-subtitle">Monthly Challenge</div>
+                    <h2 class="monthly-challenge-title">September Splash</h2>
+                    <p class="monthly-challenge-description">Complete daily micro-habits to earn points and build lasting wellness routines.</p>
+                </div>
+                
+                <!-- Weekly Challenge Groups -->
+                <div class="weekly-challenge-groups">
+                    <!-- Week 1 - Completed -->
+                    <div class="week-group completed">
+                        <div class="week-group-header">
+                            <div class="week-info">
+                                <h3 class="week-title">Week 1: Hydration Habit</h3>
+                                <div class="status-chip completed">Complete (5/5 days)</div>
+                            </div>
+                            <div class="expand-icon down"></div>
+                        </div>
+                        <div class="week-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill completed" style="width: 100%"></div>
+                            </div>
+                            <span class="progress-percent">100%</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Week 2 - Active and Expanded -->
+                    <div class="week-group active expanded">
+                        <div class="week-group-header">
+                            <div class="week-info">
+                                <h3 class="week-title">Week 2: Hydration Habit</h3>
+                                <div class="status-chip active">Active (1/5 days)</div>
+                            </div>
+                            <div class="expand-icon up"></div>
+                        </div>
+                        <div class="week-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill active" style="width: 20%"></div>
+                            </div>
+                            <span class="progress-percent">20%</span>
+                        </div>
+                        
+                        <!-- Daily Challenges List -->
+                        <div class="daily-challenges-list">
+                            <div class="challenge-item completed" onclick="viewChallengeDetails('Day 1')">
+                                <div class="challenge-item-icon check"></div>
+                                <div class="challenge-item-info">
+                                    <div class="challenge-item-day">Day 1:</div>
+                                    <div class="challenge-item-task">Drink 8 glasses of water</div>
+                                </div>
+                                <div class="challenge-item-menu"></div>
+                            </div>
+                            
+                            <div class="challenge-item active" onclick="startDailyChallenge('Day 2')">
+                                <div class="challenge-item-icon arrow"></div>
+                                <div class="challenge-item-info">
+                                    <div class="challenge-item-day">Day 2: <span class="today-badge">Today</span></div>
+                                    <div class="challenge-item-task">Drink 8 glasses of water</div>
+                                </div>
+                                <div class="challenge-item-menu"></div>
+                            </div>
+                            
+                            <div class="challenge-item pending" onclick="viewChallengeDetails('Day 3')">
+                                <div class="challenge-item-icon clock"></div>
+                                <div class="challenge-item-info">
+                                    <div class="challenge-item-day">Day 3:</div>
+                                    <div class="challenge-item-task">Drink 8 glasses of water</div>
+                                </div>
+                                <div class="challenge-item-menu"></div>
+                            </div>
+                            
+                            <div class="challenge-item pending" onclick="viewChallengeDetails('Day 4')">
+                                <div class="challenge-item-icon clock"></div>
+                                <div class="challenge-item-info">
+                                    <div class="challenge-item-day">Day 4:</div>
+                                    <div class="challenge-item-task">Drink 8 glasses of water</div>
+                                </div>
+                                <div class="challenge-item-menu"></div>
+                            </div>
+                            
+                            <div class="challenge-item pending" onclick="viewChallengeDetails('Day 5')">
+                                <div class="challenge-item-icon clock"></div>
+                                <div class="challenge-item-info">
+                                    <div class="challenge-item-day">Day 5:</div>
+                                    <div class="challenge-item-task">Drink 8 glasses of water</div>
+                                </div>
+                                <div class="challenge-item-menu"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Week 3 - Inactive -->
+                    <div class="week-group inactive">
+                        <div class="week-group-header">
+                            <div class="week-info">
+                                <h3 class="week-title">Week 3: Hydration Habit</h3>
+                                <div class="status-chip inactive">Inactive (0/5 days)</div>
+                            </div>
+                            <div class="expand-icon down"></div>
+                        </div>
+                        <div class="week-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill inactive" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-percent">0%</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Week 4 - Inactive -->
+                    <div class="week-group inactive">
+                        <div class="week-group-header">
+                            <div class="week-info">
+                                <h3 class="week-title">Week 4: Hydration Habit</h3>
+                                <div class="status-chip inactive">Inactive (0/5 days)</div>
+                            </div>
+                            <div class="expand-icon down"></div>
+                        </div>
+                        <div class="week-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill inactive" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-percent">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📝 LEARNING NOTE: Toast Notification -->
+        <!-- Success toast that slides down when challenge is completed -->
+        <div class="toast-container" id="toast-container">
+            <div class="toast" id="success-toast">
+                <div class="toast-icon">
+                    <div class="success-icon"></div>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-message">You earned 100 Betterflies</div>
+                </div>
+                <div class="toast-close" onclick="closeToast()">
+                    <div class="close-icon"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item" onclick="navigateToHome()">
+                <div class="nav-icon home"></div>
+                <span class="nav-label">Home</span>
+            </div>
+            <div class="nav-item" onclick="navigateToBenefits()">
+                <div class="nav-icon benefits"></div>
+                <span class="nav-label">Benefits</span>
+            </div>
+            <div class="nav-item active" onclick="navigateToChallenges()">
+                <div class="nav-icon journey"></div>
+                <span class="nav-label">Challenges</span>
+            </div>
+            <div class="nav-item" onclick="navigateToSocial()">
+                <div class="nav-icon social"></div>
+                <span class="nav-label">Social</span>
+            </div>
+            <div class="nav-item">
+                <img src="./assets/buddy.svg" alt="Buddy" class="nav-buddy-icon">
+            </div>
+        </div>
+    </div>
+
+    <!-- 🧭 CLEAN NAVIGATION SYSTEM -->
+    <script src="shared/navigation.js"></script>
+    
+    <!-- 📝 LEARNING NOTE: Standalone Challenges Page JavaScript -->
+    <!-- This page has its own JavaScript for navigation and interactions -->
+    <script>
+        // 🎯 CHALLENGE STATE MANAGEMENT
+        let butterflyCount = loadCurrency();
+        let challengeState = 'start'; // 'start', 'active', 'completed'
+        let timeRemaining = 3; // 3 seconds
+        let challengeTimer = null;
+        let isPaused = false; // Track if timer is paused
+        
+        // 📊 SIMPLE CURRENCY PERSISTENCE
+        function loadCurrency() {
+            const saved = localStorage.getItem('butterflyCount');
+            return saved ? parseInt(saved) : 165;
+        }
+        
+        function saveCurrency(amount) {
+            localStorage.setItem('butterflyCount', amount.toString());
+        }
+        
+        // 📊 SIMPLE CHALLENGE PERSISTENCE
+        function loadCompletedChallenges() {
+            const saved = localStorage.getItem('completedChallenges');
+            return saved ? JSON.parse(saved) : [];
+        }
+        
+        function saveCompletedChallenges(challenges) {
+            localStorage.setItem('completedChallenges', JSON.stringify(challenges));
+        }
+        
+        function markChallengeComplete(challengeId) {
+            const completed = loadCompletedChallenges();
+            if (!completed.includes(challengeId)) {
+                completed.push(challengeId);
+                saveCompletedChallenges(completed);
+            }
+        }
+        
+        function isChallengeCompleted(challengeId) {
+            const completed = loadCompletedChallenges();
+            return completed.includes(challengeId);
+        }
+
+        // 📝 LEARNING NOTE: Navigation Functions
+        // These functions are now handled by the bulletproof navigation system
+        // The bottom navigation will automatically work with the navigation script
+
+        // 📝 LEARNING NOTE: Challenge Functions
+        // These functions handle the individual challenge interactions and timer
+        
+        function toggleChallenge() {
+            console.log(`🎯 Challenge state: ${challengeState}, isPaused: ${isPaused}`);
+            
+            if (challengeState === 'start') {
+                startChallenge();
+            } else if (challengeState === 'active') {
+                if (isPaused) {
+                    resumeChallenge();
+                } else {
+                    pauseChallenge();
+                }
+            } else if (challengeState === 'completed') {
+                // Do nothing when completed, or navigate to next challenge
+                console.log('✅ Challenge already completed!');
+            }
+        }
+        
+        function startChallenge() {
+            console.log('🚀 Starting 3-second challenge...');
+            challengeState = 'active';
+            timeRemaining = 3;
+            isPaused = false;
+            updateButtonDisplay();
+            
+            // Start countdown timer
+            challengeTimer = setInterval(() => {
+                timeRemaining--;
+                updateCountdownDisplay();
+                
+                if (timeRemaining <= 0) {
+                    completeChallenge();
+                }
+            }, 1000);
+        }
+        
+        function pauseChallenge() {
+            console.log('⏸️ Pausing challenge...');
+            isPaused = true;
+            if (challengeTimer) {
+                clearInterval(challengeTimer);
+                challengeTimer = null;
+            }
+            updateButtonDisplay();
+        }
+        
+        function resumeChallenge() {
+            console.log('▶️ Resuming challenge...');
+            isPaused = false;
+            updateButtonDisplay();
+            
+            // Resume countdown timer from where it was paused
+            challengeTimer = setInterval(() => {
+                timeRemaining--;
+                updateCountdownDisplay();
+                
+                if (timeRemaining <= 0) {
+                    completeChallenge();
+                }
+            }, 1000);
+        }
+        
+        function completeChallenge() {
+            console.log('✅ Challenge completed!');
+            challengeState = 'completed';
+            isPaused = false;
+            if (challengeTimer) {
+                clearInterval(challengeTimer);
+                challengeTimer = null;
+            }
+            updateButtonDisplay();
+            
+            // 🎉 Mark challenge as completed
+            markChallengeComplete('stand-and-stretch');
+            
+            // 🎉 Reward the user with 100 Betterflies
+            rewardUser(100);
+            
+            // 📊 Update progress bar from 3/8 to 4/8 with animation
+            updateProgressBar();
+            
+            // 🎯 Show completed state and next challenge button
+            showCompletedState();
+        }
+        
+        // 📝 LEARNING NOTE: Completed State Management
+        // Function to show completed state and next challenge button
+        
+        function showCompletedState() {
+            console.log('🎯 Showing completed state...');
+            
+            // Add completed class to the challenge card
+            const challengeCard = document.querySelector('.todo-card');
+            console.log('🎯 Challenge card found:', challengeCard);
+            if (challengeCard) {
+                challengeCard.classList.add('challenge-completed');
+                console.log('🎯 Challenge completed class added');
+            }
+            
+            // Show the next challenge section
+            const nextChallengeSection = document.getElementById('next-challenge-section');
+            console.log('🎯 Next challenge section found:', nextChallengeSection);
+            if (nextChallengeSection) {
+                nextChallengeSection.style.display = 'block';
+                console.log('🎯 Next challenge section displayed');
+                
+                // Add fade-in animation
+                nextChallengeSection.style.opacity = '0';
+                nextChallengeSection.style.transform = 'translateY(20px)';
+                nextChallengeSection.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    nextChallengeSection.style.opacity = '1';
+                    nextChallengeSection.style.transform = 'translateY(0)';
+                    console.log('🎯 Next challenge section animation started');
+                }, 100);
+            } else {
+                console.error('🎯 Next challenge section not found!');
+            }
+        }
+        
+        function navigateToNextChallenge() {
+            console.log('🚀 Navigating to next challenge...');
+            // For now, navigate to a placeholder page
+            // This would be replaced with the actual rewards store page
+            alert('This would navigate to the Rewards Store page (not yet created)');
+        }
+        
+        // 📝 LEARNING NOTE: State Restoration
+        // Function to restore completed state when returning from streak page
+        
+        function restoreCompletedState() {
+            console.log('🔄 Restoring completed challenge state...');
+            
+            // Set challenge state to completed
+            challengeState = 'completed';
+            isPaused = false;
+            
+            // Update currency to reflect the reward (165 + 100 = 265)
+            butterflyCount = 265;
+            updateCurrencyDisplay();
+            
+            // Update progress bar to 4/8 completed (50%)
+            const progressText = document.querySelector('.overall-progress-text');
+            if (progressText) {
+                progressText.textContent = '4/8 completed';
+            }
+            
+            const progressFill = document.querySelector('.overall-progress-fill');
+            if (progressFill) {
+                progressFill.style.width = '50%';
+            }
+            
+            // Update button display to completed state
+            updateButtonDisplay();
+            
+            // Show completed state and next challenge section
+            showCompletedState();
+            
+            // Clean up URL by removing the completed parameter
+            const url = new URL(window.location);
+            url.searchParams.delete('completed');
+            window.history.replaceState({}, '', url);
+        }
+        
+        // 📝 LEARNING NOTE: Progress Bar Animation
+        // Function to update progress bar from 3/8 to 4/8 with smooth animation
+        
+        function updateProgressBar() {
+            console.log('📊 Updating progress bar from 3/8 to 4/8...');
+            
+            // Update the progress text
+            const progressText = document.querySelector('.overall-progress-text');
+            console.log('📊 Progress text element found:', progressText);
+            if (progressText) {
+                progressText.textContent = '4/8 completed';
+                console.log('📊 Progress text updated to 4/8 completed');
+            }
+            
+            // Animate the progress bar from 37.5% to 50%
+            const progressFill = document.querySelector('.overall-progress-fill');
+            console.log('📊 Progress fill element found:', progressFill);
+            if (progressFill) {
+                // Add pulse effect for visual feedback
+                progressFill.style.animation = 'progressPulse 0.6s ease-in-out';
+                
+                // Update the width from 37.5% to 50%
+                setTimeout(() => {
+                    progressFill.style.width = '50%';
+                    console.log('📊 Progress bar width updated to 50%');
+                }, 100); // Small delay to ensure transition is applied
+                
+                // Remove animation class after animation completes
+                setTimeout(() => {
+                    progressFill.style.animation = '';
+                }, 600);
+                
+                console.log('📊 Progress bar animated from 37.5% to 50%');
+            } else {
+                console.error('📊 Progress fill element not found!');
+            }
+        }
+        
+        // 📝 LEARNING NOTE: Reward System
+        // Functions to handle user rewards and currency updates
+        
+        function rewardUser(amount) {
+            console.log(`🎉 Rewarding user with ${amount} Betterflies!`);
+            
+            // Update currency count
+            butterflyCount += amount;
+            saveCurrency(butterflyCount);
+            updateCurrencyDisplay();
+            
+            // Show success toast
+            showSuccessToast(amount);
+            
+            console.log(`💰 New total: ${butterflyCount} Betterflies`);
+        }
+        
+        function showSuccessToast(amount) {
+            console.log('🎉 showSuccessToast called with amount:', amount);
+            const toast = document.getElementById('success-toast');
+            console.log('🎉 Toast element found:', toast);
+            if (toast) {
+                // Update the message with the actual amount
+                const messageElement = toast.querySelector('.toast-message');
+                if (messageElement) {
+                    messageElement.textContent = `You earned ${amount} Betterflies`;
+                    console.log('🎉 Toast message updated');
+                }
+                
+                // Show the toast with animation
+                toast.classList.add('show');
+                console.log('🎉 Toast show class added');
+                
+                // Auto-hide after 4 seconds
+                setTimeout(() => {
+                    closeToast();
+                }, 4000);
+            } else {
+                console.error('🎉 Toast element not found!');
+            }
+        }
+        
+        function closeToast() {
+            const toast = document.getElementById('success-toast');
+            if (toast) {
+                toast.classList.remove('show');
+            }
+        }
+        
+        function updateButtonDisplay() {
+            const button = document.getElementById('challenge-button');
+            const buttonIcon = document.getElementById('button-icon');
+            const buttonText = document.getElementById('button-text');
+            const countdownTimer = document.getElementById('countdown-timer');
+            
+            if (!button || !buttonIcon || !buttonText || !countdownTimer) return;
+            
+            // Remove all state classes
+            button.classList.remove('start', 'active', 'pause', 'completed');
+            buttonIcon.classList.remove('play', 'pause', 'check');
+            
+            // Hide countdown by default
+            countdownTimer.style.display = 'none';
+            buttonText.style.display = 'inline';
+            
+            if (challengeState === 'start') {
+                button.classList.add('start');
+                buttonIcon.classList.add('play');
+                buttonIcon.innerHTML = '<i data-lucide="play" data-fill="currentColor" data-stroke-width="0" style="width: 16px; height: 16px;"></i>';
+                buttonText.textContent = 'Start Challenge';
+            } else if (challengeState === 'active') {
+                if (isPaused) {
+                    button.classList.add('pause');
+                    buttonIcon.classList.add('play');
+                    buttonIcon.innerHTML = '<i data-lucide="play" data-fill="currentColor" data-stroke-width="0" style="width: 16px; height: 16px;"></i>';
+                    buttonText.textContent = 'Resume';
+                } else {
+                    button.classList.add('pause');
+                    buttonIcon.classList.add('pause');
+                    buttonIcon.innerHTML = '<i data-lucide="pause" data-fill="currentColor" data-stroke-width="0" style="width: 16px; height: 16px;"></i>';
+                    buttonText.textContent = 'Pause';
+                }
+                countdownTimer.style.display = 'inline';
+                countdownTimer.textContent = `${timeRemaining}s`;
+            } else if (challengeState === 'completed') {
+                button.classList.add('completed');
+                buttonIcon.classList.add('check');
+                buttonIcon.innerHTML = '<i data-lucide="check" data-fill="currentColor" data-stroke-width="0" style="width: 16px; height: 16px;"></i>';
+                buttonText.textContent = 'Completed';
+            }
+            
+            // Re-initialize Lucide icons after updating
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+        
+        function updateCountdownDisplay() {
+            const countdownTimer = document.getElementById('countdown-timer');
+            if (countdownTimer) {
+                countdownTimer.textContent = `${timeRemaining}s`;
+            }
+        }
+
+        // 📝 LEARNING NOTE: Daily Challenge Functions
+        // These functions handle daily challenge interactions
+        
+        function startDailyChallenge(day) {
+            console.log(`🚀 Starting daily challenge: ${day}`);
+            // Navigate to challenge active screen
+            navigateToChallengeActive();
+        }
+
+        function viewChallengeDetails(day) {
+            console.log(`👁️ Viewing challenge details: ${day}`);
+            // For now, just show an alert - could be expanded to show modal
+            alert(`${day} challenge details would be shown here.`);
+        }
+
+
+        // 📝 LEARNING NOTE: Page Initialization
+        // This runs when the page loads to set up initial state
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎯 Challenges page loaded successfully!');
+            
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            // Check if challenge is already completed
+            if (isChallengeCompleted('stand-and-stretch')) {
+                console.log('🔄 Challenge already completed, restoring state...');
+                restoreCompletedState();
+            } else {
+                // Check if returning from completed challenge
+                const urlParams = new URLSearchParams(window.location.search);
+                const isCompleted = urlParams.get('completed') === 'true';
+                
+                if (isCompleted) {
+                    console.log('🔄 Restoring completed challenge state...');
+                    restoreCompletedState();
+                } else {
+                    // Update currency display
+                    updateCurrencyDisplay();
+                    
+                    // Initialize challenge button state
+                    updateButtonDisplay();
+                }
+            }
+        });
+
+        function updateCurrencyDisplay() {
+            const currencyElements = document.querySelectorAll('.currency-amount');
+            currencyElements.forEach(element => {
+                element.textContent = butterflyCount.toString();
+            });
+            console.log(`💰 Updated currency display: ${butterflyCount}`);
+        }
+        
+        // 📝 LEARNING NOTE: Avatar Navigation Function
+        // Handles navigation to settings page when avatar is tapped
+        function navigateToSettings() {
+            console.log('👤 Avatar tapped - navigating to settings...');
+            window.location.href = 'settings.html';
+        }
+    </script>
+</body>
+</html>

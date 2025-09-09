@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Betterfly - Currency Rewards</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/post-onboarding.css">
+    <link rel="stylesheet" href="styles/currency-screen-fix.css">
+    <link rel="stylesheet" href="styles/figma-close-button.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        /* Standalone currency page styles */
+        body {
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .currency-page-container {
+            width: 100%;
+            max-width: 393px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: #ffffff;
+            position: relative;
+        }
+        
+        /* Ensure proper display for standalone page */
+        .currency-page-container .screen {
+            position: static !important;
+            display: flex !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            height: auto !important;
+            min-height: 100vh !important;
+        }
+        
+        /* Desktop responsive */
+        @media (min-width: 768px) {
+            body {
+                background: #f5f5f5;
+                padding: 20px;
+            }
+            
+            .currency-page-container {
+                border: 1px solid #dbdddc;
+                border-radius: 16px;
+                overflow: hidden;
+                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            }
+        }
+        
+        /* 📝 LEARNING NOTE: Progressive Task Flow Styles */
+        /* Styles for the step-by-step task completion flow */
+        
+        .progressive-task-section {
+            margin-top: 0;
+        }
+        
+        .task-step {
+            transition: all 0.5s ease;
+        }
+        
+        .task-step.completed {
+            opacity: 0.7;
+        }
+        
+        .task-step.completed .task {
+            background: #f7f5eb !important;
+            border: 1px solid #dbdddc;
+        }
+        
+        .task-step.completed .task-icon {
+            background: #22c55e !important;
+        }
+        
+        .task-step.completed .task-icon::before {
+            content: "✓";
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .task-step.completed .task-text {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+        
+        .task-step.completed .task-chevron {
+            opacity: 0.3;
+        }
+        
+        /* 📝 LEARNING NOTE: Next Todo Item Styles */
+        /* Styles for the dynamically added next todo item */
+        
+        .next-todo-item {
+            margin-top: 16px;
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        .next-todo-item .task {
+            transition: all 0.3s ease;
+        }
+        
+        .next-todo-item .task.completed {
+            background: #f7f5eb !important;
+            border: 1px solid #dbdddc;
+            opacity: 0.8;
+        }
+        
+        .next-todo-item .task.completed .task-icon {
+            background: #22c55e !important;
+        }
+        
+        .next-todo-item .task.completed .task-icon::before {
+            content: "✓";
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .next-todo-item .task.completed .task-text {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+        
+        .next-todo-item .task.completed .task-chevron {
+            opacity: 0.3;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* 📝 LEARNING NOTE: Success Modal Styles */
+        /* Modal overlay and content for redemption success */
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .success-modal {
+            background: white;
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+            max-width: 320px;
+            width: 90%;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.show .success-modal {
+            transform: scale(1);
+        }
+        
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            background: #22c55e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: successPulse 0.6s ease-out;
+        }
+        
+        .success-icon::before {
+            content: "✓";
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+        }
+        
+        .success-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #0F1C14;
+            margin-bottom: 12px;
+        }
+        
+        .success-message {
+            font-size: 16px;
+            color: #6B7280;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        
+        .success-amount {
+            font-size: 18px;
+            font-weight: 600;
+            color: #22c55e;
+            margin-bottom: 24px;
+        }
+        
+        .modal-close-button {
+            background: #0F1C14;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+        
+        .modal-close-button:hover {
+            background: #374151;
+            transform: translateY(-1px);
+        }
+        
+        .modal-close-button:active {
+            transform: translateY(0);
+        }
+        
+        @keyframes successPulse {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        /* LSA Balance highlight for step 2 */
+        .lsa-balance-section.highlighted {
+            animation: highlightPulse 2s ease-in-out;
+            border: 2px solid #22c55e;
+            border-radius: 12px;
+        }
+        
+        @keyframes highlightPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(34, 197, 94, 0.1);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+            }
+        }
+        
+        /* Redeem button highlight for step 3 */
+        .redeem-button.highlighted {
+            animation: buttonPulse 1.5s ease-in-out;
+            background: #22c55e !important;
+            transform: scale(1.05);
+        }
+        
+        @keyframes buttonPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(34, 197, 94, 0.2);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="currency-page-container">
+        <!-- Currency Rewards Screen -->
+        <div id="currency-rewards" class="screen active">
+            <!-- Lucide Close Button -->
+            <button onclick="goBack()" aria-label="Close currency rewards page" style="
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                width: 40px;
+                height: 40px;
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                color: #333;
+                transition: all 0.2s ease;
+            " onmouseover="this.style.color='#666'" onmouseout="this.style.color='#333'">
+                <i data-lucide="x" style="width: 32px; height: 32px;"></i>
+            </button>
+
+            <!-- Currency Content -->
+            <div class="currency-content" style="padding-top: 84px;">
+                <!-- Review Header Section -->
+                <div class="currency-review-header">
+                    <h1 class="currency-main-title">Betterfly Rewards</h1>
+                    <p class="currency-subtitle">Redeem your Butterflies for added benefits</p>
+                </div>
+
+                <!-- 📝 LEARNING NOTE: Two-Step Todo Card Flow -->
+                <!-- Step 1: Complete task → Step 2: Show new task item → Step 3: Transform card -->
+                <div class="todo-card" id="dynamic-todo-card">
+                    <!-- Initial State: Discover the Rewards Store -->
+                    <div class="todo-card-state" id="initial-state">
+                        <!-- Overall Progress Section -->
+                        <div class="overall-progress-section">
+                            <h2 class="overall-progress-title">Finish setting up your account</h2>
+                            <div class="overall-progress-bar-container">
+                                <div class="overall-progress-bar">
+                                    <div class="overall-progress-fill" id="progress-fill" style="width: 50%"></div>
+                                </div>
+                                <span class="overall-progress-text" id="progress-text">4/8 completed</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Spacer -->
+                        <div class="challenge-spacer"></div>
+                        
+                        <!-- Individual Challenge Section -->
+                        <div class="individual-challenge-section">
+                            <h3 class="individual-challenge-title">Discover the Rewards Store</h3>
+                            <div class="challenge-meta">
+                                <span class="challenge-duration">1 min</span>
+                                <div class="challenge-reward">
+                                    <img src="./assets/betterflies-icon.svg" alt="25 butterflies" class="butterfly-svg-mini">
+                                    <span>+25</span>
+                                </div>
+                            </div>
+                            <p class="challenge-description">Take a look around the store.</p>
+                            <button class="challenge-action-button" id="challenge-button" onclick="markComplete()">
+                                <div class="button-icon" id="button-icon">
+                                    <i data-lucide="play" data-fill="currentColor" data-stroke-width="0" style="width: 16px; height: 16px;"></i>
+                                </div>
+                                <span id="button-text">Mark as Complete</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Intermediate Task: Scroll to LSA (initially hidden) -->
+                        <div class="intermediate-task-section" id="intermediate-task" style="display: none;">
+                            <div class="challenge-spacer"></div>
+                            <div class="task pending" onclick="handleRedeemFirstReward()" style="cursor: pointer;">
+                                <div class="task-icon pending"></div>
+                                <div class="task-info">
+                                    <span class="task-text">Redeem Your First Reward</span>
+                                    <div class="task-meta">
+                                        <span class="task-time">2 min</span>
+                                        <div class="task-reward">
+                                            <img src="./assets/betterflies-icon.svg" alt="0 butterflies" class="butterfly-svg-mini">
+                                            <span>+0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="task-chevron"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Transformed State: Scroll Down to LSA Balance (initially hidden) -->
+                    <div class="todo-card-state" id="transformed-state" style="display: none;">
+                        <!-- Overall Progress Section -->
+                        <div class="overall-progress-section">
+                            <h2 class="overall-progress-title">Finish setting up your account</h2>
+                            <div class="overall-progress-bar-container">
+                                <div class="overall-progress-bar">
+                                    <div class="overall-progress-fill" style="width: 62.5%"></div>
+                                </div>
+                                <span class="overall-progress-text">5/8 completed</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Spacer -->
+                        <div class="challenge-spacer"></div>
+                        
+                        <!-- New Task Section -->
+                        <div class="individual-challenge-section">
+                            <h3 class="individual-challenge-title">Redeem Your First Reward</h3>
+                            <div class="challenge-meta">
+                                <span class="challenge-duration">2 min</span>
+                                <div class="challenge-reward">
+                                    <img src="./assets/betterflies-icon.svg" alt="0 butterflies" class="butterfly-svg-mini">
+                                    <span>+0</span>
+                                </div>
+                            </div>
+                            <p class="challenge-description">Scroll down to find the LSA Balance section and redeem your first reward.</p>
+                            <button class="challenge-action-button" id="redeem-button" onclick="handleRedeemReward()">
+                                <div class="button-icon" id="redeem-button-icon">
+                                    <i data-lucide="gift" data-fill="currentColor" data-stroke-width="0" style="width: 16px; height: 16px;"></i>
+                                </div>
+                                <span id="redeem-button-text">Redeem Reward</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Available Betterflies Section -->
+                <div class="available-betterflies-section">
+                    <div class="available-betterflies-card">
+                        <div class="available-content">
+                            <h3 class="available-title">Available Betterflies</h3>
+                            <div class="available-display">
+                                <div class="butterfly-large-icon">
+                                    <img src="./assets/betterflies-icon.svg" alt="Butterfly" class="butterfly-large-svg">
+                                </div>
+                                <div class="available-amount">165</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LSA Balance Boost Section -->
+                <div class="lsa-balance-section">
+                    <div class="lsa-balance-card">
+                        <div class="lsa-content">
+                            <div class="lsa-header">
+                                <div class="lsa-icon">💎</div>
+                                <div class="lsa-info">
+                                    <h3 class="lsa-title">LSA Balance Boost</h3>
+                                    <p class="lsa-description">Convert your Betterflies to LSA balance for more benefits</p>
+                                </div>
+                            </div>
+                            <div class="lsa-conversion">
+                                <div class="conversion-item">
+                                    <div class="conversion-amount">165 Betterflies</div>
+                                </div>
+                                <div class="conversion-arrow">→</div>
+                                <div class="conversion-result">
+                                    <div class="conversion-value">$16.50</div>
+                                    <div class="conversion-label">LSA Balance</div>
+                                </div>
+                            </div>
+                            <div class="redeem-button-section">
+                                <button class="redeem-button" onclick="redeemBalance()">Redeem Balance</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Section -->
+                <div class="recent-activity-section">
+                    <div class="recent-activity-card">
+                        <h3 class="activity-title">Recent Activity</h3>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-info">
+                                    <h4 class="activity-name">Completed Daily Challenge</h4>
+                                    <p class="activity-details">Morning meditation - 5 minutes</p>
+                                </div>
+                                <div class="activity-reward positive">
+                                    <span>+25</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-info">
+                                    <h4 class="activity-name">Weekly Goal Progress</h4>
+                                    <p class="activity-details">Exercise 3 times this week</p>
+                                </div>
+                                <div class="activity-reward positive">
+                                    <span>+50</span>
+                                </div>
+                            </div>
+                            <div class="activity-item last">
+                                <div class="activity-info">
+                                    <h4 class="activity-name">Redeemed LSA Balance</h4>
+                                    <p class="activity-details">Converted 100 Betterflies</p>
+                                </div>
+                                <div class="activity-reward negative">
+                                    <span>-100</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📝 LEARNING NOTE: Toast Notification -->
+        <!-- Success toast that slides down when task is completed -->
+        <div class="toast-container" id="toast-container">
+            <div class="toast" id="success-toast">
+                <div class="toast-icon">
+                    <div class="success-icon"></div>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-message">You earned 25 Betterflies</div>
+                </div>
+                <div class="toast-close" onclick="closeToast()">
+                    <div class="close-icon"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📝 LEARNING NOTE: Success Modal for Redemption -->
+    <!-- Modal that appears when user successfully redeems Betterflies -->
+    <div class="modal-overlay" id="success-modal" onclick="closeSuccessModal()">
+        <div class="success-modal" onclick="event.stopPropagation()">
+            <div class="success-icon"></div>
+            <h2 class="success-title">Successfully Redeemed!</h2>
+            <p class="success-message">Your Betterflies have been redeemed and added to your account.</p>
+            <div class="success-amount" id="redeemed-amount">+0 Betterflies</div>
+            <button class="modal-close-button" onclick="closeSuccessModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- 🧭 CLEAN NAVIGATION SYSTEM -->
+    <script src="shared/navigation.js"></script>
+    
+    <script>
+        // 📝 LEARNING NOTE: Enhanced Mark Complete Functionality
+        // Handles button state change and toast notification
+        
+        // 📝 LEARNING NOTE: Challenge Completion Flow - Matches Component Reference
+        // This follows the exact same pattern as challenges.html for consistency
+        
+        function markComplete() {
+            console.log('🎯 Marking "Discover the Rewards Store" as complete...');
+            
+            // Get the button element
+            const button = document.getElementById('challenge-button');
+            if (!button) {
+                console.error('❌ Challenge button not found!');
+                return;
+            }
+            
+            // Check if already completed
+            if (button.classList.contains('completed')) {
+                console.log('✅ Task already completed!');
+                return;
+            }
+            
+            // 1. Update button to completed state
+            button.classList.add('completed');
+            button.disabled = true;
+            
+            // Update button text and icon
+            const buttonText = document.getElementById('button-text');
+            const buttonIcon = document.getElementById('button-icon');
+            if (buttonText) buttonText.textContent = 'Completed';
+            if (buttonIcon) {
+                buttonIcon.innerHTML = '<i data-lucide="check" data-fill="currentColor" data-stroke-width="0" style="width: 16px; height: 16px;"></i>';
+            }
+            
+            // 2. Update progress from 4/8 to 5/8
+            updateProgressToFive();
+            
+            // 3. Show reward toast
+            showRewardToast(25);
+            
+            // 4. Update currency
+            updateCurrency(25);
+            
+            // 5. Show intermediate task (Scroll to LSA Balance)
+            showIntermediateTask();
+            
+            console.log('✅ Task marked as complete! +25 Betterflies earned!');
+        }
+        
+        function updateProgressToFive() {
+            console.log('📊 Updating progress from 4/8 to 5/8...');
+            
+            // Update progress text
+            const progressText = document.getElementById('progress-text');
+            if (progressText) {
+                progressText.textContent = '5/8 completed';
+                console.log('📊 Progress text updated to 5/8 completed');
+            }
+            
+            // Update progress bar from 50% to 62.5%
+            const progressFill = document.getElementById('progress-fill');
+            if (progressFill) {
+                // Add pulse effect for visual feedback
+                progressFill.style.animation = 'progressPulse 0.6s ease-in-out';
+                
+                // Update the width from 50% to 62.5%
+                setTimeout(() => {
+                    progressFill.style.width = '62.5%';
+                    console.log('📊 Progress bar width updated to 62.5%');
+                }, 100); // Small delay to ensure transition is applied
+                
+                // Remove animation class after animation completes
+                setTimeout(() => {
+                    progressFill.style.animation = '';
+                }, 600);
+                
+                console.log('📊 Progress bar animated from 50% to 62.5%');
+            } else {
+                console.error('📊 Progress fill element not found!');
+            }
+        }
+        
+        function showIntermediateTask() {
+            console.log('🎯 Showing intermediate task: Redeem Your First Reward...');
+            
+            const intermediateTask = document.getElementById('intermediate-task');
+            if (intermediateTask) {
+                intermediateTask.style.display = 'block';
+                
+                // Add fade-in animation
+                intermediateTask.style.opacity = '0';
+                intermediateTask.style.transform = 'translateY(20px)';
+                intermediateTask.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    intermediateTask.style.opacity = '1';
+                    intermediateTask.style.transform = 'translateY(0)';
+                    console.log('✅ Intermediate task displayed with animation');
+                }, 100);
+            } else {
+                console.error('❌ Intermediate task element not found!');
+            }
+        }
+        
+        function handleRedeemFirstReward() {
+            console.log('🎯 Handling redeem first reward task click...');
+            
+            // Get the task element
+            const taskElement = document.querySelector('#intermediate-task .task');
+            if (!taskElement) {
+                console.error('❌ Task element not found!');
+                return;
+            }
+            
+            // Check if already completed
+            if (taskElement.classList.contains('completed')) {
+                console.log('✅ Task already completed!');
+                return;
+            }
+            
+            // 1. Mark task as completed
+            taskElement.classList.add('completed');
+            taskElement.style.cursor = 'default';
+            
+            // Update task icon to checkmark
+            const taskIcon = taskElement.querySelector('.task-icon');
+            if (taskIcon) {
+                taskIcon.classList.remove('pending');
+                taskIcon.classList.add('check');
+                taskIcon.innerHTML = '✓';
+            }
+            
+            // 2. Now transform the entire todo card
+            transformTodoCard();
+            
+            console.log('✅ Redeem first reward task completed! Transforming card...');
+        }
+        
+        function handleRedeemReward() {
+            console.log('🎯 Handling redeem reward button click...');
+            
+            // Get the button element
+            const button = document.getElementById('redeem-button');
+            if (!button) {
+                console.error('❌ Redeem button not found!');
+                return;
+            }
+            
+            // Check if already completed
+            if (button.classList.contains('completed')) {
+                console.log('✅ Redeem action already completed!');
+                return;
+            }
+            
+            // 1. Update button to completed state
+            button.classList.add('completed');
+            button.disabled = true;
+            
+            // Update button text and icon
+            const buttonText = document.getElementById('redeem-button-text');
+            const buttonIcon = document.getElementById('redeem-button-icon');
+            if (buttonText) buttonText.textContent = 'Completed';
+            if (buttonIcon) {
+                buttonIcon.innerHTML = '<i data-lucide="check" data-fill="currentColor" data-stroke-width="0" style="width: 16px; height: 16px;"></i>';
+            }
+            
+            // 2. Highlight the LSA Balance section
+            const lsaSection = document.querySelector('.lsa-balance-section');
+            if (lsaSection) {
+                lsaSection.classList.add('highlighted');
+                console.log('🎯 LSA Balance section highlighted');
+                
+                // Remove highlight after animation
+                setTimeout(() => {
+                    lsaSection.classList.remove('highlighted');
+                }, 2000);
+            }
+            
+            // 3. Smooth scroll to LSA Balance section
+            setTimeout(() => {
+                if (lsaSection) {
+                    lsaSection.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                    console.log('🎯 Scrolled to LSA Balance section');
+                }
+            }, 500);
+            
+            // 4. Show completion toast
+            showRewardToast(0);
+            
+            console.log('✅ Redeem reward action completed!');
+        }
+        
+        
+        function transformTodoCard() {
+            console.log('🔄 Transforming todo card from initial state to transformed state...');
+            
+            // Hide initial state
+            const initialState = document.getElementById('initial-state');
+            const transformedState = document.getElementById('transformed-state');
+            
+            if (initialState && transformedState) {
+                // Add fade-out animation to initial state
+                initialState.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                initialState.style.opacity = '0';
+                initialState.style.transform = 'translateY(-20px)';
+                
+                // After fade-out, hide initial state and show transformed state
+                setTimeout(() => {
+                    initialState.style.display = 'none';
+                    transformedState.style.display = 'block';
+                    
+                    // Add fade-in animation to transformed state
+                    transformedState.style.opacity = '0';
+                    transformedState.style.transform = 'translateY(20px)';
+                    transformedState.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    
+                    // Trigger fade-in
+                    setTimeout(() => {
+                        transformedState.style.opacity = '1';
+                        transformedState.style.transform = 'translateY(0)';
+                        console.log('✅ Todo card transformed successfully!');
+                    }, 100);
+                }, 500);
+            } else {
+                console.error('❌ Todo card state elements not found!');
+            }
+        }
+        
+        function handleScrollToLSA() {
+            console.log('🎯 Handling scroll to LSA Balance...');
+            
+            // Get the button element
+            const button = document.getElementById('scroll-button');
+            if (!button) {
+                console.error('❌ Scroll button not found!');
+                return;
+            }
+            
+            // Check if already completed
+            if (button.classList.contains('completed')) {
+                console.log('✅ Task already completed!');
+                return;
+            }
+            
+            // 1. Update button to completed state
+            button.classList.add('completed');
+            button.disabled = true;
+            
+            // Update button text and icon
+            const buttonText = document.getElementById('scroll-button-text');
+            const buttonIcon = document.getElementById('scroll-button-icon');
+            if (buttonText) buttonText.textContent = 'Completed';
+            if (buttonIcon) {
+                buttonIcon.innerHTML = '<i data-lucide="check" data-fill="currentColor" data-stroke-width="0" style="width: 16px; height: 16px;"></i>';
+            }
+            
+            // 2. Highlight the LSA Balance section
+            const lsaSection = document.querySelector('.lsa-balance-section');
+            if (lsaSection) {
+                lsaSection.classList.add('highlighted');
+                console.log('🎯 LSA Balance section highlighted');
+                
+                // Remove highlight after animation
+                setTimeout(() => {
+                    lsaSection.classList.remove('highlighted');
+                }, 2000);
+            }
+            
+            // 3. Smooth scroll to LSA Balance section
+            setTimeout(() => {
+                if (lsaSection) {
+                    lsaSection.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                    console.log('🎯 Scrolled to LSA Balance section');
+                }
+            }, 500);
+            
+            // 4. Show completion toast
+            showRewardToast(0);
+            
+            console.log('✅ Scroll to LSA task completed!');
+        }
+        
+        // 📝 LEARNING NOTE: Progress Bar Animation - Matches Component Reference
+        function updateProgressBar() {
+            console.log('📊 Updating progress bar from 3/8 to 4/8...');
+            
+            // Update the progress text
+            const progressText = document.querySelector('.overall-progress-text');
+            if (progressText) {
+                progressText.textContent = '4/8 completed';
+                console.log('📊 Progress text updated to 4/8 completed');
+            }
+            
+            // Animate the progress bar from 37.5% to 50%
+            const progressFill = document.querySelector('.overall-progress-fill');
+            if (progressFill) {
+                // Add pulse effect for visual feedback (matching challenges page)
+                progressFill.style.animation = 'progressPulse 0.6s ease-in-out';
+                
+                // Update the width from 37.5% to 50% with smooth transition
+                setTimeout(() => {
+                    progressFill.style.width = '50%';
+                    console.log('📊 Progress bar width updated to 50%');
+                }, 100); // Small delay to ensure transition is applied
+                
+                // Remove animation class after animation completes
+                setTimeout(() => {
+                    progressFill.style.animation = '';
+                }, 600);
+                
+                console.log('📊 Progress bar animated from 37.5% to 50%');
+            } else {
+                console.error('📊 Progress fill element not found!');
+            }
+        }
+        
+        // 📝 LEARNING NOTE: Next Challenge Display - Matches Component Reference
+        function showNextChallenge() {
+            console.log('🎯 Showing next challenge...');
+            
+            // Show the next challenge section
+            const nextChallengeSection = document.getElementById('next-challenge-section');
+            if (nextChallengeSection) {
+                nextChallengeSection.style.display = 'block';
+                console.log('🎯 Next challenge section displayed');
+                
+                // Add fade-in animation
+                nextChallengeSection.style.opacity = '0';
+                nextChallengeSection.style.transform = 'translateY(20px)';
+                nextChallengeSection.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    nextChallengeSection.style.opacity = '1';
+                    nextChallengeSection.style.transform = 'translateY(0)';
+                    console.log('🎯 Next challenge section animation started');
+                }, 100);
+            } else {
+                console.error('🎯 Next challenge section not found!');
+            }
+        }
+        
+        // 📝 LEARNING NOTE: Currency Update - Matches Component Reference
+        function updateCurrency(amount) {
+            console.log(`💰 Updating currency by +${amount} Betterflies`);
+            
+            // Update all currency displays
+            const currencyAmounts = document.querySelectorAll('.currency-amount, .available-amount');
+            currencyAmounts.forEach(element => {
+                const currentAmount = parseInt(element.textContent);
+                element.textContent = (currentAmount + amount).toString();
+            });
+            
+            console.log(`💰 Currency updated: +${amount} Betterflies`);
+        }
+        
+        // 📝 LEARNING NOTE: Reward Toast - Matches Component Reference
+        function showRewardToast(amount) {
+            console.log(`🎉 Showing reward toast for ${amount} Betterflies...`);
+            const toast = document.getElementById('success-toast');
+            if (toast) {
+                // Update the message with the actual amount
+                const messageElement = toast.querySelector('.toast-message');
+                if (messageElement) {
+                    messageElement.textContent = `You earned ${amount} Betterflies`;
+                    console.log('🎉 Toast message updated');
+                }
+                
+                // Show the toast with animation
+                toast.classList.add('show');
+                console.log('🎉 Toast shown successfully');
+                
+                // Auto-hide after 4 seconds
+                setTimeout(() => {
+                    closeToast();
+                }, 4000);
+            } else {
+                console.error('❌ Toast element not found!');
+            }
+        }
+        
+        // 📝 LEARNING NOTE: Next Challenge Navigation - Matches Component Reference
+        function navigateToNextChallenge() {
+            console.log('🚀 Navigating to next challenge...');
+            // For now, show an alert - this would navigate to the wearable setup page
+            alert('This would navigate to the Wearable Setup page (not yet created)');
+        }
+        
+        function closeToast() {
+            console.log('❌ Closing toast...');
+            const toast = document.getElementById('success-toast');
+            if (toast) {
+                toast.classList.remove('show');
+                console.log('❌ Toast closed');
+            }
+        }
+        
+        function redeemBalance() {
+            console.log('💰 Redeeming LSA Balance...');
+            
+            // Calculate the redemption amount (165 Betterflies = $16.50)
+            const betterfliesAmount = 165;
+            const dollarAmount = 16.50;
+            
+            // Update the modal with the actual amounts
+            const redeemedAmountElement = document.getElementById('redeemed-amount');
+            if (redeemedAmountElement) {
+                redeemedAmountElement.textContent = `+${betterfliesAmount} Betterflies`;
+            }
+            
+            // Show the success modal
+            showSuccessModal();
+            
+            console.log(`💰 Successfully redeemed ${betterfliesAmount} Betterflies for $${dollarAmount}`);
+        }
+        
+        function showSuccessModal() {
+            console.log('🎉 Showing success modal...');
+            const modal = document.getElementById('success-modal');
+            if (modal) {
+                console.log('🎉 Modal element found:', modal);
+                modal.classList.add('show');
+                console.log('🎉 Success modal displayed with class:', modal.className);
+                
+                // Force a reflow to ensure the transition works
+                modal.offsetHeight;
+            } else {
+                console.error('❌ Success modal not found!');
+            }
+        }
+        
+        function closeSuccessModal() {
+            console.log('❌ Closing success modal...');
+            const modal = document.getElementById('success-modal');
+            if (modal) {
+                modal.classList.remove('show');
+                console.log('❌ Success modal closed');
+                
+                // Show the next todo item after modal closes
+                showNextTodoItem();
+            }
+        }
+        
+        function showNextTodoItem() {
+            console.log('🎯 Showing next todo item: Explore your LSA benefit...');
+            
+            // Create the next todo item element
+            const nextTodoItem = document.createElement('div');
+            nextTodoItem.className = 'next-todo-item';
+            nextTodoItem.innerHTML = `
+                <div class="challenge-spacer"></div>
+                <div class="task pending" onclick="handleExploreLSA()" style="cursor: pointer;">
+                    <div class="task-icon pending"></div>
+                    <div class="task-info">
+                        <span class="task-text">Explore your LSA benefit</span>
+                        <div class="task-meta">
+                            <span class="task-time">3 min</span>
+                            <div class="task-reward">
+                                <img src="./assets/betterflies-icon.svg" alt="0 butterflies" class="butterfly-svg-mini">
+                                <span>+0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-chevron"></div>
+                </div>
+            `;
+            
+            // Add to the transformed state
+            const transformedState = document.getElementById('transformed-state');
+            if (transformedState) {
+                transformedState.appendChild(nextTodoItem);
+                
+                // Add fade-in animation
+                nextTodoItem.style.opacity = '0';
+                nextTodoItem.style.transform = 'translateY(20px)';
+                nextTodoItem.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    nextTodoItem.style.opacity = '1';
+                    nextTodoItem.style.transform = 'translateY(0)';
+                    console.log('✅ Next todo item displayed with animation');
+                }, 100);
+            } else {
+                console.error('❌ Transformed state element not found!');
+            }
+        }
+        
+        function handleExploreLSA() {
+            console.log('🎯 Handling explore LSA benefit...');
+            
+            // Get the task element
+            const taskElement = document.querySelector('.next-todo-item .task');
+            if (!taskElement) {
+                console.error('❌ Task element not found!');
+                return;
+            }
+            
+            // Check if already completed
+            if (taskElement.classList.contains('completed')) {
+                console.log('✅ Task already completed!');
+                return;
+            }
+            
+            // 1. Mark task as completed
+            taskElement.classList.add('completed');
+            taskElement.style.cursor = 'default';
+            
+            // Update task icon to checkmark
+            const taskIcon = taskElement.querySelector('.task-icon');
+            if (taskIcon) {
+                taskIcon.classList.remove('pending');
+                taskIcon.classList.add('check');
+                taskIcon.innerHTML = '✓';
+            }
+            
+            // 2. Show completion toast
+            showRewardToast(0);
+            
+            // 3. Navigate to benefits page after a short delay
+            setTimeout(() => {
+                console.log('🧭 Navigating to benefits page...');
+                navigateToBenefits();
+            }, 1500);
+            
+            console.log('✅ Explore LSA benefit task completed!');
+        }
+        
+        // 📝 LEARNING NOTE: Test function for debugging modal
+        function testModal() {
+            console.log('🧪 Testing modal...');
+            showSuccessModal();
+        }
+        
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Currency Rewards page loaded successfully!');
+            
+            // Update all currency displays with the current amount
+            const currencyAmounts = document.querySelectorAll('.currency-amount, .available-amount');
+            currencyAmounts.forEach(element => {
+                element.textContent = '165';
+            });
+        });
+        
+        // Initialize Lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

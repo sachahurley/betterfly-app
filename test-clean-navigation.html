@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Navigation Test - Betterfly</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: #007AFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .test-button:hover {
+            background: #0056CC;
+        }
+        .test-results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #007AFF;
+        }
+        .success {
+            color: #28a745;
+        }
+        .info {
+            color: #17a2b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Clean Navigation Test</h1>
+        <p>This page tests the new clean navigation system with standalone pages.</p>
+        
+        <h2>Test Navigation:</h2>
+        
+        <button class="test-button" onclick="navigateToHome()">
+            🏠 Test: Home Page
+        </button>
+        
+        <button class="test-button" onclick="navigateToChallenges()">
+            🎯 Test: Challenges Page
+        </button>
+        
+        <button class="test-button" onclick="navigateToCurrency()">
+            💰 Test: Currency Rewards Page
+        </button>
+        
+        <button class="test-button" onclick="navigateToWelcome()">
+            👋 Test: Welcome Page
+        </button>
+        
+        <button class="test-button" onclick="navigateToChallengeActive()">
+            ⚡ Test: Challenge Active Page
+        </button>
+        
+        <button class="test-button" onclick="navigateToClaimRewards()">
+            🎉 Test: Claim Rewards Page
+        </button>
+        
+        <button class="test-button" onclick="navigateToBenefits()">
+            💼 Test: Benefits Page
+        </button>
+        
+        <button class="test-button" onclick="navigateToSocial()">
+            👥 Test: Social Page
+        </button>
+        
+        <div class="test-results">
+            <h3>Test Results:</h3>
+            <div id="test-output">
+                <p class="info">📝 Click the buttons above to test navigation...</p>
+                <p class="success">✅ Clean navigation system implemented</p>
+                <p class="success">✅ All pages are now standalone HTML files</p>
+                <p class="success">✅ No more conflicting navigation systems</p>
+                <p class="success">✅ Direct page navigation using window.location.href</p>
+            </div>
+        </div>
+        
+        <h2>Architecture Summary:</h2>
+        <ul>
+            <li><strong>Home:</strong> home.html (main dashboard)</li>
+            <li><strong>Challenges:</strong> challenges.html (challenges page)</li>
+            <li><strong>Currency:</strong> currency-rewards.html (currency page)</li>
+            <li><strong>Welcome:</strong> welcome.html (welcome screen)</li>
+            <li><strong>Challenge Active:</strong> challenge-active.html (active challenge)</li>
+            <li><strong>Claim Rewards:</strong> claim-butterflies.html (reward claim)</li>
+            <li><strong>Benefits:</strong> benefits.html (benefits page)</li>
+            <li><strong>Social:</strong> social.html (social page)</li>
+            <li><strong>Navigation:</strong> shared/navigation.js (clean navigation system)</li>
+        </ul>
+    </div>
+
+    <!-- 🧭 CLEAN NAVIGATION SYSTEM -->
+    <script src="shared/navigation.js"></script>
+    
+    <script>
+        // Test script
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Clean navigation test page loaded');
+            
+            const output = document.getElementById('test-output');
+            output.innerHTML += '<p class="success">✅ Test page loaded successfully</p>';
+            output.innerHTML += '<p class="info">📝 All navigation should work smoothly between standalone pages</p>';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Claim Rewards - Betterfly</title>
+    
+    <!-- 📝 LEARNING NOTE: Applying Betterfly Design System -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    
+    <!-- CSS includes -->
+    <link rel="stylesheet" href="styles/post-onboarding.css">
+    <link rel="stylesheet" href="styles/currency-screen-fix.css">
+    <link rel="stylesheet" href="styles/scroll-fixes.css">
+    
+    <!-- Debug mode toggle -->
+    <script>
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.classList.add('debug-mode');
+                console.log('🐛 Debug mode enabled');
+            });
+        }
+    </script>
+</head>
+<body>
+    <!-- 📝 LEARNING NOTE: Claim Butterflies Screen -->
+    <div class="claim-page" style="display: flex; flex-direction: column; max-width: 393px; margin: 0 auto; height: 100vh;">
+        <div class="claim-container">
+            <!-- Mascot and Chat Bubble -->
+            <div class="mascot-chat-section">
+                <div class="mascot-container">
+                    <div class="mascot-icon" style="background-image: url('./assets/162ac2159f8a17d53149f14c9846ea5592fb33ba.png')"></div>
+                </div>
+                <div class="chat-bubble">
+                    <div class="avatar-small"></div>
+                    <div class="bubble-content">
+                        <p>Congratulations. You've earned 100 Betterflies and completed a challenge</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Message -->
+            <div class="success-section">
+                <h1>Amazing work!</h1>
+                <p>You've completed a wellness challenge and earned Betterflies</p>
+            </div>
+
+            <!-- Reward Display -->
+            <div class="reward-display">
+                <div class="butterfly-large"></div>
+                <h2>100 Betterflies</h2>
+            </div>
+
+            <!-- Description -->
+            <div class="reward-description">
+                <p>Use your Betterflies to unlock rewards and track your wellness journey.</p>
+            </div>
+        </div>
+
+        <!-- Fixed Bottom Button -->
+        <div class="fixed-bottom-action">
+            <button class="animated-claim-button" onclick="claimReward()">
+                <span>Claim Betterflies (100)</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 🧭 CLEAN NAVIGATION SYSTEM -->
+    <script src="shared/navigation.js"></script>
+    
+    <!-- Claim-specific functionality -->
+    <script>
+        function claimReward() {
+            console.log('🎉 Claiming reward...');
+            
+            // Show success message
+            alert('Reward claimed! +100 Betterflies added to your account.');
+            
+            // Navigate back to home after delay
+            setTimeout(() => {
+                navigateToHome();
+            }, 2000);
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎉 Claim rewards page loaded');
+        });
+    </script>
+</body>
+</html>

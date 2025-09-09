@@ -1,0 +1,43 @@
+/* Custom Font Declarations */
+
+/* Obviously Font Family */
+@font-face {
+  font-family: 'Obviously';
+  src: url('./Obviously-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Obviously';
+  src: url('./Obviously-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Obviously';
+  src: url('./Obviously-Semibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Obviously';
+  src: url('./Obviously-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Obviously';
+  src: url('./Obviously-Narrow-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-stretch: condensed;
+  font-display: swap;
+}

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Betterfly - Post Onboarding Experience</title>
+    
+    <!-- 📝 LEARNING NOTE: Applying Betterfly Design System -->
+    <!-- Consolidated font loading strategy with font-display: swap for better performance -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    <!-- Using Obviously Narrow Bold for the logo from local assets -->
+    
+    <!-- Original CSS with correct design -->
+    <link rel="stylesheet" href="styles/post-onboarding.css">
+    <!-- Currency screen visibility fix -->
+    <link rel="stylesheet" href="styles/currency-screen-fix.css">
+    <!-- Scroll fixes -->
+    <link rel="stylesheet" href="styles/scroll-fixes.css">
+    <!-- Welcome screen fix -->
+    <link rel="stylesheet" href="styles/welcome-fix.css">
+    
+    <!-- 📊 SIMPLE STATE MANAGEMENT -->
+    <script>
+        // 📊 SIMPLE CURRENCY PERSISTENCE
+        function loadCurrency() {
+            const saved = localStorage.getItem('butterflyCount');
+            return saved ? parseInt(saved) : 165;
+        }
+        
+        function updateCurrencyDisplay() {
+            const currency = loadCurrency();
+            const currencyElements = document.querySelectorAll('.currency-amount');
+            currencyElements.forEach(element => {
+                element.textContent = currency.toString();
+            });
+            console.log(`💰 Updated currency display: ${currency}`);
+        }
+        
+        // 📊 SIMPLE CHALLENGE PERSISTENCE
+        function loadCompletedChallenges() {
+            const saved = localStorage.getItem('completedChallenges');
+            return saved ? JSON.parse(saved) : [];
+        }
+        
+        function isChallengeCompleted(challengeId) {
+            const completed = loadCompletedChallenges();
+            return completed.includes(challengeId);
+        }
+    </script>
+    
+    <!-- Debug mode toggle -->
+    <script>
+        // Add debug mode class to body for CSS debugging
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.classList.add('debug-mode');
+                console.log('🐛 Debug mode enabled');
+            });
+        }
+    </script>
+</head>
+<body>
+
+    <!-- 📝 LEARNING NOTE: Home Page -->
+    <!-- Main dashboard with tasks, insurance cards, and navigation -->
+    <div class="home-page" style="display: flex; flex-direction: column; max-width: 393px; margin: 0 auto; height: 100vh;">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="header-nav">
+                <!-- User Avatar -->
+                <div class="avatar-section" onclick="navigateToSettings()" style="cursor: pointer;">
+                    <div class="avatar">
+                        <div class="user-initials-container"></div>
+                        <div class="user-initials">AB</div>
+                        <div class="status-indicator"></div>
+                    </div>
+                </div>
+                
+                <!-- Currency Counter -->
+                <div class="currency-counter" onclick="navigateToCurrency()">
+                    <div class="butterfly-icon"></div>
+                    <div class="currency-amount">165</div>
+                </div>
+                
+                <!-- Menu Button -->
+                <div class="menu-button" onclick="navigateToChallenges()">
+                    <div class="menu-icon"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" style="flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 24px; padding-bottom: 120px;">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h1 class="welcome-title">¡Hola,<br>Camilo!</h1>
+                <p class="welcome-subtitle">Welcome to Betterfly. Everything you need to protect, prevent, and empower your health journey is right here.</p>
+                
+                <!-- Action Button -->
+                <div class="action-section">
+                    <button class="primary-button">See Details</button>
+                    <div class="progress-dots">
+                        <div class="dot active"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Todo Card Section -->
+            <div class="todo-card">
+                <h2 class="todo-title">Finish setting up your account</h2>
+                <div class="progress-card-progress">
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: 37.5%"></div>
+                    </div>
+                    <div class="progress-text">3/8 completed</div>
+                </div>
+                
+                <!-- Task List -->
+                <div class="task-list">
+                    <!-- Completed tasks -->
+                    <div class="task completed">
+                        <div class="task-icon check"></div>
+                        <span class="task-text">Questionnaire</span>
+                        <div class="task-chevron"></div>
+                    </div>
+                    
+                    <div class="task completed">
+                        <div class="task-icon check"></div>
+                        <span class="task-text">Connect Wearable</span>
+                        <div class="task-chevron"></div>
+                    </div>
+                    
+                    <div class="task completed">
+                        <div class="task-icon check"></div>
+                        <span class="task-text">Create Profile</span>
+                        <div class="task-chevron"></div>
+                    </div>
+                    
+                    <!-- Active task - clickable -->
+                    <div class="task pending" onclick="navigateToChallenges()" style="cursor: pointer;">
+                        <div class="task-icon active"></div>
+                        <div class="task-info">
+                            <span class="task-text">Complete Your Next Challenge</span>
+                            <div class="task-meta">
+                                <span class="task-time">5 min</span>
+                                <div class="task-reward">
+                                    <img src="./assets/betterflies-icon.svg" alt="100 butterflies" class="butterfly-svg-mini">
+                                    <span>+100</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-chevron"></div>
+                    </div>
+                    
+                    <!-- Remaining pending tasks -->
+                    <div class="task pending" onclick="navigateToCurrency()" style="cursor: pointer;">
+                        <div class="task-icon pending"></div>
+                        <div class="task-info">
+                            <span class="task-text">Discover The Rewards Store</span>
+                            <div class="task-meta">
+                                <span class="task-time">3 min</span>
+                                <div class="task-reward">
+                                    <img src="./assets/betterflies-icon.svg" alt="25 butterflies" class="butterfly-svg-mini">
+                                    <span>+25</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-chevron"></div>
+                    </div>
+                    
+                    <div class="task pending">
+                        <div class="task-icon pending"></div>
+                        <div class="task-info">
+                            <span class="task-text">Redeem Your First Reward</span>
+                            <div class="task-meta">
+                                <span class="task-time">2 min</span>
+                                <div class="task-reward">
+                                    <img src="./assets/betterflies-icon.svg" alt="0 butterflies" class="butterfly-svg-mini">
+                                    <span>+0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-chevron"></div>
+                    </div>
+                    
+                    <div class="task pending">
+                        <div class="task-icon pending"></div>
+                        <div class="task-info">
+                            <span class="task-text">Explore Your LSA Benefit Card</span>
+                            <div class="task-meta">
+                                <span class="task-time">2 min</span>
+                                <div class="task-reward">
+                                    <img src="./assets/betterflies-icon.svg" alt="50 butterflies" class="butterfly-svg-mini">
+                                    <span>+50</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-chevron"></div>
+                    </div>
+                    
+                    <div class="task pending">
+                        <div class="task-icon pending"></div>
+                        <div class="task-info">
+                            <span class="task-text">Review Your Profile</span>
+                            <div class="task-meta">
+                                <span class="task-time">1 min</span>
+                                <div class="task-reward">
+                                    <img src="./assets/betterflies-icon.svg" alt="25 butterflies" class="butterfly-svg-mini">
+                                    <span>+25</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-chevron"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insurance Section -->
+            <div class="insurance-section">
+                <h2 class="section-title">Mis seguros</h2>
+                <div class="insurance-cards">
+                    <div class="insurance-card">
+                        <div class="card-content">
+                            <div class="insurance-icon complementario"></div>
+                            <h3>Complementario</h3>
+                            <p>Hasta un 70% de cobertura<br>en consultas médicas.</p>
+                        </div>
+                        <button class="card-action-btn"></button>
+                    </div>
+                    
+                    <div class="insurance-card">
+                        <div class="card-content">
+                            <div class="insurance-icon vida"></div>
+                            <h3>Vida</h3>
+                            <p>Protección por invalidez<br>y respaldo para tu familia.</p>
+                        </div>
+                        <button class="card-action-btn"></button>
+                    </div>
+                    
+                    <div class="insurance-card">
+                        <div class="card-content">
+                            <div class="insurance-icon dental"></div>
+                            <h3>Dental</h3>
+                            <p>Coberturas en el cuidado<br>de tu salud dental.</p>
+                        </div>
+                        <button class="card-action-btn"></button>
+                    </div>
+                </div>
+                <div class="carousel-dots">
+                    <div class="carousel-dot active"></div>
+                </div>
+            </div>
+
+            <!-- Quick Access Section -->
+            <div class="quick-access-section">
+                <h2 class="section-title">Acciones rápidas</h2>
+                <div class="quick-access-grid">
+                    <div class="quick-access-item">
+                        <div class="quick-icon telemedicine"></div>
+                        <span>Agenda<br>telemedicina</span>
+                    </div>
+                    <div class="quick-access-item">
+                        <div class="quick-icon reimbursement"></div>
+                        <span>Pide tus reembolsos</span>
+                    </div>
+                    <div class="quick-access-item">
+                        <div class="quick-icon pharmacy"></div>
+                        <span>Ahorra en Farmacia</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="navigateToHome()">
+                <div class="nav-icon home"></div>
+                <span class="nav-label">Home</span>
+            </div>
+            <div class="nav-item" onclick="navigateToBenefits()">
+                <div class="nav-icon benefits"></div>
+                <span class="nav-label">Benefits</span>
+            </div>
+            <div class="nav-item" onclick="navigateToChallenges()">
+                <div class="nav-icon journey"></div>
+                <span class="nav-label">Challenges</span>
+            </div>
+            <div class="nav-item" onclick="navigateToSocial()">
+                <div class="nav-icon social"></div>
+                <span class="nav-label">Social</span>
+            </div>
+            <div class="nav-item">
+                <img src="./assets/buddy.svg" alt="Buddy" class="nav-buddy-icon">
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 🧭 CLEAN NAVIGATION SYSTEM -->
+    <script src="shared/navigation.js"></script>
+    
+    <!-- 📊 HOMEPAGE STATE MANAGEMENT -->
+    <script>
+        // 📝 LEARNING NOTE: Homepage State Management
+        // Update UI based on completed challenges and currency
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏠 Homepage loaded - updating state...');
+            
+            // Update currency display
+            updateCurrencyDisplay();
+            
+            // Update challenge states
+            updateChallengeStates();
+        });
+        
+        function updateChallengeStates() {
+            // Check if "Stand and Stretch" challenge is completed
+            if (isChallengeCompleted('stand-and-stretch')) {
+                console.log('✅ Stand and Stretch challenge completed - updating UI');
+                
+                // Mark the challenge as completed in the task list
+                const challengeTask = document.querySelector('.task[onclick*="navigateToChallenges"]');
+                if (challengeTask) {
+                    challengeTask.classList.add('completed');
+                    challengeTask.classList.remove('pending');
+                    
+                    // Update the icon
+                    const taskIcon = challengeTask.querySelector('.task-icon');
+                    if (taskIcon) {
+                        taskIcon.classList.remove('active');
+                        taskIcon.classList.add('check');
+                    }
+                    
+                    // Update the text
+                    const taskText = challengeTask.querySelector('.task-text');
+                    if (taskText) {
+                        taskText.textContent = 'Complete Your Next Challenge';
+                    }
+                }
+                
+                // Set next challenge as active
+                const nextChallenge = document.querySelector('.task[onclick*="navigateToChallenges"]').nextElementSibling;
+                if (nextChallenge && nextChallenge.classList.contains('task')) {
+                    nextChallenge.classList.add('active');
+                    nextChallenge.classList.remove('pending');
+                    
+                    // Update the icon
+                    const nextTaskIcon = nextChallenge.querySelector('.task-icon');
+                    if (nextTaskIcon) {
+                        nextTaskIcon.classList.add('active');
+                        nextTaskIcon.classList.remove('pending');
+                    }
+                }
+            }
+        }
+        
+        // 📝 LEARNING NOTE: Avatar Navigation Function
+        // Handles navigation to settings page when avatar is tapped
+        function navigateToSettings() {
+            console.log('👤 Avatar tapped - navigating to settings...');
+            window.location.href = 'settings.html';
+        }
+    </script>
+</body>
+</html>

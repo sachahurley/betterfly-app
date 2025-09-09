@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Welcome - Betterfly</title>
+    
+    <!-- 📝 LEARNING NOTE: Applying Betterfly Design System -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    
+    <!-- CSS includes -->
+    <link rel="stylesheet" href="styles/post-onboarding.css">
+    <link rel="stylesheet" href="styles/currency-screen-fix.css">
+    <link rel="stylesheet" href="styles/scroll-fixes.css">
+    <link rel="stylesheet" href="styles/welcome-fix.css">
+    
+    <!-- Debug mode toggle -->
+    <script>
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.classList.add('debug-mode');
+                console.log('🐛 Debug mode enabled');
+            });
+        }
+    </script>
+</head>
+<body>
+    <!-- 📝 LEARNING NOTE: Welcome Screen - Updated with Figma Design and CTA -->
+    <div class="welcome-screen-container">
+        <!-- Animated gradient background -->
+        <div class="gradient-background"></div>
+        
+        <!-- Main content area -->
+        <div class="welcome-content-area">
+            <!-- Content container -->
+            <div class="welcome-content-container">
+                <!-- Mascot icon with bounce animation -->
+                <div class="welcome-mascot-container">
+                    <div class="welcome-mascot-icon" style="background-image: url('./assets/162ac2159f8a17d53149f14c9846ea5592fb33ba.png')"></div>
+                </div>
+                
+                <!-- Betterfly logo SVG -->
+                <div class="welcome-logo-container">
+                    <img src="./assets/betterfly-logo.svg" alt="Betterfly" class="welcome-logo-svg">
+                </div>
+                
+                <!-- Header text matching Figma design -->
+                <div class="welcome-header-text">
+                    <p>Select to personalize your experience. You can change these at a later time.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CTA Button Container -->
+        <div class="welcome-cta-container">
+            <button class="welcome-cta-button" onclick="navigateToHome()">
+                Get started
+            </button>
+        </div>
+    </div>
+
+    <!-- 🧭 CLEAN NAVIGATION SYSTEM -->
+    <script src="shared/navigation.js"></script>
+    
+    <!-- Debug script -->
+    <script>
+        // Debug navigation loading
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Welcome page loaded');
+            console.log('navigateToHome function:', typeof navigateToHome);
+            
+            // Test if navigation function exists
+            if (typeof navigateToHome === 'function') {
+                console.log('✅ navigateToHome function is available');
+            } else {
+                console.log('❌ navigateToHome function is NOT available');
+                // Fallback navigation
+                window.navigateToHome = function() {
+                    console.log('Using fallback navigation to home');
+                    window.location.href = 'home.html';
+                };
+            }
+        });
+        
+        // Additional fallback - define navigateToHome immediately
+        window.navigateToHome = window.navigateToHome || function() {
+            console.log('Using immediate fallback navigation to home');
+            window.location.href = 'home.html';
+        };
+    </script>
+</body>
+</html>

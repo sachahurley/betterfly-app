@@ -1,0 +1,95 @@
+/* 🛡️ CURRENCY SCREEN VISIBILITY FIX
+   This fixes the white screen issue when opening the currency screen
+   Add this file AFTER the main post-onboarding.css file
+*/
+
+/* ==========================================
+   🎯 CURRENCY SCREEN VISIBILITY FIX
+   ========================================== */
+
+/* Force currency screen to be visible when active */
+#currency-rewards.screen.active {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 10 !important;
+}
+
+/* Ensure currency screen has proper dimensions */
+#currency-rewards {
+    min-height: 100vh !important;
+    background: #ffffff !important;
+}
+
+/* Force visibility for currency screen content */
+#currency-rewards .currency-content {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Ensure currency screen header is visible */
+#currency-rewards .currency-header {
+    display: block !important;
+    visibility: visible !important;
+}
+
+/* Fix any potential display issues with currency screen elements */
+#currency-rewards * {
+    visibility: visible !important;
+}
+
+/* Override any conflicting screen styles for currency screen */
+#currency-rewards.screen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 10 !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Ensure currency screen is properly centered on desktop */
+@media (min-width: 768px) {
+    #currency-rewards.screen {
+        max-width: 393px !important;
+        margin: 0 auto !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+    }
+}
+
+/* Debug mode - highlight currency screen when active */
+.debug-mode #currency-rewards.screen.active {
+    outline: 3px solid #00b578 !important;
+    background: #f0fff4 !important;
+}
+
+/* Force all currency screen children to be visible */
+#currency-rewards.screen.active * {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Ensure currency screen content is properly displayed */
+#currency-rewards .currency-content {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+}
+
+/* Fix any potential overflow issues */
+#currency-rewards {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+/* Ensure currency screen takes full viewport height */
+#currency-rewards.screen.active {
+    height: 100vh !important;
+    min-height: 100vh !important;
+}
